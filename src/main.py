@@ -35,7 +35,7 @@ def main():
             num_creeps = _.sum(Game.creeps, lambda c: c.pos.roomName == spawn.pos.roomName)
             if num_creeps < 8 and spawn.room.energyCapacityAvailable >= 250:
                 # If we have more energy, spawn a bigger creep.
-                if spawn.room.energyCapacityAvailable >= 300:
+                if spawn.room.energyCapacityAvailable >= 350:
                     spawn.createCreep([WORK, CARRY, CARRY, MOVE, MOVE, MOVE])
                 else:
                     spawn.createCreep([WORK, CARRY, MOVE, MOVE])
