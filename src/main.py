@@ -23,9 +23,11 @@ def main():
     """
 
     # Run each creep
-    for name in Object.keys(Game.creeps):
+    creeps = Object.keys(Game.creeps)
+    for name in creeps:
         creep = Game.creeps[name]
         harvester.run_harvester(creep)
+
 
     # Run each spawn
     for name in Object.keys(Game.spawns):
@@ -34,11 +36,11 @@ def main():
             # Get the number of our creeps in the room.
             num_creeps = _.sum(Game.creeps, lambda c: c.pos.roomName == spawn.pos.roomName)
             if num_creeps < 8 and spawn.room.energyCapacityAvailable >= 250:
-                # If we have more energy, spawn a bigger creep.
-                if spawn.room.energyCapacityAvailable >= 300:
-                    spawn.createCreep([WORK, CARRY, CARRY, MOVE, MOVE, MOVE])
-                else:
-                    spawn.createCreep([WORK, CARRY, MOVE, MOVE])
+                spawn.createCreep([WORK, CARRY, MOVE, MOVE])
+
+    for name in Object.keys(Memory.creeps):
+        if not creeps.includes(name):
+            del Memory.creeps[name]
 
 
 module.exports.loop = main
