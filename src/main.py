@@ -21,5 +21,6 @@ def main():
 
     manager_coordinator.do_periodical_tasks()
 
+    manager_coordinator.do_strategic_tasks()
 
 module.exports.loop = main

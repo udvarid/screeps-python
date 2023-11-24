@@ -1,4 +1,4 @@
-from src.roles import harvester
+from src.roles.harvester import run_harvester
 from src.defs import *
 
 __pragma__('noalias', 'name')
@@ -10,9 +10,12 @@ __pragma__('noalias', 'set')
 __pragma__('noalias', 'type')
 __pragma__('noalias', 'update')
 
+CREEP_TASKS = {
+    'harvester': {'run_task': run_harvester}
+}
+
 
 def operate_worker_creeps():
     for name in Object.keys(Game.creeps):
         creep = Game.creeps[name]
-        # külön konstanstént egy dict-be tenni a role-okhoz tartozó fv-t, amit használni kell
-        harvester.run_harvester(creep)
+        CREEP_TASKS[creep.memory.role].run_task(creep)

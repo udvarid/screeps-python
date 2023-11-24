@@ -2,6 +2,9 @@ from src.defs import *
 
 
 def need_extra(context):
+    return context.number < context.max and more_builder_is_needed(context)
+
+
+def more_builder_is_needed(context):
     construction_sites = context.room.find(FIND_MY_CONSTRUCTION_SITES)
-    # TODO itt azért megnézni, hogy van e már más builder, vagy akár a normál mapbe beletenni egy max változót
-    return len(construction_sites) > 0
+    return context.number == 0 and len(construction_sites) > 0 or context.number > 0 and len(construction_sites) > 1
