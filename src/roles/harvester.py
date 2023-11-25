@@ -40,7 +40,7 @@ def run_harvester(creep):
             if result != OK:
                 print("[{}] Unknown result from creep.harvest({}): {}".format(creep.name, source, result))
         else:
-            creep.moveTo(source)
+            creep.moveTo(source, {'visualizePathStyle': {'stroke': '#ffffff'}})
     else:
         # If we have a saved target, use it
         if creep.memory.target:
@@ -81,4 +81,4 @@ def run_harvester(creep):
                 if not creep.pos.inRangeTo(target, 2):
                     creep.moveTo(target)
         else:
-            creep.moveTo(target)
+            creep.moveTo(target, {'visualizePathStyle': {'stroke': '#ffffff'}})

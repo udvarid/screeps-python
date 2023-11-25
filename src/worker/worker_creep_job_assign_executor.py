@@ -1,3 +1,4 @@
+from src.roles.builder import run_builder
 from src.roles.harvester import run_harvester
 from src.defs import *
 
@@ -11,7 +12,8 @@ __pragma__('noalias', 'type')
 __pragma__('noalias', 'update')
 
 CREEP_TASKS = {
-    'harvester': {'run_task': run_harvester}
+    'harvester': {'run_task': run_harvester},
+    'builder': {'run_task': run_builder}
 }
 
 

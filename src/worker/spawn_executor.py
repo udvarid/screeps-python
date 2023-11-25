@@ -40,8 +40,7 @@ def do_spawn():
                 context = {
                     'room': spawn.room,
                     'max': role.max,
-                    'number': num_role_creeps,
-                    'role_name': role_name
+                    'number': num_role_creeps
                 }
                 if num_role_creeps < role.min or role.logic(context):
                     multiplier = calculate_multiplier(energy_capacity, role.base_body)
