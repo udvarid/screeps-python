@@ -23,4 +23,5 @@ def main():
 
     manager_coordinator.do_strategic_tasks()
 
+
 module.exports.loop = main

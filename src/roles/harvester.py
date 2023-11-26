@@ -1,3 +1,4 @@
+from src.constant.my_constants import FILL_WITH_ENERGY
 from src.defs import *
 
 __pragma__('noalias', 'name')
@@ -48,8 +49,7 @@ def run_harvester(creep):
         else:
             # Get a random new target.
             target = _(creep.room.find(FIND_STRUCTURES)) \
-                .filter(lambda s: ((s.structureType == STRUCTURE_SPAWN or s.structureType == STRUCTURE_EXTENSION)
-                                   and s.energy < s.energyCapacity)) \
+                .filter(lambda s: (FILL_WITH_ENERGY.includes(s.structureType) and s.energy < s.energyCapacity)) \
                 .sample()
             if target is undefined:
                 target = _(creep.room.find(FIND_STRUCTURES)) \
