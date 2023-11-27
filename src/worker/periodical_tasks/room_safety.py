@@ -1,4 +1,4 @@
-from src.constant.my_constants import ROOM_SAFETY
+from src.constant.my_constants import ROOM_SAFETY, STRUCTURE_NOT_TO_HEAL
 from src.defs import *
 
 __pragma__('noalias', 'name')
@@ -21,10 +21,17 @@ def make_room_safety_check():
                 enemies = room.find(FIND_HOSTILE_CREEPS)
                 attacker_enemies = filter(lambda c: c.getActiveBodyparts(RANGED_ATTACK) +
                                                     c.getActiveBodyparts(ATTACK) > 0, enemies)
-                # TODO nézni, van e sérült creep illetve sérült épület
+                wounded_creeps = filter(lambda c: c.hits < c.hitsMax, room.find(FIND_MY_CREEPS))
+                wounded_structures = filter(lambda s: s.hits < s.hitsMax and
+                                                      not STRUCTURE_NOT_TO_HEAL.includes(s.structureType),
+                                            room.find(FIND_MY_STRUCTURES))
+                weak_containers = filter(lambda s: s.hits < s.hitsMax * 0.9 and s.structureType == STRUCTURE_CONTAINER,
+                                            room.find(FIND_MY_STRUCTURES))
                 snapshot = {
                     'enemy': len(enemies) > 0,
-                    'attacker': len(attacker_enemies) > 0
+                    'attacker': len(attacker_enemies) > 0,
+                    'wounded_creeps': len(wounded_creeps) > 0,
+                    'wounded_struc': len(wounded_structures) > 0 or len(weak_containers) > 0
                 }
                 __pragma__('js', '{}', 'safety_check[room_name] = snapshot')
         Memory.room_safety_state = safety_check

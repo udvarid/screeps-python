@@ -1,4 +1,4 @@
-from src.constant.my_constants import FILL_WITH_ENERGY
+from src.constant.my_constants import FILL_WITH_ENERGY, FILL_WITH_ENERGY_WO_TOWER
 from src.defs import *
 
 __pragma__('noalias', 'name')
@@ -48,10 +48,19 @@ def run_harvester(creep):
             target = Game.getObjectById(creep.memory.target)
         else:
             # Get a random new target.
-            # TODO ha támadás alatt van a szoba, akkor fő prioritás a tower
-            target = _(creep.room.find(FIND_STRUCTURES)) \
-                .filter(lambda s: (FILL_WITH_ENERGY.includes(s.structureType) and s.energy < s.energyCapacity)) \
-                .sample()
+            if Memory.room_safety_state[creep.room.name].enemy:
+                target = _(creep.room.find(FIND_STRUCTURES)) \
+                    .filter(lambda s: (s.structureType == STRUCTURE_TOWER and s.energy < s.energyCapacity)) \
+                    .sample()
+                if target is undefined:
+                    target = _(creep.room.find(FIND_STRUCTURES)) \
+                        .filter(lambda s: (FILL_WITH_ENERGY_WO_TOWER.includes(s.structureType) and
+                                           s.energy < s.energyCapacity)) \
+                        .sample()
+            else:
+                target = _(creep.room.find(FIND_STRUCTURES)) \
+                    .filter(lambda s: (FILL_WITH_ENERGY.includes(s.structureType) and s.energy < s.energyCapacity)) \
+                    .sample()
             if target is undefined:
                 target = _(creep.room.find(FIND_STRUCTURES)) \
                     .filter(lambda s: (s.structureType == STRUCTURE_CONTROLLER)) \

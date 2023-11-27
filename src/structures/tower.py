@@ -1,4 +1,5 @@
-from src.constant.my_constants import STRUCTURE_NOT_TO_HEAL
+from src.constant.my_constants import STRUCTURE_WALL_OR_RAMPART_OR_ROAD, STRUCTURE_WALL_OR_RAMPART, \
+    RAMPART_AND_WALL_SIZE
 from src.defs import *
 
 __pragma__('noalias', 'name')
@@ -21,27 +22,24 @@ def operate_towers():
 
 
 def operate_tower(tower):
-    if attack_enemy(tower):
+    if Memory.room_safety_state[tower.room.name].enemy and attack_enemy(tower):
         return
-    if heal_friend(tower):
+    if Memory.room_safety_state[tower.room.name].wounded_creeps and heal_friend(tower):
         return
-    if repair_structure(tower):
+    if Memory.room_safety_state[tower.room.name].wounded_struc and repair_structure(tower):
         return
-
-    # TODO build rampart and walls
+    build_rampart_and_wall(tower)
 
 
 def attack_enemy(tower):
-    if Memory.room_safety_state[tower.room.name].enemy:
-        closest_enemy = tower.pos.findClosestByRange(FIND_HOSTILE_CREEPS)
-        if closest_enemy is not None:
-            tower.attack(closest_enemy)
-            return True
+    closest_enemy = tower.pos.findClosestByRange(FIND_HOSTILE_CREEPS)
+    if closest_enemy is not None:
+        tower.attack(closest_enemy)
+        return True
     return False
 
 
 def heal_friend(tower):
-    # TODO csekkolni memória alapján, hogy van e sérült creep
     damaged_creep = _(tower.room.find(FIND_MY_CREEPS)) \
         .filter(lambda c: c.hits < c.hitsMax) \
         .sample()
@@ -52,11 +50,21 @@ def heal_friend(tower):
 
 
 def repair_structure(tower):
-    # TODO csekkolni memória alapján, hogy van e sérült structure
     damaged_structure = _(tower.room.find(FIND_MY_STRUCTURES)) \
-        .filter(lambda s: s.hits < s.hitsMax and not STRUCTURE_NOT_TO_HEAL.includes(s.structureType)) \
+        .filter(lambda s: s.hits < s.hitsMax and not STRUCTURE_WALL_OR_RAMPART_OR_ROAD.includes(s.structureType)) \
         .sample()
     if damaged_structure is not undefined:
         tower.repair(damaged_structure)
         return True
     return False
+
+
+def build_rampart_and_wall(tower):
+    hit_level = RAMPART_AND_WALL_SIZE[tower.room.controller.level - 1]
+    wall_or_rampart = filter(lambda s: STRUCTURE_WALL_OR_RAMPART.includes(s.structureType) and s.hits < hit_level,
+                             tower.room.find(FIND_MY_STRUCTURES))
+    if len(wall_or_rampart) > 0:
+        structure_to_repair = sorted(wall_or_rampart, key=lambda c: c.hits)[0]
+        tower.repair(structure_to_repair)
+
+
