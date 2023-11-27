@@ -48,6 +48,7 @@ def run_harvester(creep):
             target = Game.getObjectById(creep.memory.target)
         else:
             # Get a random new target.
+            # TODO ha támadás alatt van a szoba, akkor fő prioritás a tower
             target = _(creep.room.find(FIND_STRUCTURES)) \
                 .filter(lambda s: (FILL_WITH_ENERGY.includes(s.structureType) and s.energy < s.energyCapacity)) \
                 .sample()

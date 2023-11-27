@@ -19,7 +19,8 @@ def make_room_snapshot():
         for room_name in Object.keys(Game.rooms):
             room = Game.rooms[room_name]
             if len(room.find(FIND_MY_SPAWNS)) > 0:
-                snapshot[room_name] = {'energy': room.energyAvailable}
+                room_snapshot = {'energy': room.energyAvailable}
+                __pragma__('js', '{}', 'snapshot[room_name] = room_snapshot')
         Memory.room_snapshot = snapshot
     else:
         Memory.room_snapshot_time -= 1

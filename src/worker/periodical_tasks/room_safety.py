@@ -21,10 +21,12 @@ def make_room_safety_check():
                 enemies = room.find(FIND_HOSTILE_CREEPS)
                 attacker_enemies = filter(lambda c: c.getActiveBodyparts(RANGED_ATTACK) +
                                                     c.getActiveBodyparts(ATTACK) > 0, enemies)
-                safety_check[room_name] = {
+                # TODO nézni, van e sérült creep illetve sérült épület
+                snapshot = {
                     'enemy': len(enemies) > 0,
                     'attacker': len(attacker_enemies) > 0
                 }
+                __pragma__('js', '{}', 'safety_check[room_name] = snapshot')
         Memory.room_safety_state = safety_check
     else:
         Memory.room_safety_check_time -= 1
