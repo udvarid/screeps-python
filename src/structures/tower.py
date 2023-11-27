@@ -24,6 +24,7 @@ def operate_towers():
 def operate_tower(tower):
     if Memory.room_safety_state[tower.room.name].enemy and attack_enemy(tower):
         return
+    # TODO csak akkor csinálja ezeket, ha legalább 25%ig van az energia, többit védelemre
     if Memory.room_safety_state[tower.room.name].wounded_creeps and heal_friend(tower):
         return
     if Memory.room_safety_state[tower.room.name].wounded_struc and repair_structure(tower):
