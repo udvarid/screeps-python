@@ -15,7 +15,7 @@ __pragma__('noalias', 'update')
 def operate_towers():
     for room_name in Object.keys(Game.rooms):
         room = Game.rooms[room_name]
-        towers = filter(lambda s: s.structureType == STRUCTURE_TOWER and s.energyCapacity > 0,
+        towers = filter(lambda s: s.structureType == STRUCTURE_TOWER and s.energy > 0,
                         room.find(FIND_MY_STRUCTURES))
         for tower in towers:
             operate_tower(tower)
@@ -24,12 +24,12 @@ def operate_towers():
 def operate_tower(tower):
     if Memory.room_safety_state[tower.room.name].enemy and attack_enemy(tower):
         return
-    # TODO csak akkor csinálja ezeket, ha legalább 25%ig van az energia, többit védelemre
-    if Memory.room_safety_state[tower.room.name].wounded_creeps and heal_friend(tower):
-        return
-    if Memory.room_safety_state[tower.room.name].wounded_struc and repair_structure(tower):
-        return
-    build_rampart_and_wall(tower)
+    if tower.energy >= tower.energyCapacity * 0.25:
+        if Memory.room_safety_state[tower.room.name].wounded_creeps and heal_friend(tower):
+            return
+        if Memory.room_safety_state[tower.room.name].wounded_struc and repair_structure(tower):
+            return
+        build_rampart_and_wall(tower)
 
 
 def attack_enemy(tower):

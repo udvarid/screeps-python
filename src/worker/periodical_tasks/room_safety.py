@@ -34,6 +34,19 @@ def make_room_safety_check():
                     'wounded_struc': len(wounded_structures) > 0 or len(weak_containers) > 0
                 }
                 __pragma__('js', '{}', 'safety_check[room_name] = snapshot')
+
+                activate_safe_mode_when_needed(room)
         Memory.room_safety_state = safety_check
     else:
         Memory.room_safety_check_time -= 1
+
+
+def activate_safe_mode_when_needed(room):
+    if Memory.room_safety_state[room.name].attacker and \
+            room.controller.safeMode is undefined and \
+            room.controller.safeModeCooldown is undefined and \
+            room.controller.safeModeAvailable > 0:
+        towers = filter(lambda s: s.structureType == STRUCTURE_TOWER and s.energy > 0,
+                        room.find(FIND_MY_STRUCTURES))
+        if len(towers) == 0:
+            room.controller.activateSafeMode()
