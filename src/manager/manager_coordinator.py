@@ -8,6 +8,7 @@ from src.worker import worker_creep_job_assign_executor
 def do_periodical_tasks():
     periodical_memory_task_executor.do_periodical_tasks()
     construction_task_executor.check_for_new_rampart()
+    construction_task_executor.check_for_new_construction_site()
 
 
 def do_strategic_tasks():
