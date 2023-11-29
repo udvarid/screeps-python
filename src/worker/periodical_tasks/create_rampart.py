@@ -1,4 +1,4 @@
-from src.constant.my_constants import ROOM_RAMPART, STRUCTURE_NEED_RAMPART
+from src.constant.my_constants import ROOM_RAMPART, STRUCTURES_NEED_RAMPART
 from src.defs import *
 
 __pragma__('noalias', 'name')
@@ -19,7 +19,7 @@ def create_rampart():
             if len(room.find(FIND_MY_SPAWNS)) > 0:
                 construction_sites = room.find(FIND_MY_CONSTRUCTION_SITES)
                 if len(construction_sites) == 0:
-                    vip_structures = filter(lambda s: STRUCTURE_NEED_RAMPART.includes(s.structureType),
+                    vip_structures = filter(lambda s: STRUCTURES_NEED_RAMPART.includes(s.structureType),
                                             room.find(FIND_MY_STRUCTURES))
                     ramparts = filter(lambda s: s.structureType == STRUCTURE_RAMPART, room.find(FIND_MY_STRUCTURES))
                     for vip in vip_structures:

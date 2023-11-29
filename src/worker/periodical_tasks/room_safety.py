@@ -1,4 +1,4 @@
-from src.constant.my_constants import ROOM_SAFETY, STRUCTURE_NOT_TO_HEAL
+from src.constant.my_constants import ROOM_SAFETY, STRUCTURES_NOT_TO_HEAL
 from src.defs import *
 
 __pragma__('noalias', 'name')
@@ -23,7 +23,7 @@ def make_room_safety_check():
                                                     c.getActiveBodyparts(ATTACK) > 0, enemies)
                 wounded_creeps = filter(lambda c: c.hits < c.hitsMax, room.find(FIND_MY_CREEPS))
                 wounded_structures = filter(lambda s: s.hits < s.hitsMax and
-                                                      not STRUCTURE_NOT_TO_HEAL.includes(s.structureType),
+                                                      not STRUCTURES_NOT_TO_HEAL.includes(s.structureType),
                                             room.find(FIND_MY_STRUCTURES))
                 weak_containers = filter(lambda s: s.hits < s.hitsMax * 0.9 and s.structureType == STRUCTURE_CONTAINER,
                                             room.find(FIND_MY_STRUCTURES))
