@@ -13,4 +13,4 @@ def more_worker_would_be_useful(context):
     for harvester in my_harvesters:
         work_elements += harvester.getActiveBodyparts(WORK)
 
-    return work_elements // sources < 6
+    return work_elements // sources < 8

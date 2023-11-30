@@ -46,7 +46,7 @@ def do_spawn():
                     multiplier = calculate_multiplier(energy_capacity, role.base_body)
                     body_list = role.base_body[:]
                     if multiplier > 1:
-                        for i in range(min(multiplier, 4) - 1):
+                        for i in range(min(multiplier, 5) - 1):
                             body_list.extend(role.base_body)
                     name = "{}{}".format(role_name, Game.time)
                     spawn.spawnCreep(body_list, name, {'memory': {'role': role_name}})
