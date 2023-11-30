@@ -44,7 +44,7 @@ def do_spawn():
                 }
                 if num_role_creeps < role.min or role.logic(context):
                     multiplier = calculate_multiplier(energy_capacity, role.base_body)
-                    body_list = role.base_body
+                    body_list = role.base_body[:]
                     if multiplier > 1:
                         for i in range(min(multiplier, 4) - 1):
                             body_list.extend(role.base_body)
