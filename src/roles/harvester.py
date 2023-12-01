@@ -47,44 +47,18 @@ def run_harvester(creep):
         if creep.memory.target:
             target = Game.getObjectById(creep.memory.target)
         else:
-            # Get a random new target.
-            if Memory.room_safety_state[creep.room.name].enemy:
-                target = _(creep.room.find(FIND_STRUCTURES)) \
-                    .filter(lambda s: (s.structureType == STRUCTURE_TOWER and s.energy < s.energyCapacity)) \
-                    .sample()
-                if target is undefined:
-                    target = _(creep.room.find(FIND_STRUCTURES)) \
-                        .filter(lambda s: (FILL_WITH_ENERGY_WO_TOWER.includes(s.structureType) and
-                                           s.energy < s.energyCapacity)) \
-                        .sample()
-                # if target is undefined:
-                #     target = _([creep.room.storage]) \
-                #         .filter(lambda s: s.store[RESOURCE_ENERGY] < 10000) \
-                #         .sample()
-            else:
-                target = _(creep.room.find(FIND_STRUCTURES)) \
-                    .filter(lambda s: (FILL_WITH_ENERGY.includes(s.structureType) and s.energy < s.energyCapacity)) \
-                    .sample()
-                # if target is undefined:
-                #     target = _([creep.room.storage]) \
-                #         .filter(lambda s: s.store[RESOURCE_ENERGY] < 10000) \
-                #         .sample()
-            if target is undefined:
-                target = _(creep.room.find(FIND_STRUCTURES)) \
-                    .filter(lambda s: (s.structureType == STRUCTURE_CONTROLLER)) \
-                    .sample()
+            target = get_target(creep)
             creep.memory.target = target.id
 
         # If we are targeting a spawn or extension, we need to be directly next to it - otherwise, we can be 3 away.
-        # TODO a store esetet itt is kezelni kell
-        if target.energyCapacity:
+        if target.energyCapacity or target == creep.room.storage:
             is_close = creep.pos.isNearTo(target)
         else:
             is_close = creep.pos.inRangeTo(target, 3)
 
         if is_close:
             # If we are targeting a spawn or extension, transfer energy. Otherwise, use upgradeController on it.
-            if target.energyCapacity:
+            if target.energyCapacity or target == creep.room.storage:
                 result = creep.transfer(target, RESOURCE_ENERGY)
                 if result == OK or result == ERR_FULL:
                     del creep.memory.target
@@ -101,3 +75,19 @@ def run_harvester(creep):
                     creep.moveTo(target)
         else:
             creep.moveTo(target, {'visualizePathStyle': {'stroke': '#ffffff'}})
+
+
+def get_target(creep):
+    room = creep.room
+    target = undefined
+    if Memory.room_safety_state[room.name].enemy:
+        target = _(room.find(FIND_STRUCTURES)) \
+            .filter(lambda s: (s.structureType == STRUCTURE_TOWER and s.energy < s.energyCapacity * 0.5)).sample()
+    if target is undefined:
+        target = _(room.find(FIND_STRUCTURES)) \
+            .filter(lambda s: (FILL_WITH_ENERGY.includes(s.structureType) and s.energy < s.energyCapacity * 0.9)).sample()
+    if target is undefined:
+        target = _([room.storage]).filter(lambda s: s.store[RESOURCE_ENERGY] < 10000).sample()
+    if target is undefined:
+        target = _(room.find(FIND_STRUCTURES)).filter(lambda s: (s.structureType == STRUCTURE_CONTROLLER)).sample()
+    return target
