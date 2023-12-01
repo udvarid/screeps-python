@@ -1,4 +1,3 @@
-from src.constant.my_constants import ROOM_RAMPART, STRUCTURES_NEED_RAMPART
 from src.defs import *
 
 __pragma__('noalias', 'name')
@@ -13,7 +12,8 @@ __pragma__('noalias', 'update')
 FIND_ME_EXITS = [FIND_EXIT_TOP, FIND_EXIT_BOTTOM, FIND_EXIT_RIGHT, FIND_EXIT_LEFT]
 
 
-def create_exit_wall():
+def create_exit_wall_plan():
+    # TODO bizonyos időközönként nézzük és csak akkor, ha még nem léteztik a memóriában
     room_exits = {}
     for room_name in Object.keys(Game.rooms):
         room = Game.rooms[room_name]
@@ -25,12 +25,15 @@ def create_exit_wall():
                     for exit_block in split_to_exit_blocks(exits):
                         exit_blocks.append(exit_block)
 
+            init_walls = get_me_walls(exit_blocks, room)
+            ramparts = get_rampart_from_init_walls(init_walls, room)
+            final_walls = get_final_walls(init_walls, ramparts)
             exits_to_report = {
                 'exits': exit_blocks,
-                'walls': get_me_walls(exit_blocks, room)
+                'walls': final_walls,
+                'ramparts': ramparts
             }
             __pragma__('js', '{}', 'room_exits[room_name] = exits_to_report')
-            # TODO mindegyik exit blokknál a kontrollertől az exit blok közepéig optimális út számítás és ahol metszi az építendő falat, ott rampart
 
     Memory.room_exits = room_exits
 
@@ -115,3 +118,25 @@ def get_me_walls(exits, room):
         final_result.append(final_block)
 
     return final_result
+
+
+def get_rampart_from_init_walls(walls, room):
+    result = []
+    controller = room.controller
+    for wall_block in walls:
+        room_positions = list(map(lambda w: __new__(RoomPosition(w[0], w[1], room.name)), wall_block))
+        closest = controller.pos.findClosestByPath(room_positions)
+        result.append((closest.x, closest.y))
+    return result
+
+
+def get_final_walls(init_walls, ramparts):
+    result = []
+    for i in range(len(init_walls)):
+        final_wall_block = []
+        rampart = ramparts[i]
+        for wall in init_walls[i]:
+            if not (wall[0] == rampart[0] and wall[1] == rampart[1]):
+                final_wall_block.append((wall[0], wall[1]))
+        result.append(final_wall_block)
+    return result
