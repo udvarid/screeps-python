@@ -28,6 +28,7 @@ def run_builder(creep: Creep):
         else:
             creep.memory.role = 'harvester'
     else:
+        # TODO checking energy in store and if found, grab it
         sources = creep.room.find(FIND_SOURCES)
         if creep.harvest(sources[0]) == ERR_NOT_IN_RANGE:
             creep.moveTo(
