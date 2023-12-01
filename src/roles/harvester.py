@@ -57,18 +57,18 @@ def run_harvester(creep):
                         .filter(lambda s: (FILL_WITH_ENERGY_WO_TOWER.includes(s.structureType) and
                                            s.energy < s.energyCapacity)) \
                         .sample()
-                if target is undefined:
-                    target = _([creep.room.storage]) \
-                        .filter(lambda s: s.store[RESOURCE_ENERGY] < 10000) \
-                        .sample()
+                # if target is undefined:
+                #     target = _([creep.room.storage]) \
+                #         .filter(lambda s: s.store[RESOURCE_ENERGY] < 10000) \
+                #         .sample()
             else:
                 target = _(creep.room.find(FIND_STRUCTURES)) \
                     .filter(lambda s: (FILL_WITH_ENERGY.includes(s.structureType) and s.energy < s.energyCapacity)) \
                     .sample()
-                if target is undefined:
-                    target = _([creep.room.storage]) \
-                        .filter(lambda s: s.store[RESOURCE_ENERGY] < 10000) \
-                        .sample()
+                # if target is undefined:
+                #     target = _([creep.room.storage]) \
+                #         .filter(lambda s: s.store[RESOURCE_ENERGY] < 10000) \
+                #         .sample()
             if target is undefined:
                 target = _(creep.room.find(FIND_STRUCTURES)) \
                     .filter(lambda s: (s.structureType == STRUCTURE_CONTROLLER)) \
@@ -76,6 +76,7 @@ def run_harvester(creep):
             creep.memory.target = target.id
 
         # If we are targeting a spawn or extension, we need to be directly next to it - otherwise, we can be 3 away.
+        # TODO a store esetet itt is kezelni kell
         if target.energyCapacity:
             is_close = creep.pos.isNearTo(target)
         else:
