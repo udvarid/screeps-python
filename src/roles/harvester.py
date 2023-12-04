@@ -1,4 +1,4 @@
-from src.constant.my_constants import FILL_WITH_ENERGY, FILL_WITH_ENERGY_WO_TOWER
+from src.constant.my_constants import FILL_WITH_ENERGY
 from src.defs import *
 
 __pragma__('noalias', 'name')
@@ -87,7 +87,7 @@ def get_target(creep):
         target = _(room.find(FIND_STRUCTURES)) \
             .filter(lambda s: (FILL_WITH_ENERGY.includes(s.structureType) and s.energy < s.energyCapacity * 0.9)).sample()
     if target is undefined:
-        target = _([room.storage]).filter(lambda s: s.store[RESOURCE_ENERGY] < 10000).sample()
+        target = _([room.storage]).filter(lambda s: s.store[RESOURCE_ENERGY] < 200000).sample()
     if target is undefined:
         target = _(room.find(FIND_STRUCTURES)).filter(lambda s: (s.structureType == STRUCTURE_CONTROLLER)).sample()
     return target

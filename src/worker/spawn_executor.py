@@ -1,3 +1,4 @@
+from src.roles.spawn_roles.upgrader_logic import need_extra as upgrader_logic
 from src.roles.spawn_roles.harvester_logic import need_extra as harvest_logic
 from src.roles.spawn_roles.builder_logic import need_extra as builder_logic
 
@@ -24,6 +25,12 @@ SPAWN_PLAN = {
         'max': 2,
         'base_body': [WORK, CARRY, MOVE, MOVE],
         'logic': builder_logic
+    },
+    'upgrader': {
+        'min': 0,
+        'max': 2,
+        'base_body': [WORK, CARRY, MOVE, MOVE],
+        'logic': upgrader_logic
     }
 }
 
