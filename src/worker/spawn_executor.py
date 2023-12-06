@@ -1,3 +1,4 @@
+from src.roles.spawn_roles.hauler_logic import need_extra as hauler_logic
 from src.roles.spawn_roles.upgrader_logic import need_extra as upgrader_logic
 from src.roles.spawn_roles.harvester_logic import need_extra as harvest_logic
 from src.roles.spawn_roles.builder_logic import need_extra as builder_logic
@@ -14,6 +15,12 @@ __pragma__('noalias', 'type')
 __pragma__('noalias', 'update')
 
 SPAWN_PLAN = {
+    'hauler': {
+        'min': 0,
+        'max': 1,
+        'base_body': [CARRY, CARRY, MOVE, MOVE],
+        'logic': hauler_logic
+    },
     'harvester': {
         'min': 2,
         'max': 8,
