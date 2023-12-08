@@ -1,3 +1,4 @@
+from src.worker.periodical_tasks.clear_unknown_walls import clear_walls
 from src.worker.periodical_tasks.create_construction_site import create_construction_site
 from src.worker.periodical_tasks.create_exit_wall import create_exit_wall_plan
 from src.worker.periodical_tasks.create_rampart import create_rampart
@@ -13,3 +14,7 @@ def check_for_new_construction_site():
 
 def exit_wall_creator():
     create_exit_wall_plan()
+
+
+def clear_unknown_walls():
+    clear_walls()

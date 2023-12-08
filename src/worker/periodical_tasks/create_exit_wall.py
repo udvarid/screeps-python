@@ -13,7 +13,7 @@ FIND_ME_EXITS = [FIND_EXIT_TOP, FIND_EXIT_BOTTOM, FIND_EXIT_RIGHT, FIND_EXIT_LEF
 
 
 def create_exit_wall_plan():
-    # TODO bizonyos időközönként nézzük és csak akkor, ha még nem léteztik a memóriában
+    # TODO itt a már meglévő terveket kiszedni a memóriából és csak az új szobákra megcsinálni
     room_exits = {}
     for room_name in Object.keys(Game.rooms):
         room = Game.rooms[room_name]
