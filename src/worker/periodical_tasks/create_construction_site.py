@@ -41,7 +41,8 @@ def find_and_create_construction_site(spawn, structure):
         checked_elements.append(actual)
         actual_is_valid_type = is_valid_type(actual, spawn.room)
         actual_is_occupied = any(actual[0] == struct.pos.x and actual[1] == struct.pos.y for struct in all_structures)
-        if not actual_is_occupied and actual_is_valid_type:
+        actual_is_near_to_sources = is_near_to_sources(actual, spawn.room)
+        if not actual_is_occupied and actual_is_valid_type and not actual_is_near_to_sources:
             spawn.room.createConstructionSite(actual[0], actual[1], structure)
             found_construction_site = True
             continue
@@ -53,6 +54,17 @@ def find_and_create_construction_site(spawn, structure):
                         not any(neighbour[0] == actual_element[0] and
                                 neighbour[1] == actual_element[1] for actual_element in my_queue):
                     my_queue.append(neighbour)
+
+
+def is_near_to_sources(actual, room):
+    act_pos = __new__(RoomPosition(actual[0], actual[1], room.name))
+    mineral = room.find(FIND_MINERALS)[0]
+    if act_pos.isNearTo(mineral):
+        return True
+    for source in room.find(FIND_SOURCES):
+        if act_pos.isNearTo(source):
+            return True
+    return False
 
 
 def get_neighbours(actual):
