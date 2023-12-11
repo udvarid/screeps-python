@@ -20,7 +20,6 @@ def run_harvester(creep):
     # If we're full, stop filling up and remove the saved source
     if creep.memory.filling and _.sum(creep.carry) >= creep.carryCapacity:
         creep.memory.filling = False
-        del creep.memory.source
     # If we're empty, start filling again and remove the saved target
     elif not creep.memory.filling and creep.carry.energy <= 0:
         creep.memory.filling = True
@@ -31,17 +30,20 @@ def run_harvester(creep):
         if creep.memory.source:
             source = Game.getObjectById(creep.memory.source)
         else:
-            # Get a random new source and save it
-            sources = filter(lambda s: s.energy > 0, creep.room.find(FIND_SOURCES))
-            source = creep.pos.findClosestByPath(sources)
-            creep.memory.source = source.id
+            energy_sources = creep.room.find(FIND_SOURCES)
+            source_with_workers = []
+            for energy_source in energy_sources:
+                harvesters = list(filter(lambda c: c.memory.source == energy_source.id,
+                                         creep.room.find(FIND_MY_CREEPS)))
+                source_with_workers.append((energy_source, len(harvesters)))
+            source = sorted(source_with_workers, key=lambda c: c[1])[0]
+            creep.memory.source = source[0].id
 
         # If we're near the source, harvest it - otherwise, move to it.
         if creep.pos.isNearTo(source):
             result = creep.harvest(source)
             if result != OK:
                 print("[{}] Unknown result from creep.harvest({}): {}".format(creep.name, source, result))
-                del creep.memory.source
         else:
             creep.moveTo(source, {'visualizePathStyle': {'stroke': '#ffffff'}})
     else:
@@ -72,7 +74,6 @@ def run_harvester(creep):
                 if result != OK:
                     print("[{}] Unknown result from creep.upgradeController({}): {}".format(
                         creep.name, target, result))
-                # Let the creeps get a little bit closer than required to the controller, to make room for other creeps.
                 if not creep.pos.inRangeTo(target, 2):
                     creep.moveTo(target)
         else:
@@ -89,7 +90,8 @@ def get_target(creep):
             .filter(lambda s: (s.structureType == STRUCTURE_TOWER and s.energy < s.energyCapacity * 0.5)).sample()
     if target is undefined and not we_have_haulers:
         target = _(room.find(FIND_STRUCTURES)) \
-            .filter(lambda s: (FILL_WITH_ENERGY.includes(s.structureType) and s.energy < s.energyCapacity * 0.9)).sample()
+            .filter(lambda s: (FILL_WITH_ENERGY.includes(s.structureType) and
+                               s.energy < s.energyCapacity * 0.9)).sample()
     if target is undefined:
         links = list(filter(lambda s: s.structureType == STRUCTURE_LINK and
                                       s.energyCapacity - s.energy >= creep.carry.energy,
