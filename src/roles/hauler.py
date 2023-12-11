@@ -26,9 +26,18 @@ def run_hauler(creep):
             creep.memory.working = True
             creep.memory.filling = False
             creep.memory.target = creep.room.storage.id
+        if possible_target is None and _.sum(creep.carry) == 0:
+            central_link_id = Memory.links[creep.room.name]
+            if central_link_id is not undefined:
+                link = Game.getObjectById(central_link_id)
+                if link is not None and link.energy > 0:
+                    creep.memory.working = True
+                    creep.memory.filling = True
+                    creep.memory.source = link.id
+                    creep.memory.target = creep.room.storage.id
 
     if creep.memory.working:
-        if creep.memory.filling and _.sum(creep.carry) >= creep.carryCapacity:
+        if creep.memory.filling and _.sum(creep.carry) > 0:
             creep.memory.filling = False
         elif not creep.memory.filling and creep.carry.energy <= 0:
             creep.memory.filling = True
@@ -38,6 +47,11 @@ def run_hauler(creep):
                 source = Game.getObjectById(creep.memory.source)
             else:
                 source = creep.room.storage
+                central_link_id = Memory.links[creep.room.name]
+                if central_link_id is not undefined:
+                    link = Game.getObjectById(central_link_id)
+                    if link is not None and link.energy > 0:
+                        source = link
                 creep.memory.source = source.id
 
             if creep.pos.isNearTo(source):
@@ -45,6 +59,8 @@ def run_hauler(creep):
                 if result != OK:
                     print("[{}] Unknown result from creep.withdraw from storage ({}): {}".format(creep.name, source,
                                                                                                  result))
+                else:
+                    del creep.memory.source
             else:
                 creep.moveTo(source, {'visualizePathStyle': {'stroke': '#ffffff'}})
         else:

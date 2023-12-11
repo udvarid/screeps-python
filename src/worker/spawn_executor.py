@@ -17,7 +17,7 @@ __pragma__('noalias', 'update')
 SPAWN_PLAN = {
     'hauler': {
         'min': 0,
-        'max': 1,
+        'max': 2,
         'base_body': [CARRY, CARRY, MOVE, MOVE],
         'logic': hauler_logic
     },

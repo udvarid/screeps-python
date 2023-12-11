@@ -13,6 +13,8 @@ __pragma__('noalias', 'update')
 
 
 def construct_links():
+    if Memory.links is undefined:
+        Memory.links = {}
     if not Memory.link_time or Memory.link_time <= 0:
         Memory.link_time = ROOM_LINK
         for room_name in Object.keys(Game.rooms):
@@ -26,8 +28,21 @@ def construct_links():
                 if len(construction_sites) == 0 and len(links) < 3:
                     check_and_build_at_store(room, spawns[0], links)
                     check_and_build_at_sources(room, spawns[0], links)
+                if len(links) > 0:
+                    put_central_link_id_into_memory(room, links)
     else:
         Memory.link_time -= 1
+
+
+def put_central_link_id_into_memory(room, links):
+    storage = room.storage
+    if storage is not undefined:
+        for link in links:
+            if storage.pos.isNearTo(link):
+                link_id = link.id
+                room_name = room.name
+                __pragma__('js', '{}', 'Memory.links[room_name] = link_id')
+                return
 
 
 def check_and_build_at_store(room, spawn, links):
@@ -79,4 +94,3 @@ def check_and_build_at_sources(room, spawn, links):
         closest = spawn.pos.findClosestByPath(filtered_neighbours)
         room.createConstructionSite(closest.x, closest.y, STRUCTURE_LINK)
         print("Create construction site at {}".format(closest))
-

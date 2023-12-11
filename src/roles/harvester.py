@@ -91,6 +91,12 @@ def get_target(creep):
         target = _(room.find(FIND_STRUCTURES)) \
             .filter(lambda s: (FILL_WITH_ENERGY.includes(s.structureType) and s.energy < s.energyCapacity * 0.9)).sample()
     if target is undefined:
+        links = list(filter(lambda s: s.structureType == STRUCTURE_LINK and
+                                      s.energyCapacity - s.energy >= creep.carry.energy,
+                            creep.room.find(FIND_MY_STRUCTURES)))
+        if len(links) > 0:
+            target = creep.pos.findClosestByPath(links)
+    if target is undefined:
         target = _([room.storage]).filter(lambda s: s.store[RESOURCE_ENERGY] < 200000).sample()
     if target is undefined:
         target = _(room.find(FIND_STRUCTURES)).filter(lambda s: (s.structureType == STRUCTURE_CONTROLLER)).sample()

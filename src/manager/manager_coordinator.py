@@ -1,3 +1,4 @@
+from src.structures.link import operate_links
 from src.structures.tower import operate_towers
 from src.worker import periodical_memory_task_executor
 from src.worker import construction_task_executor
@@ -16,6 +17,7 @@ def do_periodical_tasks():
 
 def do_strategic_tasks():
     operate_towers()
+    operate_links()
 
 
 def do_spawning():
