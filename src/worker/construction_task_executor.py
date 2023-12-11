@@ -1,3 +1,4 @@
+from src.worker.periodical_tasks.build_links import construct_links
 from src.worker.periodical_tasks.clear_unknown_walls import clear_walls
 from src.worker.periodical_tasks.create_construction_site import create_construction_site
 from src.worker.periodical_tasks.create_exit_wall import create_exit_wall_plan
@@ -18,3 +19,7 @@ def exit_wall_creator():
 
 def clear_unknown_walls():
     clear_walls()
+
+
+def build_links():
+    construct_links()
