@@ -41,9 +41,7 @@ def run_harvester(creep):
 
         # If we're near the source, harvest it - otherwise, move to it.
         if creep.pos.isNearTo(source):
-            result = creep.harvest(source)
-            if result != OK:
-                print("[{}] Unknown result from creep.harvest({}): {}".format(creep.name, source, result))
+            creep.harvest(source)
         else:
             creep.moveTo(source, {'visualizePathStyle': {'stroke': '#ffffff'}})
     else:
@@ -66,14 +64,8 @@ def run_harvester(creep):
                 result = creep.transfer(target, RESOURCE_ENERGY)
                 if result == OK or result == ERR_FULL:
                     del creep.memory.target
-                else:
-                    print("[{}] Unknown result from creep.transfer({}, {}): {}".format(
-                        creep.name, target, RESOURCE_ENERGY, result))
             else:
-                result = creep.upgradeController(target)
-                if result != OK:
-                    print("[{}] Unknown result from creep.upgradeController({}): {}".format(
-                        creep.name, target, result))
+                creep.upgradeController(target)
                 if not creep.pos.inRangeTo(target, 2):
                     creep.moveTo(target)
         else:

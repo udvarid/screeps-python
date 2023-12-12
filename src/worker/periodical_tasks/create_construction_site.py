@@ -21,7 +21,7 @@ def create_construction_site():
                     not Memory.room_safety_state[room_name].enemy and \
                     len(room.find(FIND_MY_CONSTRUCTION_SITES)) == 0:
                 for structure in STRUCTURES_NEED_CONSTRUCT:
-                    structures = filter(lambda s: s.structureType == structure, room.find(FIND_MY_STRUCTURES))
+                    structures = list(filter(lambda s: s.structureType == structure, room.find(FIND_MY_STRUCTURES)))
                     max_number = CONTROLLER_STRUCTURES[structure][room.controller.level]
                     if max_number > len(structures):
                         print("{} room tries to structure {}".format(room_name, structure))

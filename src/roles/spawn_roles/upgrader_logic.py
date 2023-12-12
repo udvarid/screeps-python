@@ -7,4 +7,6 @@ def need_extra(context):
 
 def more_upgrader_is_needed(context):
     energy_in_store = context.room.storage.store[RESOURCE_ENERGY]
-    return context.number == 0 and energy_in_store > 10000 or context.number > 0 and energy_in_store > 200000
+    return context.number == 0 and energy_in_store > 10000 or \
+           context.number <= 1 and energy_in_store > 200000 or \
+           context.number <= 2 and energy_in_store > 500000

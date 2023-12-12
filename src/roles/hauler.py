@@ -82,7 +82,8 @@ def get_target(creep):
     room = creep.room
     target = None
     if Memory.room_safety_state[room.name].enemy:
-        towers = filter(lambda s: s.structureType == STRUCTURE_TOWER and s.energy < s.energyCapacity * 0.5, room.find(FIND_STRUCTURES))
+        towers = list(filter(lambda s: s.structureType == STRUCTURE_TOWER and
+                                  s.energy < s.energyCapacity * 0.5, room.find(FIND_STRUCTURES)))
         target = creep.pos.findClosestByPath(towers)
     if target is None:
         structures = filter(lambda s: FILL_WITH_ENERGY.includes(s.structureType) and

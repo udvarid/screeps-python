@@ -1,4 +1,4 @@
-from src.constant.my_constants import ROOM_RAMPART, STRUCTURES_NEED_RAMPART, ROOM_CLEAR
+from src.constant.my_constants import ROOM_CLEAR
 from src.defs import *
 
 __pragma__('noalias', 'name')

@@ -1,6 +1,5 @@
 from src.defs import *
 
-
 __pragma__('noalias', 'name')
 __pragma__('noalias', 'undefined')
 __pragma__('noalias', 'Infinity')

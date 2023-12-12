@@ -1,6 +1,6 @@
-from src.constant.my_constants import ROOM_RAMPART, STRUCTURES_NEED_RAMPART, ROOM_LINK
-from src.defs import *
+from src.constant.my_constants import ROOM_LINK
 from src.worker.periodical_tasks.create_construction_site import is_valid_type, is_near_to_sources
+from src.defs import *
 
 __pragma__('noalias', 'name')
 __pragma__('noalias', 'undefined')

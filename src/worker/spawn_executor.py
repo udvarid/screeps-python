@@ -35,7 +35,7 @@ SPAWN_PLAN = {
     },
     'upgrader': {
         'min': 0,
-        'max': 2,
+        'max': 3,
         'base_body': [WORK, CARRY, MOVE, MOVE],
         'logic': upgrader_logic
     }

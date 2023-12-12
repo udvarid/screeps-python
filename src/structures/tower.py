@@ -15,8 +15,8 @@ __pragma__('noalias', 'update')
 def operate_towers():
     for room_name in Object.keys(Game.rooms):
         room = Game.rooms[room_name]
-        towers = filter(lambda s: s.structureType == STRUCTURE_TOWER and s.energy > 0,
-                        room.find(FIND_MY_STRUCTURES))
+        towers = list(filter(lambda s: s.structureType == STRUCTURE_TOWER and s.energy > 0,
+                             room.find(FIND_MY_STRUCTURES)))
         for tower in towers:
             operate_tower(tower)
 
@@ -62,10 +62,8 @@ def repair_structure(tower):
 
 def build_rampart_and_wall(tower):
     hit_level = RAMPART_AND_WALL_SIZE[tower.room.controller.level - 1]
-    wall_or_rampart = filter(lambda s: STRUCTURE_WALL_OR_RAMPART.includes(s.structureType) and s.hits < hit_level,
-                             tower.room.find(FIND_MY_STRUCTURES))
+    wall_or_rampart = list(filter(lambda s: STRUCTURE_WALL_OR_RAMPART.includes(s.structureType) and s.hits < hit_level,
+                                  tower.room.find(FIND_MY_STRUCTURES)))
     if len(wall_or_rampart) > 0:
         structure_to_repair = sorted(wall_or_rampart, key=lambda c: c.hits)[0]
         tower.repair(structure_to_repair)
-
-

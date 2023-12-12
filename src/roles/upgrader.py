@@ -16,11 +16,9 @@ def run_upgrader(creep):
     :param creep: The creep to run
     """
 
-    # If we're full, stop filling up and remove the saved source
     if creep.memory.filling and _.sum(creep.carry) >= creep.carryCapacity:
         creep.memory.filling = False
         del creep.memory.source
-    # If we're empty, start filling again and remove the saved target
     elif not creep.memory.filling and creep.carry.energy <= 0:
         creep.memory.filling = True
         del creep.memory.target
@@ -33,9 +31,7 @@ def run_upgrader(creep):
             creep.memory.source = source.id
 
         if creep.pos.isNearTo(source):
-            result = creep.withdraw(source, RESOURCE_ENERGY)
-            if result != OK:
-                print("[{}] Unknown result from creep.withdraw from storage ({}): {}".format(creep.name, source, result))
+            creep.withdraw(source, RESOURCE_ENERGY)
         else:
             creep.moveTo(source, {'visualizePathStyle': {'stroke': '#ffffff'}})
     else:
@@ -49,11 +45,7 @@ def run_upgrader(creep):
         is_close = creep.pos.inRangeTo(target, 3)
 
         if is_close:
-            result = creep.upgradeController(target)
-            if result != OK:
-                print("[{}] Unknown result from creep.upgradeController({}): {}".format(
-                    creep.name, target, result))
-            # Let the creeps get a little bit closer than required to the controller, to make room for other creeps.
+            creep.upgradeController(target)
             if not creep.pos.inRangeTo(target, 2):
                 creep.moveTo(target)
         else:

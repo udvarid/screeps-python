@@ -19,14 +19,15 @@ def make_room_safety_check():
             room = Game.rooms[room_name]
             if len(room.find(FIND_MY_SPAWNS)) > 0:
                 enemies = room.find(FIND_HOSTILE_CREEPS)
-                attacker_enemies = filter(lambda c: c.getActiveBodyparts(RANGED_ATTACK) +
-                                                    c.getActiveBodyparts(ATTACK) > 0, enemies)
-                wounded_creeps = filter(lambda c: c.hits < c.hitsMax, room.find(FIND_MY_CREEPS))
-                wounded_structures = filter(lambda s: s.hits < s.hitsMax and
-                                                      not STRUCTURES_NOT_TO_HEAL.includes(s.structureType),
-                                            room.find(FIND_MY_STRUCTURES))
-                weak_containers = filter(lambda s: s.hits < s.hitsMax * 0.9 and s.structureType == STRUCTURE_CONTAINER,
-                                            room.find(FIND_MY_STRUCTURES))
+                attacker_enemies = list(filter(lambda c: c.getActiveBodyparts(RANGED_ATTACK) +
+                                                         c.getActiveBodyparts(ATTACK) > 0, enemies))
+                wounded_creeps = list(filter(lambda c: c.hits < c.hitsMax, room.find(FIND_MY_CREEPS)))
+                wounded_structures = list(filter(lambda s: s.hits < s.hitsMax and
+                                                           not STRUCTURES_NOT_TO_HEAL.includes(s.structureType),
+                                                 room.find(FIND_MY_STRUCTURES)))
+                weak_containers = list(filter(lambda s: s.hits < s.hitsMax * 0.9 and
+                                                        s.structureType == STRUCTURE_CONTAINER,
+                                              room.find(FIND_MY_STRUCTURES)))
                 snapshot = {
                     'enemy': len(enemies) > 0,
                     'attacker': len(attacker_enemies) > 0,
@@ -46,7 +47,7 @@ def activate_safe_mode_when_needed(room):
             room.controller.safeMode is undefined and \
             room.controller.safeModeCooldown is undefined and \
             room.controller.safeModeAvailable > 0:
-        towers = filter(lambda s: s.structureType == STRUCTURE_TOWER and s.energy > 0,
-                        room.find(FIND_MY_STRUCTURES))
+        towers = list(filter(lambda s: s.structureType == STRUCTURE_TOWER and s.energy > 0,
+                             room.find(FIND_MY_STRUCTURES)))
         if len(towers) == 0:
             room.controller.activateSafeMode()

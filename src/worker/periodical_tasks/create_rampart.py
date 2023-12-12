@@ -18,11 +18,12 @@ def create_rampart():
             room = Game.rooms[room_name]
             if len(room.find(FIND_MY_SPAWNS)) > 0:
                 construction_sites = room.find(FIND_MY_CONSTRUCTION_SITES)
-                towers = filter(lambda s: s.structureType == STRUCTURE_TOWER, room.find(FIND_MY_STRUCTURES))
+                towers = list(filter(lambda s: s.structureType == STRUCTURE_TOWER, room.find(FIND_MY_STRUCTURES)))
                 if len(construction_sites) == 0 and len(towers) > 0:
-                    vip_structures = filter(lambda s: STRUCTURES_NEED_RAMPART.includes(s.structureType),
-                                            room.find(FIND_MY_STRUCTURES))
-                    ramparts = filter(lambda s: s.structureType == STRUCTURE_RAMPART, room.find(FIND_MY_STRUCTURES))
+                    vip_structures = list(filter(lambda s: STRUCTURES_NEED_RAMPART.includes(s.structureType),
+                                                 room.find(FIND_MY_STRUCTURES)))
+                    ramparts = list(filter(lambda s: s.structureType == STRUCTURE_RAMPART,
+                                           room.find(FIND_MY_STRUCTURES)))
                     for vip in vip_structures:
                         if not any(vip.pos.x == rampart.pos.x and vip.pos.y == rampart.pos.y for rampart in ramparts):
                             room.createConstructionSite(vip.pos.x, vip.pos.y, STRUCTURE_RAMPART)

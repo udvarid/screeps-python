@@ -12,6 +12,7 @@ def do_periodical_tasks():
     construction_task_executor.check_for_new_construction_site()
     construction_task_executor.clear_unknown_walls()
     construction_task_executor.build_links()
+    construction_task_executor.build_mine()
     #construction_task_executor.exit_wall_creator()
 
 
