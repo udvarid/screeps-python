@@ -2,6 +2,7 @@ from src.roles.spawn_roles.hauler_logic import need_extra as hauler_logic
 from src.roles.spawn_roles.upgrader_logic import need_extra as upgrader_logic
 from src.roles.spawn_roles.harvester_logic import need_extra as harvest_logic
 from src.roles.spawn_roles.builder_logic import need_extra as builder_logic
+from src.roles.spawn_roles.miner_logic import need_extra as miner_logic
 
 from src.defs import *
 
@@ -38,6 +39,12 @@ SPAWN_PLAN = {
         'max': 3,
         'base_body': [WORK, CARRY, MOVE, MOVE],
         'logic': upgrader_logic
+    },
+    'miner': {
+        'min': 0,
+        'max': 1,
+        'base_body': [WORK, CARRY, MOVE, MOVE],
+        'logic': miner_logic
     }
 }
 
