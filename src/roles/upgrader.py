@@ -20,6 +20,8 @@ def run_upgrader(creep):
         creep.memory.filling = False
         del creep.memory.source
     elif not creep.memory.filling and creep.carry.energy <= 0:
+        if creep.ticksToLive < 50:
+            creep.suicide()
         creep.memory.filling = True
         del creep.memory.target
 

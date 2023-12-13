@@ -18,7 +18,7 @@ def run_miner(creep):
     if creep.memory.filling and _.sum(creep.carry) >= creep.carryCapacity:
         creep.memory.filling = False
     elif not creep.memory.filling and _.sum(creep.carry) <= 0:
-        if creep.room.find(FIND_MINERALS)[0].mineralAmount == 0:
+        if creep.ticksToLive < 300 or creep.room.find(FIND_MINERALS)[0].mineralAmount == 0:
             creep.memory.role = 'harvester'
             return
         creep.memory.filling = True

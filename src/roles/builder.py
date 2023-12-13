@@ -15,6 +15,8 @@ def run_builder(creep: Creep):
         creep.memory.building = False
         creep.say('🔄 harvest')
     if not creep.memory.building and creep.store.getFreeCapacity() == 0:
+        if creep.ticksToLive < 50:
+            creep.suicide()
         creep.memory.building = True
         creep.say('🚧 build')
 

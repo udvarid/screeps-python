@@ -16,6 +16,8 @@ def run_hauler(creep):
     time = Game.time
     __pragma__('js', '{}', 'Memory.room_snapshot[room_name]["hauler_time"] = time')
     if not creep.memory.working:
+        if creep.ticksToLive < 20:
+            creep.suicide()
         energy_in_store = creep.room.storage.store[RESOURCE_ENERGY]
         possible_target = get_target(creep)
         if energy_in_store > 10000 and possible_target is not None:

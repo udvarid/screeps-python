@@ -22,6 +22,8 @@ def run_harvester(creep):
         creep.memory.filling = False
     # If we're empty, start filling again and remove the saved target
     elif not creep.memory.filling and creep.carry.energy <= 0:
+        if creep.ticksToLive < 50:
+            creep.suicide()
         creep.memory.filling = True
         del creep.memory.target
 
