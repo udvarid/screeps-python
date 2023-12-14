@@ -1,4 +1,4 @@
-from src.constant.my_constants import FILL_WITH_ENERGY
+from src.constant.my_constants import FILL_WITH_ENERGY, TERMINAL_MINIMUM_ENERGY, TERMINAL_MINIMUM_RESOURCE
 from src.defs import *
 
 __pragma__('noalias', 'name')
@@ -50,6 +50,29 @@ def run_hauler(creep):
                 creep.memory.resource = Memory.room_snapshot[creep.room.name]['mineral']
                 creep.memory.source = container_to_use.id
                 creep.memory.target = creep.room.storage.id
+        if possible_target is None and _.sum(creep.carry) == 0 and creep.memory.working is False:
+            terminals = list(filter(lambda s: s.structureType == STRUCTURE_TERMINAL,
+                                    creep.room.find(FIND_MY_STRUCTURES)))
+            if len(terminals) > 0:
+                terminal = terminals[0]
+                storage = creep.room.storage
+                terminal_energy = terminal.store.getUsedCapacity(RESOURCE_ENERGY)
+                storage_energy = storage.store.getUsedCapacity(RESOURCE_ENERGY)
+                resource = Memory.room_snapshot[creep.room.name]['mineral']
+                terminal_resource = terminal.store.getUsedCapacity(resource)
+                storage_resource = storage.store.getUsedCapacity(resource)
+                if terminal_energy < TERMINAL_MINIMUM_ENERGY and storage_energy > 10000:
+                    creep.memory.working = True
+                    creep.memory.filling = True
+                    creep.memory.resource = RESOURCE_ENERGY
+                    creep.memory.source = storage.id
+                    creep.memory.target = terminal.id
+                elif terminal_resource < TERMINAL_MINIMUM_RESOURCE and storage_resource > 0:
+                    creep.memory.working = True
+                    creep.memory.filling = True
+                    creep.memory.resource = resource
+                    creep.memory.source = storage.id
+                    creep.memory.target = terminal.id
 
     if creep.memory.working:
         if creep.memory.filling and _.sum(creep.carry) > 0:
