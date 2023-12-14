@@ -27,7 +27,7 @@ def make_room_safety_check():
                                                  room.find(FIND_MY_STRUCTURES)))
                 weak_containers = list(filter(lambda s: s.hits < s.hitsMax * 0.9 and
                                                         s.structureType == STRUCTURE_CONTAINER,
-                                              room.find(FIND_MY_STRUCTURES)))
+                                              room.find(FIND_STRUCTURES)))
                 snapshot = {
                     'enemy': len(enemies) > 0,
                     'attacker': len(attacker_enemies) > 0,

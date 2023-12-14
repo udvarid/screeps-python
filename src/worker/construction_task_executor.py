@@ -1,3 +1,4 @@
+from src.worker.periodical_tasks.build_containers import construct_containers
 from src.worker.periodical_tasks.build_links import construct_links
 from src.worker.periodical_tasks.build_mine import construct_mine
 from src.worker.periodical_tasks.clear_unknown_walls import clear_walls
@@ -28,3 +29,7 @@ def build_links():
 
 def build_mine():
     construct_mine()
+
+
+def build_containers():
+    construct_containers()
