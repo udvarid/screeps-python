@@ -24,10 +24,12 @@ def run_hauler(creep):
             creep.memory.working = True
             creep.memory.filling = False
             creep.memory.target = possible_target.id
+            creep.memory.resource = RESOURCE_ENERGY
         if possible_target is None and _.sum(creep.carry) > 0:
             creep.memory.working = True
             creep.memory.filling = False
             creep.memory.target = creep.room.storage.id
+            creep.memory.resource = RESOURCE_ENERGY
         if possible_target is None and _.sum(creep.carry) == 0:
             central_link_id = Memory.links[creep.room.name]
             if central_link_id is not undefined:
@@ -37,6 +39,17 @@ def run_hauler(creep):
                     creep.memory.filling = True
                     creep.memory.source = link.id
                     creep.memory.target = creep.room.storage.id
+                    creep.memory.resource = RESOURCE_ENERGY
+        if possible_target is None and _.sum(creep.carry) == 0 and creep.memory.working is False:
+            containers = list(filter(lambda s: s.structureType == STRUCTURE_CONTAINER and s.store.getUsedCapacity() > 0,
+                                     creep.room.find(FIND_STRUCTURES)))
+            if len(containers) > 0:
+                container_to_use = sorted(containers, key=lambda c: c.store.getFreeCapacity())[0]
+                creep.memory.working = True
+                creep.memory.filling = True
+                creep.memory.resource = Memory.room_snapshot[creep.room.name]['mineral']
+                creep.memory.source = container_to_use.id
+                creep.memory.target = creep.room.storage.id
 
     if creep.memory.working:
         if creep.memory.filling and _.sum(creep.carry) > 0:
@@ -57,7 +70,7 @@ def run_hauler(creep):
                 creep.memory.source = source.id
 
             if creep.pos.isNearTo(source):
-                result = creep.withdraw(source, RESOURCE_ENERGY)
+                result = creep.withdraw(source, creep.memory.resource)
                 if result != OK:
                     print("[{}] Unknown result from creep.withdraw from storage ({}): {}".format(creep.name, source,
                                                                                                  result))
@@ -69,13 +82,13 @@ def run_hauler(creep):
             target = Game.getObjectById(creep.memory.target)
             is_close = creep.pos.isNearTo(target)
             if is_close:
-                result = creep.transfer(target, RESOURCE_ENERGY)
+                result = creep.transfer(target, creep.memory.resource)
                 if result == OK or result == ERR_FULL:
                     del creep.memory.target
                     creep.memory.working = False
                 else:
                     print("[{}] Unknown result from creep.transfer({}, {}): {}"
-                          .format(creep.name, target, RESOURCE_ENERGY, result))
+                          .format(creep.name, target, creep.memory.resource, result))
             else:
                 creep.moveTo(target, {'visualizePathStyle': {'stroke': '#ffffff'}})
 
@@ -85,10 +98,10 @@ def get_target(creep):
     target = None
     if Memory.room_safety_state[room.name].enemy:
         towers = list(filter(lambda s: s.structureType == STRUCTURE_TOWER and
-                                  s.energy < s.energyCapacity * 0.5, room.find(FIND_STRUCTURES)))
+                                       s.energy < s.energyCapacity * 0.5, room.find(FIND_STRUCTURES)))
         target = creep.pos.findClosestByPath(towers)
     if target is None:
         structures = filter(lambda s: FILL_WITH_ENERGY.includes(s.structureType) and
-                                         s.energy < s.energyCapacity * 0.9, room.find(FIND_MY_STRUCTURES))
+                                      s.energy < s.energyCapacity * 0.9, room.find(FIND_MY_STRUCTURES))
         target = creep.pos.findClosestByPath(structures)
     return target

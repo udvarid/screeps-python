@@ -20,6 +20,7 @@ def run_miner(creep):
     elif not creep.memory.filling and _.sum(creep.carry) <= 0:
         if creep.ticksToLive < 300 or creep.room.find(FIND_MINERALS)[0].mineralAmount == 0:
             creep.memory.role = 'upgrader'
+            del creep.memory.source
             return
         creep.memory.filling = True
         del creep.memory.target
