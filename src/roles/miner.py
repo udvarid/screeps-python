@@ -19,7 +19,7 @@ def run_miner(creep):
         creep.memory.filling = False
     elif not creep.memory.filling and _.sum(creep.carry) <= 0:
         if creep.ticksToLive < 300 or creep.room.find(FIND_MINERALS)[0].mineralAmount == 0:
-            creep.memory.role = 'harvester'
+            creep.memory.role = 'upgrader'
             return
         creep.memory.filling = True
         del creep.memory.target
@@ -48,5 +48,11 @@ def run_miner(creep):
 
 
 def get_target(creep):
-    target = creep.room.storage
+    target = undefined
+    containers = list(filter(lambda s: s.structureType == STRUCTURE_CONTAINER and s.store.getFreeCapacity() > 0,
+                             creep.room.find(FIND_STRUCTURES)))
+    if len(containers) > 0:
+        target = containers[0]
+    if target is undefined:
+        target = creep.room.storage
     return target

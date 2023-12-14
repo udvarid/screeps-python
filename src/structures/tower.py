@@ -57,6 +57,12 @@ def repair_structure(tower):
     if damaged_structure is not undefined:
         tower.repair(damaged_structure)
         return True
+    damaged_container = _(tower.room.find(FIND_STRUCTURES)) \
+        .filter(lambda s: s.hits < s.hitsMax and s.structureType == STRUCTURE_CONTAINER) \
+        .sample()
+    if damaged_container is not undefined:
+        tower.repair(damaged_container)
+        return True
     return False
 
 

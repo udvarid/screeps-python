@@ -41,7 +41,7 @@ def run_hauler(creep):
     if creep.memory.working:
         if creep.memory.filling and _.sum(creep.carry) > 0:
             creep.memory.filling = False
-        elif not creep.memory.filling and creep.carry.energy <= 0:
+        elif not creep.memory.filling and _.sum(creep.carry) <= 0:
             creep.memory.filling = True
 
         if creep.memory.filling:
