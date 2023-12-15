@@ -42,7 +42,7 @@ SPAWN_PLAN = {
     },
     'miner': {
         'min': 0,
-        'max': 1,
+        'max': 2,
         'base_body': [WORK, CARRY, MOVE, MOVE],
         'logic': miner_logic
     }
