@@ -95,8 +95,7 @@ def run_hauler(creep):
             if creep.pos.isNearTo(source):
                 result = creep.withdraw(source, creep.memory.resource)
                 if result != OK:
-                    print("[{}] Unknown result from creep.withdraw from storage ({}): {}".format(creep.name, source,
-                                                                                                 result))
+                    creep.memory.working = False
                 else:
                     del creep.memory.source
             else:
