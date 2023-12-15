@@ -37,7 +37,10 @@ def run_harvester(creep):
             for energy_source in energy_sources:
                 harvesters = list(filter(lambda c: c.memory.source == energy_source.id,
                                          creep.room.find(FIND_MY_CREEPS)))
-                source_with_workers.append((energy_source, len(harvesters)))
+                work_elements = 0
+                for harvester in harvesters:
+                    work_elements += harvester.getActiveBodyparts(WORK)
+                source_with_workers.append((energy_source, work_elements))
             source = sorted(source_with_workers, key=lambda c: c[1])[0]
             creep.memory.source = source[0].id
 
