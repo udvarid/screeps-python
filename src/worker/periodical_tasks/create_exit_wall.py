@@ -1,3 +1,4 @@
+from src.constant.my_constants import ROOM_DEFINE_EXIT
 from src.defs import *
 
 __pragma__('noalias', 'name')
@@ -13,29 +14,36 @@ FIND_ME_EXITS = [FIND_EXIT_TOP, FIND_EXIT_BOTTOM, FIND_EXIT_RIGHT, FIND_EXIT_LEF
 
 
 def create_exit_wall_plan():
-    # TODO itt a már meglévő terveket kiszedni a memóriából és csak az új szobákra megcsinálni
-    room_exits = {}
-    for room_name in Object.keys(Game.rooms):
-        room = Game.rooms[room_name]
-        if len(room.find(FIND_MY_SPAWNS)) > 0:
-            exit_blocks = []
-            for find_direction in FIND_ME_EXITS:
-                exits = room.find(find_direction)
-                if len(exits) > 0:
-                    for exit_block in split_to_exit_blocks(exits):
-                        exit_blocks.append(exit_block)
+    if not Memory.define_exit_time or Memory.define_exit_time <= 0:
+        Memory.define_exit_time = ROOM_DEFINE_EXIT
+        room_exits = Memory.room_exits
+        if room_exits is undefined:
+            room_exits = {}
+        for room_name in Object.keys(Game.rooms):
+            room = Game.rooms[room_name]
+            if len(room.find(FIND_MY_SPAWNS)) > 0:
+                if room_exits[room_name] is not undefined:
+                    return
+                exit_blocks = []
+                for find_direction in FIND_ME_EXITS:
+                    exits = room.find(find_direction)
+                    if len(exits) > 0:
+                        for exit_block in split_to_exit_blocks(exits):
+                            exit_blocks.append(exit_block)
 
-            init_walls = get_me_walls(exit_blocks, room)
-            ramparts = get_rampart_from_init_walls(init_walls, room)
-            final_walls = get_final_walls(init_walls, ramparts)
-            exits_to_report = {
-                'exits': exit_blocks,
-                'walls': final_walls,
-                'ramparts': ramparts
-            }
-            __pragma__('js', '{}', 'room_exits[room_name] = exits_to_report')
+                init_walls = get_me_walls(exit_blocks, room)
+                ramparts = get_rampart_from_init_walls(init_walls, room)
+                final_walls = get_final_walls(init_walls, ramparts)
+                exits_to_report = {
+                    'exits': exit_blocks,
+                    'walls': final_walls,
+                    'ramparts': ramparts
+                }
+                __pragma__('js', '{}', 'room_exits[room_name] = exits_to_report')
 
-    Memory.room_exits = room_exits
+        Memory.room_exits = room_exits
+    else:
+        Memory.define_exit_time -= 1
 
 
 def split_to_exit_blocks(exits):
