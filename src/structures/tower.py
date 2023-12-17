@@ -69,7 +69,7 @@ def repair_structure(tower):
 def build_rampart_and_wall(tower):
     hit_level = RAMPART_AND_WALL_SIZE[tower.room.controller.level - 1]
     wall_or_rampart = list(filter(lambda s: STRUCTURE_WALL_OR_RAMPART.includes(s.structureType) and s.hits < hit_level,
-                                  tower.room.find(FIND_MY_STRUCTURES)))
+                                  tower.room.find(FIND_STRUCTURES)))
     if len(wall_or_rampart) > 0:
         structure_to_repair = sorted(wall_or_rampart, key=lambda c: c.hits)[0]
         tower.repair(structure_to_repair)

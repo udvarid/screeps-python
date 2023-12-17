@@ -22,11 +22,13 @@ def build_exit_wall():
             room_exits = Memory.room_exits[room_name]
             if len(room.find(FIND_MY_SPAWNS)) == 0 or room_exits is undefined:
                 continue
-            if Memory.room_safety_state[room.name].enemy:
+            if Memory.room_safety_state[room_name].enemy:
                 continue
             if len(room.find(FIND_MY_CONSTRUCTION_SITES)) > 0:
                 continue
             if room.storage is undefined or room.storage.store.getUsedCapacity(RESOURCE_ENERGY) < 200000:
+                continue
+            if not Memory.room_clear[room_name]:
                 continue
             hit_level = RAMPART_AND_WALL_SIZE[room.controller.level - 1] * 0.9
             wall_or_rampart = list(
