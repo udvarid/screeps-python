@@ -30,7 +30,7 @@ SPAWN_PLAN = {
     },
     'builder': {
         'min': 0,
-        'max': 2,
+        'max': 1,
         'base_body': [WORK, CARRY, MOVE, MOVE],
         'logic': builder_logic
     },
