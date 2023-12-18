@@ -24,12 +24,16 @@ def check_for_new_rooms():
                 is_there_enemy = Memory.room_safety_state[room_name].enemy
                 is_there_attacker = Memory.room_safety_state[room_name].attacker
                 previous_state = Memory.room_map[room_name]
+                if previous_state is undefined or previous_state['neighbours'] is undefined:
+                    neighbours = get_neighbours(room)
+                else:
+                    neighbours = previous_state['neighbours']
                 room_state = {
                     'energy': 2,
                     'owner': 'me',
                     'enemy': is_there_enemy,
                     'attacker': is_there_attacker,
-                    'neighbours': previous_state if previous_state is not undefined else get_neighbours(room),
+                    'neighbours': neighbours,
                     'time': Game.time
                 }
                 __pragma__('js', '{}', 'Memory.room_map[room_name] = room_state')

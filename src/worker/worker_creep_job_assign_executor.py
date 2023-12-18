@@ -1,6 +1,7 @@
 from src.roles.builder import run_builder
 from src.roles.harvester import run_harvester
 from src.roles.hauler import run_hauler
+from src.roles.scouter import run_scouter
 from src.roles.upgrader import run_upgrader
 from src.roles.miner import run_miner
 from src.defs import *
@@ -20,6 +21,7 @@ CREEP_TASKS = {
     'builder': {'run_task': run_builder},
     'upgrader': {'run_task': run_upgrader},
     'miner': {'run_task': run_miner},
+    'scouter': {'run_task': run_scouter},
 }
 
 

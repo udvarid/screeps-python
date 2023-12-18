@@ -3,6 +3,7 @@ from src.roles.spawn_roles.upgrader_logic import need_extra as upgrader_logic
 from src.roles.spawn_roles.harvester_logic import need_extra as harvest_logic
 from src.roles.spawn_roles.builder_logic import need_extra as builder_logic
 from src.roles.spawn_roles.miner_logic import need_extra as miner_logic
+from src.roles.spawn_roles.scouter_logic import need_extra as scouter_logic, give_aim
 
 from src.defs import *
 
@@ -16,35 +17,48 @@ __pragma__('noalias', 'type')
 __pragma__('noalias', 'update')
 
 SPAWN_PLAN = {
+    'scouter': {
+        'min': 0,
+        'max': 0,
+        'base_body': [MOVE],
+        'logic': scouter_logic,
+        'multiple': False,
+        'aim_logic': give_aim
+    },
     'hauler': {
         'min': 0,
         'max': 2,
         'base_body': [CARRY, CARRY, MOVE, MOVE],
-        'logic': hauler_logic
+        'logic': hauler_logic,
+        'multiple': True
     },
     'harvester': {
         'min': 2,
         'max': 8,
         'base_body': [WORK, CARRY, MOVE, MOVE],
-        'logic': harvest_logic
+        'logic': harvest_logic,
+        'multiple': True
     },
     'builder': {
         'min': 0,
         'max': 1,
         'base_body': [WORK, CARRY, MOVE, MOVE],
-        'logic': builder_logic
+        'logic': builder_logic,
+        'multiple': True
     },
     'upgrader': {
         'min': 0,
         'max': 3,
         'base_body': [WORK, CARRY, MOVE, MOVE],
-        'logic': upgrader_logic
+        'logic': upgrader_logic,
+        'multiple': True
     },
     'miner': {
         'min': 0,
         'max': 2,
         'base_body': [WORK, CARRY, MOVE, MOVE],
-        'logic': miner_logic
+        'logic': miner_logic,
+        'multiple': True
     }
 }
 
@@ -64,13 +78,21 @@ def do_spawn():
                     'number': num_role_creeps
                 }
                 if num_role_creeps < role.min or role.logic(context):
-                    multiplier = calculate_multiplier(energy_capacity, role.base_body)
+                    multiplier = 1 if role.multiple is False else calculate_multiplier(energy_capacity, role.base_body)
                     body_list = role.base_body[:]
                     if multiplier > 1:
                         for i in range(min(multiplier, 10) - 1):
                             body_list.extend(role.base_body)
                     name = "{}{}".format(role_name, Game.time)
-                    spawn.spawnCreep(body_list, name, {'memory': {'role': role_name}})
+                    aim_name = spawn.room.name if role.aim_logic is undefined else role.aim_logic(spawn.room.name)
+                    memory = {
+                        'memory': {
+                            'role': role_name,
+                            'home': spawn.room.name,
+                            'aim': aim_name
+                        }
+                    }
+                    spawn.spawnCreep(body_list, name, memory)
                     return
 
 
