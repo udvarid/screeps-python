@@ -1,7 +1,7 @@
 from src.structures.link import operate_links
 from src.structures.terminal import operate_terminals
 from src.structures.tower import operate_towers
-from src.worker import periodical_memory_task_executor
+from src.worker import periodical_memory_task_executor, discovery_task_executor
 from src.worker import construction_task_executor
 from src.worker import spawn_executor
 from src.worker import worker_creep_job_assign_executor
@@ -17,6 +17,7 @@ def do_periodical_tasks():
     construction_task_executor.build_containers()
     construction_task_executor.exit_wall_plan_creator()
     construction_task_executor.exit_wall_builder()
+    discovery_task_executor.check_rooms_for_scout()
 
 
 def do_strategic_tasks():
