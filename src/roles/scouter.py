@@ -41,7 +41,12 @@ def run_scouter(creep: Creep):
         __pragma__('js', '{}', 'Memory.room_map[creep.room.name] = room_state')
         __pragma__('js', '{}', 'Memory.room_map[my_home]["neighbours"][creep.memory.aim] = creep.room.name')
         creep.suicide()
-    creep.moveByPath(creep.memory.my_path)
+    result = creep.moveByPath(creep.memory.my_path)
+    if result is not OK and len(creep.memory.my_path) > 0:
+        creep.memory.my_path = creep.room.findPath(creep.pos, creep.memory.my_exit)
+    elif result is not OK and len(creep.memory.my_path) == 0:
+        creep.memory.my_exit = get_exit(creep)
+        creep.memory.my_path = creep.room.findPath(creep.pos, creep.memory.my_exit)
 
 
 def get_exit(creep):

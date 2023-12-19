@@ -19,7 +19,7 @@ __pragma__('noalias', 'update')
 SPAWN_PLAN = {
     'scouter': {
         'min': 0,
-        'max': 0,
+        'max': 1,
         'base_body': [MOVE],
         'logic': scouter_logic,
         'multiple': False,
