@@ -21,9 +21,9 @@ def run_claimer(creep: Creep):
         creep.memory.my_path = creep.room.findPath(creep.pos, creep.memory.my_exit)
     if creep.room.name != creep.memory.home:
         controller = creep.room.controller
-        PathFinder.search(creep.pos, controller)
+        creep.memory.my_path = creep.room.findPath(creep.pos, controller.pos, {'swampCost': 1})
         if creep.claimController(controller) == ERR_NOT_IN_RANGE:
-            creep.moveTo(controller)
+            creep.moveByPath(creep.memory.my_path)
     else:
         result = creep.moveByPath(creep.memory.my_path)
         if result is not OK and len(creep.memory.my_path) > 0:
