@@ -39,7 +39,7 @@ def build_exit_wall():
 
             number_to_build = 5
             wall_blocks = room_exits['walls']
-            walls_in_room = list(filter(lambda s: s.structureType == STRUCTURE_WALL, room.find(FIND_MY_STRUCTURES)))
+            walls_in_room = list(filter(lambda s: s.structureType == STRUCTURE_WALL, room.find(FIND_STRUCTURES)))
             for wall_block in wall_blocks:
                 for wall in wall_block:
                     if any(wall[0] == wall_in_room.pos.x and wall[1] == wall_in_room.pos.y

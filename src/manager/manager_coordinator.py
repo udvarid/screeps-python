@@ -17,10 +17,14 @@ def do_periodical_tasks():
     construction_task_executor.build_containers()
     construction_task_executor.exit_wall_plan_creator()
     construction_task_executor.exit_wall_builder()
-    discovery_task_executor.check_rooms_for_scout()
 
 
 def do_strategic_tasks():
+    discovery_task_executor.check_rooms_for_scout()
+    discovery_task_executor.check_rooms_for_conquer()
+
+
+def do_structure_related_tasks():
     operate_towers()
     operate_links()
     operate_terminals()

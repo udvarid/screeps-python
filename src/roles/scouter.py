@@ -1,5 +1,5 @@
 from src.defs import *
-from src.worker.periodical_tasks.check_for_new_rooms import get_neighbours
+from src.worker.periodical_tasks.check_for_new_scouts import get_neighbours
 
 __pragma__('noalias', 'name')
 __pragma__('noalias', 'undefined')

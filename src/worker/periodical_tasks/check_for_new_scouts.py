@@ -11,7 +11,7 @@ __pragma__('noalias', 'type')
 __pragma__('noalias', 'update')
 
 
-def check_for_new_rooms():
+def check_for_new_scouts():
     if not Memory.scout_time or Memory.scout_time <= 0:
         room_maps = {}
         if Memory.room_map is undefined:

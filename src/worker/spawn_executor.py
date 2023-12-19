@@ -17,14 +17,6 @@ __pragma__('noalias', 'type')
 __pragma__('noalias', 'update')
 
 SPAWN_PLAN = {
-    'scouter': {
-        'min': 0,
-        'max': 1,
-        'base_body': [MOVE],
-        'logic': scouter_logic,
-        'multiple': False,
-        'aim_logic': give_aim
-    },
     'hauler': {
         'min': 0,
         'max': 2,
@@ -59,6 +51,14 @@ SPAWN_PLAN = {
         'base_body': [WORK, CARRY, MOVE, MOVE],
         'logic': miner_logic,
         'multiple': True
+    },
+    'scouter': {
+        'min': 0,
+        'max': 1,
+        'base_body': [MOVE],
+        'logic': scouter_logic,
+        'multiple': False,
+        'aim_logic': give_aim
     }
 }
 

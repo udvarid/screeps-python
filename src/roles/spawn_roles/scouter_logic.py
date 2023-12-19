@@ -1,4 +1,5 @@
 from src.defs import *
+from src.utility.helper import get_active_rooms
 
 __pragma__('noalias', 'name')
 __pragma__('noalias', 'undefined')
@@ -40,12 +41,7 @@ def get_neighbour_scouted_long_ago(room_name):
         neighbours.append(('left', room_state['neighbours']['left']))
 
     if len(neighbours) > 0:
-        my_rooms = []
-        for room_name in Object.keys(Game.rooms):
-            room = Game.rooms[room_name]
-            spawns = room.find(FIND_MY_SPAWNS)
-            if len(spawns) > 0:
-                my_rooms.append(room_name)
+        my_rooms = get_active_rooms()
 
         for neigh in neighbours:
             if any(neigh[1] == room for room in my_rooms):
