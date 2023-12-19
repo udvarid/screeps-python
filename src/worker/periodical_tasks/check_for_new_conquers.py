@@ -19,11 +19,13 @@ def check_for_new_conquers():
         if len(my_rooms) >= Game.gcl.level:
             return
 
-        my_free_rooms = get_free_rooms(my_rooms)
-
         room_conquer = {}
         if Memory.room_conquer is undefined:
             Memory.room_conquer = room_conquer
+
+        my_free_rooms = get_free_rooms(my_rooms)
+
+        clean_old_conquers()
 
         for room_map in Object.keys(Memory.room_map):
             old = Game.time - Memory.room_map[room_map]['time'] > 15000
@@ -37,11 +39,19 @@ def check_for_new_conquers():
                     print("Room {} should be occupied by {}".format(room_map, occupier))
                     aim = {
                         'aim': room_map,
-                        'claimed': False
+                        'claimed': False,
+                        'time': Game.time
                     }
                     __pragma__('js', '{}', 'Memory.room_conquer[occupier] = aim')
     else:
         Memory.conquer_time -= 1
+
+
+def clean_old_conquers():
+    for occupier in Object.keys(Memory.room_conquer):
+        occupy = Memory.room_conquer[occupier]
+        if Game.time - occupy['aim']['time'] > 50000:
+            del Memory.room_conquer[occupier]
 
 
 def get_occupier(rooms, neighbours):
