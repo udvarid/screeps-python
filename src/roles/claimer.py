@@ -14,7 +14,7 @@ __pragma__('noalias', 'update')
 def run_claimer(creep: Creep):
     if creep.memory.birth is undefined:
         creep.memory.birth = True
-        __pragma__('js', '{}', 'Memory.room_conquer[creep.memory.aim]["aim"]["time"] = Game.time')
+        __pragma__('js', '{}', 'Memory.room_conquer[creep.memory.home]["time"] = Game.time')
 
     if creep.memory.my_exit is undefined:
         direction = creep.room.findExitTo(creep.memory.aim)
@@ -32,8 +32,6 @@ def run_claimer(creep: Creep):
         if controller.my:
             cont_sites = creep.room.find(FIND_CONSTRUCTION_SITES)
             spawns = creep.room.find(FIND_MY_SPAWNS)
-            print("We have {} construction sites and {} spawn"
-                  .format(len(cont_sites), len(spawns)))
             if len(cont_sites) == 0 and len(spawns) == 0:
                 sources = creep.room.find(FIND_SOURCES)
                 pos1 = (sources[0].pos.x + sources[1].pos.x) // 2
@@ -41,14 +39,12 @@ def run_claimer(creep: Creep):
                 middle = (pos1, pos2)
                 spawn = find_place_for_spawn(middle, creep.room)
                 if spawn is not undefined:
-                    print(spawn)
                     creep.room.createConstructionSite(spawn[0], spawn[1], STRUCTURE_SPAWN)
-                    __pragma__('js', '{}', 'Memory.room_conquer[creep.memory.aim]["aim"]["claimed"] = True')
+                    __pragma__('js', '{}', 'Memory.room_conquer[creep.memory.home]["claimed"] = true')
             if len(spawns) > 0:
-                del Memory.room_conquer[creep.memory.aim]
+                del Memory.room_conquer[creep.memory.home]
                 __pragma__('js', '{}', 'Memory.room_map[creep.room.name]["owner"] = "me"')
                 creep.suicide()
-                # TODO a builder legyen harvester
     else:
         result = creep.moveByPath(creep.memory.my_path)
         if result is not OK and len(creep.memory.my_path) > 0:

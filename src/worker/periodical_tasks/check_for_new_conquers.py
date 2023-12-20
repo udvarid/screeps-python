@@ -1,6 +1,6 @@
 from src.constant.my_constants import ROOM_CONQUER
-from src.defs import *
 from src.utility.helper import get_active_rooms
+from src.defs import *
 
 __pragma__('noalias', 'name')
 __pragma__('noalias', 'undefined')
@@ -50,7 +50,7 @@ def check_for_new_conquers():
 def clean_old_conquers():
     for occupier in Object.keys(Memory.room_conquer):
         occupy = Memory.room_conquer[occupier]
-        if Game.time - occupy['aim']['time'] > 50000:
+        if Game.time - occupy['time'] > 50000:
             del Memory.room_conquer[occupier]
 
 
