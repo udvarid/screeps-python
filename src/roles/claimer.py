@@ -42,13 +42,12 @@ def run_claimer(creep: Creep):
                 spawn = find_place_for_spawn(middle, creep.room)
                 if spawn is not undefined:
                     print(spawn)
-                    # TODO spawn contruction site
-                    # TODO conquer memory-ban átírni a claimed-et true-ra -> erre induljon el az építő és építsen
+                    creep.room.createConstructionSite(spawn[0], spawn[1], STRUCTURE_SPAWN)
+                    __pragma__('js', '{}', 'Memory.room_conquer[creep.memory.aim]["aim"]["claimed"] = True')
             if len(spawns) > 0:
-                pass
-                # TODO memory conquer-ben ezt törölni
-                # TODO memory room-map-ben az owner-t 'me'-re átírni
-                # TODO suicide
+                del Memory.room_conquer[creep.memory.aim]
+                __pragma__('js', '{}', 'Memory.room_map[creep.room.name]["owner"] = "me"')
+                creep.suicide()
                 # TODO a builder legyen harvester
     else:
         result = creep.moveByPath(creep.memory.my_path)
@@ -64,7 +63,7 @@ def find_place_for_spawn(middle, room):
     my_queue = [middle]
     checked_elements = []
     counter = 0
-    while len(my_queue) > 0 and counter < 50:
+    while len(my_queue) > 0 and counter < 250:
         counter += 1
         actual = my_queue.pop(0)
         checked_elements.append(actual)
