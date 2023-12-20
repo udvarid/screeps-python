@@ -33,7 +33,7 @@ def build_exit_wall():
             hit_level = RAMPART_AND_WALL_SIZE[room.controller.level - 1] * 0.9
             wall_or_rampart = list(
                 filter(lambda s: STRUCTURE_WALL_OR_RAMPART.includes(s.structureType) and s.hits < hit_level,
-                       room.find(FIND_MY_STRUCTURES)))
+                       room.find(FIND_STRUCTURES)))
             if len(wall_or_rampart) > 0:
                 continue
 

@@ -1,5 +1,5 @@
 from src.defs import *
-from src.worker.periodical_tasks.create_construction_site import is_valid_type, is_near_to_sources
+from src.worker.periodical_tasks.create_construction_site import is_valid_type, is_near_to_sources, pos_in_the_frame
 
 __pragma__('noalias', 'name')
 __pragma__('noalias', 'undefined')
@@ -74,8 +74,9 @@ def find_place_for_spawn(middle, room):
             return actual
         neighbours = get_neighbours(actual)
         for neighbour in neighbours:
-            if not any(neighbour[0] == checked_element[0] and
-                       neighbour[1] == checked_element[1] for checked_element in checked_elements) and \
+            if pos_in_the_frame(neighbour) and not any(neighbour[0] == checked_element[0] and
+                                                       neighbour[1] == checked_element[1] for checked_element in
+                                                       checked_elements) and \
                     not any(neighbour[0] == actual_element[0] and
                             neighbour[1] == actual_element[1] for actual_element in my_queue):
                 my_queue.append(neighbour)

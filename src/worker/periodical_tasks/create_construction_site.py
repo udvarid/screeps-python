@@ -32,7 +32,7 @@ def create_construction_site():
 
 
 def find_and_create_construction_site(spawn, structure):
-    all_structures = spawn.room.find(FIND_MY_STRUCTURES)
+    all_structures = spawn.room.find(FIND_STRUCTURES)
     my_queue = [(spawn.pos.x, spawn.pos.y)]
     checked_elements = []
     found_construction_site = False
@@ -49,11 +49,16 @@ def find_and_create_construction_site(spawn, structure):
         if actual_is_valid_type:
             neighbours = get_neighbours(actual)
             for neighbour in neighbours:
-                if not any(neighbour[0] == checked_element[0] and
-                           neighbour[1] == checked_element[1] for checked_element in checked_elements) and \
+                if pos_in_the_frame(neighbour) and not any(neighbour[0] == checked_element[0] and
+                                                           neighbour[1] == checked_element[1] for checked_element in
+                                                           checked_elements) and \
                         not any(neighbour[0] == actual_element[0] and
                                 neighbour[1] == actual_element[1] for actual_element in my_queue):
                     my_queue.append(neighbour)
+
+
+def pos_in_the_frame(position):
+    return not (position[0] <= 2 or position[0] >= 47 or position[1] <= 2 or position[1] >= 47)
 
 
 def is_near_to_sources(actual, room):

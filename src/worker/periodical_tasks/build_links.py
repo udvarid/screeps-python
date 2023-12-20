@@ -1,5 +1,5 @@
 from src.constant.my_constants import ROOM_LINK
-from src.worker.periodical_tasks.create_construction_site import is_valid_type, is_near_to_sources
+from src.worker.periodical_tasks.create_construction_site import is_valid_type, is_near_to_sources, pos_in_the_frame
 from src.defs import *
 
 __pragma__('noalias', 'name')
@@ -89,7 +89,7 @@ def check_and_build_at_sources(room, spawn, links):
             (sp.x + 1, sp.y + 2)
         ]
         filtered_neighbours = map(lambda f: __new__(RoomPosition(f[0], f[1], room.name)),
-                                  list(filter(lambda n: is_valid_type(n, room) and
+                                  list(filter(lambda n: is_valid_type(n, room) and pos_in_the_frame(n) and
                                                         not is_near_to_sources(n, room), neighbours)))
         closest = spawn.pos.findClosestByPath(filtered_neighbours)
         room.createConstructionSite(closest.x, closest.y, STRUCTURE_LINK)

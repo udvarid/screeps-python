@@ -1,5 +1,5 @@
 from src.constant.my_constants import ROOM_CONTAINER
-from src.worker.periodical_tasks.create_construction_site import is_valid_type
+from src.worker.periodical_tasks.create_construction_site import is_valid_type, pos_in_the_frame
 from src.defs import *
 
 __pragma__('noalias', 'name')
@@ -44,7 +44,7 @@ def check_and_build(spawn, containers, extractor):
 
     room = spawn.room
     filtered_neighbours = list(map(lambda f: __new__(RoomPosition(f[0], f[1], room.name)),
-                                   list(filter(lambda n: is_valid_type(n, room) and
+                                   list(filter(lambda n: is_valid_type(n, room) and pos_in_the_frame(n) and
                                                          not is_container_at_position(n, containers), neighbours))))
     if len(filtered_neighbours) > 0:
         closest = spawn.pos.findClosestByPath(filtered_neighbours)

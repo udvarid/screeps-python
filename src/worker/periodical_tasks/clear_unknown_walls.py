@@ -18,7 +18,7 @@ def clear_walls():
         for room_name in Object.keys(Game.rooms):
             room = Game.rooms[room_name]
             if len(room.find(FIND_MY_SPAWNS)) > 0 and (not Memory.room_clear or not Memory.room_clear[room_name]):
-                walls = list(filter(lambda s: s.structureType == STRUCTURE_WALL, room.find(FIND_MY_STRUCTURES)))
+                walls = list(filter(lambda s: s.structureType == STRUCTURE_WALL, room.find(FIND_STRUCTURES)))
                 if len(walls) > 0:
                     wall = walls[0]
                     print("Deleting wall at x:{}, y:{}".format(wall.pos.x, wall.pos.y))
