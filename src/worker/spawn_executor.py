@@ -18,6 +18,14 @@ __pragma__('noalias', 'type')
 __pragma__('noalias', 'update')
 
 SPAWN_PLAN = {
+    'claimer': {
+        'min': 0,
+        'max': 0,
+        'base_body': [MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, CLAIM],
+        'logic': claimer_logic,
+        'multiple': False,
+        'aim_logic': give_claimer_aim
+    },
     'hauler': {
         'min': 0,
         'max': 2,
@@ -60,14 +68,6 @@ SPAWN_PLAN = {
         'logic': scouter_logic,
         'multiple': False,
         'aim_logic': give_scouter_aim
-    },
-    'claimer': {
-        'min': 0,
-        'max': 0,
-        'base_body': [MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, CLAIM],
-        'logic': claimer_logic,
-        'multiple': False,
-        'aim_logic': give_claimer_aim
     }
 }
 

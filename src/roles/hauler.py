@@ -23,11 +23,13 @@ def run_hauler(creep):
         if energy_in_store > 10000 and possible_target is not None:
             creep.memory.working = True
             creep.memory.filling = False
+            del creep.memory.source
             creep.memory.target = possible_target.id
             creep.memory.resource = RESOURCE_ENERGY
         if possible_target is None and _.sum(creep.carry) > 0:
             creep.memory.working = True
             creep.memory.filling = False
+            del creep.memory.source
             creep.memory.target = creep.room.storage.id
             creep.memory.resource = RESOURCE_ENERGY
         if possible_target is None and _.sum(creep.carry) == 0:
