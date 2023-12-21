@@ -17,7 +17,7 @@ def make_room_safety_check():
         safety_check = {}
         for room_name in Object.keys(Game.rooms):
             room = Game.rooms[room_name]
-            if len(room.find(FIND_MY_SPAWNS)) > 0:
+            if len(room.find(FIND_MY_SPAWNS)) > 0 and room.controller.my:
                 enemies = room.find(FIND_HOSTILE_CREEPS)
                 attacker_enemies = list(filter(lambda c: c.getActiveBodyparts(RANGED_ATTACK) +
                                                          c.getActiveBodyparts(ATTACK) > 0, enemies))

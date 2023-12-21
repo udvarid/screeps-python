@@ -16,14 +16,14 @@ def need_extra(context):
 
 
 def more_scouter_is_needed(context):
-    if Memory.room_map is undefined or Memory.room_map[context.room.name] is undefined:
+    if Memory.room_map is undefined or Memory.room_map[context.room['name']] is undefined:
         return False
-    room_state = Memory.room_map[context.room.name]
+    room_state = Memory.room_map[context.room['name']]
     has_uncharted_neighbour = room_state['neighbours']['up'] == "?" or \
                               room_state['neighbours']['bottom'] == "?" or \
                               room_state['neighbours']['right'] == "?" or \
                               room_state['neighbours']['left'] == "?"
-    neighbour_scouted_long_ago = get_neighbour_scouted_long_ago(context.room.name)
+    neighbour_scouted_long_ago = get_neighbour_scouted_long_ago(context.room['name'])
     return has_uncharted_neighbour or neighbour_scouted_long_ago is not undefined
 
 

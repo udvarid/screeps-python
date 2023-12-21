@@ -18,3 +18,20 @@ def get_active_rooms():
         if len(spawns) > 0:
             my_rooms.append(room_name)
     return my_rooms
+
+
+def get_full_neighbours(actual):
+    x = actual[0]
+    y = actual[1]
+
+    n1 = (x - 1, y - 1)
+    n2 = (x - 1, y)
+    n3 = (x - 1, y + 1)
+
+    n4 = (x, y - 1)
+    n5 = (x, y + 1)
+
+    n6 = (x + 1, y - 1)
+    n7 = (x + 1, y)
+    n8 = (x + 1, y + 1)
+    return [n1, n2, n3, n4, n5, n6, n7, n8]

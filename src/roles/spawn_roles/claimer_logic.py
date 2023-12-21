@@ -15,7 +15,7 @@ def need_extra(context):
 
 
 def more_claimer_is_needed(context):
-    return Memory.room_conquer is not undefined and Memory.room_conquer[context.room.name] is not undefined
+    return Memory.room_conquer is not undefined and Memory.room_conquer[context.room['name']] is not undefined
 
 
 def give_aim(room_name):

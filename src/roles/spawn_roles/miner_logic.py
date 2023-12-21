@@ -4,7 +4,10 @@ __pragma__('noalias', 'undefined')
 
 
 def need_extra(context):
-    return context.number < context.max and more_miner_is_needed(context)
+    mine_place = context.max
+    if Memory.room_snapshot is not undefined and Memory.room_snapshot[context.room['name']] is not undefined:
+        mine_place = min(Memory.room_snapshot[context.room['name']]['mine_place'], mine_place)
+    return context.number < mine_place and more_miner_is_needed(context)
 
 
 def more_miner_is_needed(context):

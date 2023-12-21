@@ -1,5 +1,6 @@
-from src.defs import *
+from src.utility.helper import get_full_neighbours
 from src.worker.periodical_tasks.create_construction_site import is_valid_type, is_near_to_sources, pos_in_the_frame
+from src.defs import *
 
 __pragma__('noalias', 'name')
 __pragma__('noalias', 'undefined')
@@ -67,7 +68,7 @@ def find_place_for_spawn(middle, room):
         actual_is_near_to_sources = is_near_to_sources(actual, room)
         if actual_is_valid_type and not actual_is_near_to_sources:
             return actual
-        neighbours = get_neighbours(actual)
+        neighbours = get_full_neighbours(actual)
         for neighbour in neighbours:
             if pos_in_the_frame(neighbour) and not any(neighbour[0] == checked_element[0] and
                                                        neighbour[1] == checked_element[1] for checked_element in
@@ -76,20 +77,3 @@ def find_place_for_spawn(middle, room):
                             neighbour[1] == actual_element[1] for actual_element in my_queue):
                 my_queue.append(neighbour)
     return undefined
-
-
-def get_neighbours(actual):
-    x = actual[0]
-    y = actual[1]
-
-    n1 = (x - 1, y - 1)
-    n2 = (x - 1, y)
-    n3 = (x - 1, y + 1)
-
-    n4 = (x, y - 1)
-    n5 = (x, y + 1)
-
-    n6 = (x + 1, y - 1)
-    n7 = (x + 1, y)
-    n8 = (x + 1, y + 1)
-    return [n1, n2, n3, n4, n5, n6, n7, n8]

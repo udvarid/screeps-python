@@ -17,7 +17,7 @@ def create_construction_site():
         for room_name in Object.keys(Game.rooms):
             room = Game.rooms[room_name]
             spawns = room.find(FIND_MY_SPAWNS)
-            if len(spawns) > 0 and \
+            if len(spawns) > 0 and room.controller.my and \
                     not Memory.room_safety_state[room_name].enemy and \
                     len(room.find(FIND_MY_CONSTRUCTION_SITES)) == 0:
                 for structure in STRUCTURES_NEED_CONSTRUCT:

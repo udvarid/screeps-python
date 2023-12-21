@@ -16,8 +16,8 @@ def need_extra(context):
 
 def more_c_builder_is_needed(context):
     return Memory.room_conquer is not undefined and \
-        Memory.room_conquer[context.room.name] is not undefined \
-        and Memory.room_conquer[context.room.name]["claimed"] is True
+        Memory.room_conquer[context.room['name']] is not undefined \
+        and Memory.room_conquer[context.room['name']]["claimed"] is True
 
 
 def give_aim(room_name):
