@@ -86,7 +86,7 @@ def do_spawn():
     for name in Object.keys(Game.spawns):
         spawn = Game.spawns[name]
         energy_capacity = spawn.room.energyAvailable
-        if not spawn.spawning and energy_capacity >= 250:
+        if not spawn.spawning and energy_capacity >= 250 and spawn.room.controller.my:
             for role_name in Object.keys(SPAWN_PLAN):
                 role = SPAWN_PLAN[role_name]
                 num_role_creeps = _.sum(Game.creeps, lambda c: c.memory.home == spawn.pos.roomName and

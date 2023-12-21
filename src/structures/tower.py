@@ -75,7 +75,7 @@ def build_rampart_and_wall(tower):
         tower.repair(structure_to_repair)
         return
 
-    if tower.room.storage.store.getUsedCapacity(RESOURCE_ENERGY) < 50000:
+    if tower.room.storage is undefined or tower.room.storage.store.getUsedCapacity(RESOURCE_ENERGY) < 50000:
         return
 
     wall = list(filter(lambda s: s.structureType == STRUCTURE_WALL and s.hits < hit_level,

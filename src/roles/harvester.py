@@ -82,7 +82,8 @@ def get_target(creep):
     target = undefined
     hauler_time = Memory.room_snapshot[room.name]['hauler_time']
     we_have_haulers = True if hauler_time is not None and (Game.time - hauler_time) < 10 else False
-    if Memory.room_safety_state[room.name].enemy and not we_have_haulers:
+    if Memory.room_safety_state[room.name] is not undefined and \
+            Memory.room_safety_state[room.name].enemy and not we_have_haulers:
         target = _(room.find(FIND_STRUCTURES)) \
             .filter(lambda s: (s.structureType == STRUCTURE_TOWER and s.energy < s.energyCapacity * 0.5)).sample()
     if target is undefined and not we_have_haulers:
@@ -95,7 +96,7 @@ def get_target(creep):
                             creep.room.find(FIND_MY_STRUCTURES)))
         if len(links) > 0:
             target = creep.pos.findClosestByPath(links)
-    if target is undefined:
+    if target is undefined and room.storage is not undefined:
         target = _([room.storage]).filter(lambda s: s.store[RESOURCE_ENERGY] < 200000).sample()
     if target is undefined:
         target = _(room.find(FIND_STRUCTURES)).filter(lambda s: (s.structureType == STRUCTURE_CONTROLLER)).sample()

@@ -43,7 +43,8 @@ def make_room_safety_check():
 
 
 def activate_safe_mode_when_needed(room):
-    if Memory.room_safety_state[room.name].attacker and \
+    if Memory.room_safety_state[room.name] is not undefined and \
+            Memory.room_safety_state[room.name].attacker and \
             room.controller.safeMode is undefined and \
             room.controller.safeModeCooldown is undefined and \
             room.controller.safeModeAvailable > 0:

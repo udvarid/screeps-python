@@ -1,12 +1,16 @@
 from src.constant.my_constants import FILL_WITH_ENERGY
 from src.defs import *
 
+__pragma__('noalias', 'undefined')
+
 
 def need_extra(context):
     return context.number < context.max and more_hauler_is_needed(context)
 
 
 def more_hauler_is_needed(context):
+    if context.room.storage is undefined:
+        return False
     energy_in_store = context.room.storage.store[RESOURCE_ENERGY]
     structures_need_energy = list(filter(lambda s: FILL_WITH_ENERGY.includes(s.structureType),
                                          context.room.find(FIND_MY_STRUCTURES)))
