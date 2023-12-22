@@ -23,7 +23,7 @@ def create_exit_wall_plan():
             room = Game.rooms[room_name]
             if len(room.find(FIND_MY_SPAWNS)) > 0:
                 if room_exits[room_name] is not undefined:
-                    return
+                    continue
                 exit_blocks = []
                 for find_direction in FIND_ME_EXITS:
                     exits = room.find(find_direction)

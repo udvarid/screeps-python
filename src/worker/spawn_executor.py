@@ -112,7 +112,7 @@ def do_spawn():
                         }
                     }
                     spawn.spawnCreep(body_list, name, memory)
-                    return
+                    break
 
 
 def calculate_multiplier(capacity, body_parts):

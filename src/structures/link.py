@@ -14,9 +14,9 @@ def operate_links():
     for room_name in Object.keys(Game.rooms):
         room = Game.rooms[room_name]
         central_link_id = Memory.links[room_name]
-        if central_link_id is undefined or get_central_link(central_link_id) is None:
-            continue
         central_link = get_central_link(central_link_id)
+        if central_link is None:
+            continue
         if central_link.energyCapacity - central_link.energy <= 0 or central_link.cooldown > 0:
             continue
         links = list(filter(lambda s: s.structureType == STRUCTURE_LINK and
@@ -25,16 +25,13 @@ def operate_links():
                                       s.id != central_link_id,
                             room.find(FIND_MY_STRUCTURES)))
         for link in links:
-            result = operate_link(link, central_link)
-            if result:
-                return
+            operate_link(link, central_link)
 
 
 def get_central_link(link_id):
-    return Game.getObjectById(link_id)
+    return None if link_id is undefined or Game.getObjectById(link_id) is None else Game.getObjectById(link_id)
 
 
 def operate_link(link, central_link):
     amount = min(central_link.energyCapacity - central_link.energy, link.energy)
-    result = link.transferEnergy(central_link, amount)
-    return True if result == OK else False
+    link.transferEnergy(central_link, amount)

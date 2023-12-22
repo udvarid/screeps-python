@@ -23,8 +23,7 @@ def more_scouter_is_needed(context):
                               room_state['neighbours']['bottom'] == "?" or \
                               room_state['neighbours']['right'] == "?" or \
                               room_state['neighbours']['left'] == "?"
-    neighbour_scouted_long_ago = get_neighbour_scouted_long_ago(context.room['name'])
-    return has_uncharted_neighbour or neighbour_scouted_long_ago is not undefined
+    return has_uncharted_neighbour or get_neighbour_scouted_long_ago(context.room['name']) is not undefined
 
 
 def get_neighbour_scouted_long_ago(room_name):

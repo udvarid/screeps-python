@@ -1,5 +1,4 @@
-from src.constant.my_constants import STRUCTURE_WALL_OR_RAMPART_OR_ROAD, STRUCTURE_WALL_OR_RAMPART, \
-    RAMPART_AND_WALL_SIZE
+from src.constant.my_constants import STRUCTURE_WALL_OR_RAMPART_OR_ROAD, RAMPART_AND_WALL_SIZE
 from src.defs import *
 
 __pragma__('noalias', 'name')
@@ -22,12 +21,15 @@ def operate_towers():
 
 
 def operate_tower(tower):
-    if Memory.room_safety_state[tower.room.name].enemy and attack_enemy(tower):
+    if Memory.room_safety_state[tower.room.name].enemy:
+        attack_enemy(tower)
         return
     if tower.energy >= tower.energyCapacity * 0.25:
-        if Memory.room_safety_state[tower.room.name].wounded_creeps and heal_friend(tower):
+        if Memory.room_safety_state[tower.room.name].wounded_creeps:
+            heal_friend(tower)
             return
-        if Memory.room_safety_state[tower.room.name].wounded_struc and repair_structure(tower):
+        if Memory.room_safety_state[tower.room.name].wounded_struc:
+            repair_structure(tower)
             return
         build_rampart_and_wall(tower)
 
@@ -36,8 +38,6 @@ def attack_enemy(tower):
     closest_enemy = tower.pos.findClosestByRange(FIND_HOSTILE_CREEPS)
     if closest_enemy is not None:
         tower.attack(closest_enemy)
-        return True
-    return False
 
 
 def heal_friend(tower):
@@ -46,8 +46,6 @@ def heal_friend(tower):
         .sample()
     if damaged_creep is not undefined:
         tower.heal(damaged_creep)
-        return True
-    return False
 
 
 def repair_structure(tower):
@@ -56,32 +54,26 @@ def repair_structure(tower):
         .sample()
     if damaged_structure is not undefined:
         tower.repair(damaged_structure)
-        return True
+        return
     damaged_container = _(tower.room.find(FIND_STRUCTURES)) \
         .filter(lambda s: s.hits < s.hitsMax and s.structureType == STRUCTURE_CONTAINER) \
         .sample()
     if damaged_container is not undefined:
         tower.repair(damaged_container)
-        return True
-    return False
 
 
 def build_rampart_and_wall(tower):
     hit_level = RAMPART_AND_WALL_SIZE[tower.room.controller.level - 1]
     rampart = list(filter(lambda s: s.structureType == STRUCTURE_RAMPART and s.hits < hit_level,
-                                  tower.room.find(FIND_STRUCTURES)))
+                          tower.room.find(FIND_STRUCTURES)))
     if len(rampart) > 0:
         structure_to_repair = sorted(rampart, key=lambda c: c.hits)[0]
         tower.repair(structure_to_repair)
         return
 
-    if tower.room.storage is undefined or tower.room.storage.store.getUsedCapacity(RESOURCE_ENERGY) < 50000:
-        return
-
-    wall = list(filter(lambda s: s.structureType == STRUCTURE_WALL and s.hits < hit_level,
-                                  tower.room.find(FIND_STRUCTURES)))
-    if len(wall) > 0:
-        structure_to_repair = sorted(wall, key=lambda c: c.hits)[0]
-        tower.repair(structure_to_repair)
-        return
-
+    if tower.room.storage is not undefined and tower.room.storage.store.getUsedCapacity(RESOURCE_ENERGY) >= 50000:
+        wall = list(filter(lambda s: s.structureType == STRUCTURE_WALL and s.hits < hit_level,
+                           tower.room.find(FIND_STRUCTURES)))
+        if len(wall) > 0:
+            structure_to_repair = sorted(wall, key=lambda c: c.hits)[0]
+            tower.repair(structure_to_repair)

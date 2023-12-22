@@ -27,6 +27,5 @@ def create_rampart():
                     for vip in vip_structures:
                         if not any(vip.pos.x == rampart.pos.x and vip.pos.y == rampart.pos.y for rampart in ramparts):
                             room.createConstructionSite(vip.pos.x, vip.pos.y, STRUCTURE_RAMPART)
-                            return
     else:
         Memory.rampart_time -= 1
