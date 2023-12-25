@@ -14,8 +14,8 @@ __pragma__('noalias', 'update')
 
 
 def make_room_snapshot():
-    if not Memory.room_snapshot_time or Memory.room_snapshot_time <= 0:
-        Memory.room_snapshot_time = ROOM_SNAPSHOT
+    if not Memory.counters["room_snapshot_time"] or Memory.counters["room_snapshot_time"] <= 0:
+        __pragma__('js', '{}', 'Memory.counters["room_snapshot_time"] = ROOM_SNAPSHOT')
         print("Making room snapshots")
         snapshot = {}
         for room_name in Object.keys(Game.rooms):
@@ -39,7 +39,8 @@ def make_room_snapshot():
                 __pragma__('js', '{}', 'snapshot[room_name] = room_snapshot')
         Memory.room_snapshot = snapshot
     else:
-        Memory.room_snapshot_time -= 1
+        actual = Memory.counters["room_snapshot_time"]
+        __pragma__('js', '{}', 'Memory.counters["room_snapshot_time"] = actual - 1')
 
 
 def get_free_mine_places(room):

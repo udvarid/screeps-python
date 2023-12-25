@@ -12,11 +12,12 @@ __pragma__('noalias', 'update')
 
 
 def clean_memory():
-    if not Memory.clean_time or Memory.clean_time <= 0:
+    if not Memory.counters["clean_time"] or Memory.counters["clean_time"] <= 0:
         console.log('memory cleaning!')
-        Memory.clean_time = MEMORY_CLEANING
+        __pragma__('js', '{}', 'Memory.counters["clean_time"] = MEMORY_CLEANING')
         for name in Object.keys(Memory.creeps):
             if not Object.keys(Game.creeps).includes(name):
                 del Memory.creeps[name]
     else:
-        Memory.clean_time -= 1
+        actual = Memory.counters["clean_time"]
+        __pragma__('js', '{}', 'Memory.counters["clean_time"] = actual - 1')

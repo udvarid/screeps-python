@@ -12,8 +12,8 @@ __pragma__('noalias', 'update')
 
 
 def construct_mine():
-    if not Memory.mine_time or Memory.mine_time <= 0:
-        Memory.mine_time = ROOM_MINE
+    if not Memory.counters["mine_time"] or Memory.counters["mine_time"] <= 0:
+        __pragma__('js', '{}', 'Memory.counters["mine_time"] = ROOM_MINE')
         for room_name in Object.keys(Game.rooms):
             room = Game.rooms[room_name]
             spawns = room.find(FIND_MY_SPAWNS)
@@ -28,4 +28,5 @@ def construct_mine():
                     room.createConstructionSite(mine.pos.x, mine.pos.y, STRUCTURE_EXTRACTOR)
                     print("Creating mine at {}".format(mine.pos))
     else:
-        Memory.mine_time -= 1
+        actual = Memory.counters["mine_time"]
+        __pragma__('js', '{}', 'Memory.counters["mine_time"] = actual - 1')

@@ -15,8 +15,8 @@ __pragma__('noalias', 'update')
 def construct_links():
     if Memory.links is undefined:
         Memory.links = {}
-    if not Memory.link_time or Memory.link_time <= 0:
-        Memory.link_time = ROOM_LINK
+    if not Memory.counters["link_time"] or Memory.counters["link_time"] <= 0:
+        __pragma__('js', '{}', 'Memory.counters["link_time"] = ROOM_LINK')
         for room_name in Object.keys(Game.rooms):
             room = Game.rooms[room_name]
             spawns = room.find(FIND_MY_SPAWNS)
@@ -31,7 +31,8 @@ def construct_links():
                 if len(links) > 0:
                     put_central_link_id_into_memory(room, links)
     else:
-        Memory.link_time -= 1
+        actual = Memory.counters["link_time"]
+        __pragma__('js', '{}', 'Memory.counters["link_time"] = actual - 1')
 
 
 def put_central_link_id_into_memory(room, links):

@@ -13,8 +13,8 @@ __pragma__('noalias', 'update')
 
 
 def check_for_new_conquers():
-    if not Memory.conquer_time or Memory.conquer_time <= 0:
-        Memory.conquer_time = ROOM_CONQUER
+    if not Memory.counters["conquer_time"] or Memory.counters["conquer_time"] <= 0:
+        __pragma__('js', '{}', 'Memory.counters["conquer_time"] = ROOM_CONQUER')
         my_rooms = get_active_rooms()
         if len(my_rooms) >= Game.gcl.level:
             return
@@ -44,7 +44,8 @@ def check_for_new_conquers():
                     }
                     __pragma__('js', '{}', 'Memory.room_conquer[occupier] = aim')
     else:
-        Memory.conquer_time -= 1
+        actual = Memory.counters["conquer_time"]
+        __pragma__('js', '{}', 'Memory.counters["conquer_time"] = actual - 1')
 
 
 def clean_old_conquers():
@@ -71,6 +72,7 @@ def get_free_rooms(my_rooms):
     cleaned_rooms = []
     for my_room in my_rooms:
         if Memory.room_conquer[my_room] is undefined and \
+                Game.rooms[my_room].storage is not undefined and \
                 Game.rooms[my_room].storage.store[RESOURCE_ENERGY] > 100000:
             cleaned_rooms.append(my_room)
     return cleaned_rooms

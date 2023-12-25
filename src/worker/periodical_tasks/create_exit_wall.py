@@ -14,8 +14,8 @@ FIND_ME_EXITS = [FIND_EXIT_TOP, FIND_EXIT_BOTTOM, FIND_EXIT_RIGHT, FIND_EXIT_LEF
 
 
 def create_exit_wall_plan():
-    if not Memory.define_exit_time or Memory.define_exit_time <= 0:
-        Memory.define_exit_time = ROOM_DEFINE_EXIT
+    if not Memory.counters["define_exit_time"] or Memory.counters["define_exit_time"] <= 0:
+        __pragma__('js', '{}', 'Memory.counters["define_exit_time"] = ROOM_DEFINE_EXIT')
         room_exits = Memory.room_exits
         if room_exits is undefined:
             room_exits = {}
@@ -43,7 +43,8 @@ def create_exit_wall_plan():
 
         Memory.room_exits = room_exits
     else:
-        Memory.define_exit_time -= 1
+        actual = Memory.counters["define_exit_time"]
+        __pragma__('js', '{}', 'Memory.counters["define_exit_time"] = actual - 1')
 
 
 def split_to_exit_blocks(exits):

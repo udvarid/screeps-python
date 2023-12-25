@@ -12,8 +12,8 @@ __pragma__('noalias', 'update')
 
 
 def create_construction_site():
-    if not Memory.construction_time or Memory.construction_time <= 0:
-        Memory.construction_time = ROOM_CONSTRUCTION
+    if not Memory.counters["construction_time"] or Memory.counters["construction_time"] <= 0:
+        __pragma__('js', '{}', 'Memory.counters["construction_time"] = ROOM_CONSTRUCTION')
         for room_name in Object.keys(Game.rooms):
             room = Game.rooms[room_name]
             spawns = room.find(FIND_MY_SPAWNS)
@@ -28,7 +28,8 @@ def create_construction_site():
                         find_and_create_construction_site(spawns[0], structure)
                         return
     else:
-        Memory.construction_time -= 1
+        actual = Memory.counters["construction_time"]
+        __pragma__('js', '{}', 'Memory.counters["construction_time"] = actual - 1')
 
 
 def find_and_create_construction_site(spawn, structure):

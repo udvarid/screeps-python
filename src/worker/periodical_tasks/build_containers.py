@@ -13,8 +13,8 @@ __pragma__('noalias', 'update')
 
 
 def construct_containers():
-    if not Memory.container_time or Memory.container_time <= 0:
-        Memory.container_time = ROOM_CONTAINER
+    if not Memory.counters["container_time"] or Memory.counters["container_time"] <= 0:
+        __pragma__('js', '{}', 'Memory.counters["container_time"] = ROOM_CONTAINER')
         for room_name in Object.keys(Game.rooms):
             room = Game.rooms[room_name]
             spawns = room.find(FIND_MY_SPAWNS)
@@ -26,7 +26,8 @@ def construct_containers():
                 if len(construction_sites) == 0 and len(containers) < 3 and len(extractors) > 0:
                     check_and_build(spawns[0], containers, extractors[0])
     else:
-        Memory.container_time -= 1
+        actual = Memory.counters["container_time"]
+        __pragma__('js', '{}', 'Memory.counters["container_time"] = actual - 1')
 
 
 def check_and_build(spawn, containers, extractor):

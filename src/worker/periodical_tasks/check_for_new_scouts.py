@@ -12,11 +12,11 @@ __pragma__('noalias', 'update')
 
 
 def check_for_new_scouts():
-    if not Memory.scout_time or Memory.scout_time <= 0:
+    if not Memory.counters["scout_time"] or Memory.counters["scout_time"] <= 0:
         room_maps = {}
         if Memory.room_map is undefined:
             Memory.room_map = room_maps
-        Memory.scout_time = ROOM_MAP_MAKING
+        __pragma__('js', '{}', 'Memory.counters["scout_time"] = ROOM_MAP_MAKING')
         for room_name in Object.keys(Game.rooms):
             room = Game.rooms[room_name]
             spawns = room.find(FIND_MY_SPAWNS)
@@ -39,7 +39,8 @@ def check_for_new_scouts():
                 __pragma__('js', '{}', 'Memory.room_map[room_name] = room_state')
 
     else:
-        Memory.scout_time -= 1
+        actual = Memory.counters["scout_time"]
+        __pragma__('js', '{}', 'Memory.counters["scout_time"] = actual - 1')
 
 
 def get_neighbours(room):

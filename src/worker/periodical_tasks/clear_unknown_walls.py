@@ -12,8 +12,8 @@ __pragma__('noalias', 'update')
 
 
 def clear_walls():
-    if not Memory.clear_time or Memory.clear_time <= 0:
-        Memory.clear_time = ROOM_CLEAR
+    if not Memory.counters["clear_time"] or Memory.counters["clear_time"] <= 0:
+        __pragma__('js', '{}', 'Memory.counters["clear_time"] = ROOM_CLEAR')
         print("Unknown wall clearing")
         for room_name in Object.keys(Game.rooms):
             room = Game.rooms[room_name]
@@ -31,4 +31,6 @@ def clear_walls():
                         __pragma__('js', '{}', 'Memory.room_clear[room_name] = "CLEARED"')
 
     else:
-        Memory.clear_time -= 1
+        actual = Memory.counters["clear_time"]
+        __pragma__('js', '{}', 'Memory.counters["clear_time"] = actual - 1')
+
