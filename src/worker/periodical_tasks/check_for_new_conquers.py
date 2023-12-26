@@ -14,7 +14,8 @@ __pragma__('noalias', 'update')
 
 def check_for_new_conquers():
     if not Memory.counters["conquer_time"] or Memory.counters["conquer_time"] <= 0:
-        __pragma__('js', '{}', 'Memory.counters["conquer_time"] = ROOM_CONQUER')
+        time_limit = ROOM_CONQUER
+        __pragma__('js', '{}', 'Memory.counters["conquer_time"] = time_limit')
         my_rooms = get_active_rooms()
         if len(my_rooms) >= Game.gcl.level:
             return

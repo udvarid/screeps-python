@@ -13,7 +13,8 @@ __pragma__('noalias', 'update')
 
 def operate_terminals():
     if not Memory.counters["terminal_time"] or Memory.counters["terminal_time"] <= 0:
-        __pragma__('js', '{}', 'Memory.counters["terminal_time"] = TERMINAL_TIME')
+        time_limit = TERMINAL_TIME
+        __pragma__('js', '{}', 'Memory.counters["terminal_time"] = time_limit')
         energy_cost = undefined
         for room_name in Object.keys(Game.rooms):
             room = Game.rooms[room_name]

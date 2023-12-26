@@ -16,7 +16,8 @@ def check_for_new_scouts():
         room_maps = {}
         if Memory.room_map is undefined:
             Memory.room_map = room_maps
-        __pragma__('js', '{}', 'Memory.counters["scout_time"] = ROOM_MAP_MAKING')
+        time_limit = ROOM_MAP_MAKING
+        __pragma__('js', '{}', 'Memory.counters["scout_time"] = time_limit')
         for room_name in Object.keys(Game.rooms):
             room = Game.rooms[room_name]
             spawns = room.find(FIND_MY_SPAWNS)

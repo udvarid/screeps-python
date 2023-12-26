@@ -15,7 +15,8 @@ FIND_ME_EXITS = [FIND_EXIT_TOP, FIND_EXIT_BOTTOM, FIND_EXIT_RIGHT, FIND_EXIT_LEF
 
 def create_exit_wall_plan():
     if not Memory.counters["define_exit_time"] or Memory.counters["define_exit_time"] <= 0:
-        __pragma__('js', '{}', 'Memory.counters["define_exit_time"] = ROOM_DEFINE_EXIT')
+        time_limit = ROOM_DEFINE_EXIT
+        __pragma__('js', '{}', 'Memory.counters["define_exit_time"] = time_limit')
         room_exits = Memory.room_exits
         if room_exits is undefined:
             room_exits = {}

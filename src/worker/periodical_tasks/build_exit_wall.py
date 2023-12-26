@@ -15,8 +15,8 @@ FIND_ME_EXITS = [FIND_EXIT_TOP, FIND_EXIT_BOTTOM, FIND_EXIT_RIGHT, FIND_EXIT_LEF
 
 def build_exit_wall():
     if not Memory.counters["create_exit_time"] or Memory.counters["create_exit_time"] <= 0:
-        __pragma__('js', '{}', 'Memory.counters["create_exit_time"] = ROOM_CREATE_EXIT')
-
+        time_limit = ROOM_CREATE_EXIT
+        __pragma__('js', '{}', 'Memory.counters["create_exit_time"] = time_limit')
         for room_name in Object.keys(Game.rooms):
             room = Game.rooms[room_name]
             room_exits = Memory.room_exits[room_name]

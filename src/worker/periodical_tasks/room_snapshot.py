@@ -15,24 +15,27 @@ __pragma__('noalias', 'update')
 
 def make_room_snapshot():
     if not Memory.counters["room_snapshot_time"] or Memory.counters["room_snapshot_time"] <= 0:
-        __pragma__('js', '{}', 'Memory.counters["room_snapshot_time"] = ROOM_SNAPSHOT')
+        time_limit = ROOM_SNAPSHOT
+        __pragma__('js', '{}', 'Memory.counters["room_snapshot_time"] = time_limit')
         print("Making room snapshots")
         snapshot = {}
         for room_name in Object.keys(Game.rooms):
             room = Game.rooms[room_name]
             if len(room.find(FIND_MY_SPAWNS)) > 0 and room.controller.my:
-                mine = room.find(FIND_MINERALS)[0]
                 prev_mine_place = undefined
                 prev_source_place = undefined
+                prev_mine_type = undefined
                 if Memory.room_snapshot is not undefined and Memory.room_snapshot[room_name] is not undefined:
                     prev_mine_place = Memory.room_snapshot[room_name]['mine_place']
                     prev_source_place = Memory.room_snapshot[room_name]['source_place']
+                    prev_mine_type = Memory.room_snapshot[room_name]['mineral']
                 free_mine_places = prev_mine_place if prev_mine_place is not undefined else get_free_mine_places(room)
-                free_source_places = prev_source_place if prev_source_place is not undefined else get_free_source_places(
-                    room)
+                free_source_places = prev_source_place if prev_source_place is not undefined else \
+                    get_free_source_places(room)
+                mine_type = prev_mine_type if prev_mine_type is not undefined else room.find(FIND_MINERALS)[0].mineraType
                 room_snapshot = {
                     'energy': room.energyAvailable,
-                    'mineral': mine.mineralType,
+                    'mineral': mine_type,
                     'mine_place': free_mine_places,
                     'source_place': free_source_places
                 }

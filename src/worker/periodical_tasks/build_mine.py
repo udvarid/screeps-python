@@ -13,7 +13,8 @@ __pragma__('noalias', 'update')
 
 def construct_mine():
     if not Memory.counters["mine_time"] or Memory.counters["mine_time"] <= 0:
-        __pragma__('js', '{}', 'Memory.counters["mine_time"] = ROOM_MINE')
+        time_limit = ROOM_MINE
+        __pragma__('js', '{}', 'Memory.counters["mine_time"] = time_limit')
         for room_name in Object.keys(Game.rooms):
             room = Game.rooms[room_name]
             spawns = room.find(FIND_MY_SPAWNS)

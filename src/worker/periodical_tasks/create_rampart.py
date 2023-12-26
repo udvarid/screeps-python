@@ -13,7 +13,8 @@ __pragma__('noalias', 'update')
 
 def create_rampart():
     if not Memory.counters["rampart_time"] or Memory.counters["rampart_time"] <= 0:
-        __pragma__('js', '{}', 'Memory.counters["rampart_time"] = ROOM_RAMPART')
+        time_limit = ROOM_RAMPART
+        __pragma__('js', '{}', 'Memory.counters["rampart_time"] = time_limit')
         for room_name in Object.keys(Game.rooms):
             room = Game.rooms[room_name]
             if len(room.find(FIND_MY_SPAWNS)) > 0:

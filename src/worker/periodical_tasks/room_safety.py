@@ -13,7 +13,8 @@ __pragma__('noalias', 'update')
 
 def make_room_safety_check():
     if not Memory.counters["room_safety_check_time"] or Memory.counters["room_safety_check_time"] <= 0:
-        __pragma__('js', '{}', 'Memory.counters["room_safety_check_time"] = ROOM_SAFETY')
+        time_limit = ROOM_SAFETY
+        __pragma__('js', '{}', 'Memory.counters["room_safety_check_time"] = time_limit')
         safety_check = {}
         for room_name in Object.keys(Game.rooms):
             room = Game.rooms[room_name]
