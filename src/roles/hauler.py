@@ -1,4 +1,5 @@
-from src.constant.my_constants import FILL_WITH_ENERGY, TERMINAL_MINIMUM_ENERGY, TERMINAL_MINIMUM_RESOURCE
+from src.constant.my_constants import FILL_WITH_ENERGY, TERMINAL_MINIMUM_ENERGY, TERMINAL_MINIMUM_RESOURCE, \
+    TERMINAL_MAXIMUM_ENERGY
 from src.defs import *
 
 __pragma__('noalias', 'name')
@@ -18,63 +19,17 @@ def run_hauler(creep):
     if not creep.memory.working:
         if creep.ticksToLive < 20:
             creep.suicide()
-        energy_in_store = creep.room.storage.store[RESOURCE_ENERGY]
         possible_target = get_target(creep)
-        if energy_in_store > 10000 and possible_target is not None:
+        if check_for_real_targets(creep, possible_target):
             creep.memory.working = True
-            creep.memory.filling = False
-            del creep.memory.source
-            creep.memory.target = possible_target.id
-            creep.memory.resource = RESOURCE_ENERGY
-        if possible_target is None and _.sum(creep.carry) > 0:
+        elif check_energy_back_to_store(creep, possible_target):
             creep.memory.working = True
-            creep.memory.filling = False
-            del creep.memory.source
-            creep.memory.target = creep.room.storage.id
-            creep.memory.resource = RESOURCE_ENERGY
-        if possible_target is None and _.sum(creep.carry) == 0:
-            central_link_id = Memory.links[creep.room.name]
-            if central_link_id is not undefined:
-                link = Game.getObjectById(central_link_id)
-                if link is not None and link.energy > 0:
-                    creep.memory.working = True
-                    creep.memory.filling = True
-                    creep.memory.source = link.id
-                    creep.memory.target = creep.room.storage.id
-                    creep.memory.resource = RESOURCE_ENERGY
-        if possible_target is None and _.sum(creep.carry) == 0 and creep.memory.working is False:
-            containers = list(filter(lambda s: s.structureType == STRUCTURE_CONTAINER and s.store.getUsedCapacity() > 0,
-                                     creep.room.find(FIND_STRUCTURES)))
-            if len(containers) > 0:
-                container_to_use = sorted(containers, key=lambda c: c.store.getFreeCapacity())[0]
-                creep.memory.working = True
-                creep.memory.filling = True
-                creep.memory.resource = Memory.room_snapshot[creep.room.name]['mineral']
-                creep.memory.source = container_to_use.id
-                creep.memory.target = creep.room.storage.id
-        if possible_target is None and _.sum(creep.carry) == 0 and creep.memory.working is False:
-            terminals = list(filter(lambda s: s.structureType == STRUCTURE_TERMINAL,
-                                    creep.room.find(FIND_MY_STRUCTURES)))
-            if len(terminals) > 0:
-                terminal = terminals[0]
-                storage = creep.room.storage
-                terminal_energy = terminal.store.getUsedCapacity(RESOURCE_ENERGY)
-                storage_energy = storage.store.getUsedCapacity(RESOURCE_ENERGY)
-                resource = Memory.room_snapshot[creep.room.name]['mineral']
-                terminal_resource = terminal.store.getUsedCapacity(resource)
-                storage_resource = storage.store.getUsedCapacity(resource)
-                if terminal_energy < TERMINAL_MINIMUM_ENERGY and storage_energy > 10000:
-                    creep.memory.working = True
-                    creep.memory.filling = True
-                    creep.memory.resource = RESOURCE_ENERGY
-                    creep.memory.source = storage.id
-                    creep.memory.target = terminal.id
-                elif terminal_resource < TERMINAL_MINIMUM_RESOURCE and storage_resource > 0:
-                    creep.memory.working = True
-                    creep.memory.filling = True
-                    creep.memory.resource = resource
-                    creep.memory.source = storage.id
-                    creep.memory.target = terminal.id
+        elif possible_target is None and _.sum(creep.carry) == 0:
+            check_for_link_with_energy(creep)
+            if creep.memory.working is False:
+                check_for_mineral_from_container(creep)
+            if creep.memory.working is False:
+                check_for_terminal_job(creep)
 
     if creep.memory.working:
         if creep.memory.filling and _.sum(creep.carry) > 0:
@@ -84,14 +39,13 @@ def run_hauler(creep):
 
         if creep.memory.filling:
             if creep.memory.source:
+
                 source = Game.getObjectById(creep.memory.source)
             else:
                 source = creep.room.storage
-                central_link_id = Memory.links[creep.room.name]
-                if central_link_id is not undefined:
-                    link = Game.getObjectById(central_link_id)
-                    if link is not None and link.energy > 0:
-                        source = link
+                link_with_energy = get_link_with_energy(creep.room.name)
+                if link_with_energy is not None:
+                    source = link_with_energy
                 creep.memory.source = source.id
 
             if creep.pos.isNearTo(source):
@@ -115,6 +69,108 @@ def run_hauler(creep):
                           .format(creep.name, target, creep.memory.resource, result))
             else:
                 creep.moveTo(target, {'visualizePathStyle': {'stroke': '#ffffff'}})
+
+
+def check_for_terminal_job(creep):
+    terminals = list(filter(lambda s: s.structureType == STRUCTURE_TERMINAL,
+                            creep.room.find(FIND_MY_STRUCTURES)))
+    if len(terminals) > 0:
+        terminal = terminals[0]
+        storage = creep.room.storage
+        terminal_energy = terminal.store.getUsedCapacity(RESOURCE_ENERGY)
+        storage_energy = storage.store.getUsedCapacity(RESOURCE_ENERGY)
+        resource = Memory.room_snapshot[creep.room.name]['mineral']
+        terminal_resource = terminal.store.getUsedCapacity(resource)
+        storage_resource = storage.store.getUsedCapacity(resource)
+        if terminal_energy < TERMINAL_MINIMUM_ENERGY and storage_energy > 10000:
+            creep.memory.working = True
+            creep.memory.filling = True
+            creep.memory.resource = RESOURCE_ENERGY
+            creep.memory.source = storage.id
+            creep.memory.target = terminal.id
+        elif terminal_resource < TERMINAL_MINIMUM_RESOURCE and storage_resource > 0:
+            creep.memory.working = True
+            creep.memory.filling = True
+            creep.memory.resource = resource
+            creep.memory.source = storage.id
+            creep.memory.target = terminal.id
+        elif terminal_energy > TERMINAL_MAXIMUM_ENERGY:
+            creep.memory.working = True
+            creep.memory.filling = True
+            creep.memory.resource = RESOURCE_ENERGY
+            creep.memory.source = terminal.id
+            creep.memory.target = storage.id
+        elif check_for_other_mineral(creep, terminal, resource):
+            creep.memory.working = True
+            creep.memory.source = terminal.id
+            creep.memory.target = storage.id
+
+
+def check_for_other_mineral(creep, terminal, resource):
+    extra_mineral = undefined
+    for mineral in Object.keys(terminal.store):
+        if mineral != RESOURCE_ENERGY and mineral != resource and terminal.store.getUsedCapacity(mineral) > 0:
+            extra_mineral = mineral
+            break
+    if extra_mineral is not undefined:
+        creep.memory.filling = True
+        creep.memory.resource = extra_mineral
+        return True
+    return False
+
+
+def check_for_mineral_from_container(creep):
+    containers = list(
+        filter(lambda s: s.structureType == STRUCTURE_CONTAINER and s.store.getUsedCapacity() > 0,
+               creep.room.find(FIND_STRUCTURES)))
+    if len(containers) > 0:
+        container_to_use = sorted(containers, key=lambda c: c.store.getFreeCapacity())[0]
+        creep.memory.working = True
+        creep.memory.filling = True
+        creep.memory.resource = Memory.room_snapshot[creep.room.name]['mineral']
+        creep.memory.source = container_to_use.id
+        creep.memory.target = creep.room.storage.id
+
+
+def check_for_link_with_energy(creep):
+    link_with_energy = get_link_with_energy(creep.room.name)
+    if link_with_energy is not None:
+        creep.memory.working = True
+        creep.memory.filling = True
+        creep.memory.source = link_with_energy.id
+        creep.memory.target = creep.room.storage.id
+        creep.memory.resource = RESOURCE_ENERGY
+
+
+def check_energy_back_to_store(creep, possible_target):
+    if possible_target is None and _.sum(creep.carry) > 0:
+        creep.memory.filling = False
+        del creep.memory.source
+        creep.memory.target = creep.room.storage.id
+        creep.memory.resource = RESOURCE_ENERGY
+        return True
+    else:
+        return False
+
+
+def check_for_real_targets(creep, possible_target):
+    if creep.room.storage.store[RESOURCE_ENERGY] > 10000 and possible_target is not None:
+        creep.memory.filling = False
+        del creep.memory.source
+        creep.memory.target = possible_target.id
+        creep.memory.resource = RESOURCE_ENERGY
+        return True
+    else:
+        return False
+
+
+def get_link_with_energy(room_name):
+    central_link_id = Memory.links[room_name]
+    if central_link_id is not undefined:
+        link = Game.getObjectById(central_link_id)
+        if link is not None and link.energy > 0:
+            return link
+    return None
 
 
 def get_target(creep):
