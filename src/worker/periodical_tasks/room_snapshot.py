@@ -25,10 +25,12 @@ def make_room_snapshot():
                 prev_mine_place = undefined
                 prev_source_place = undefined
                 prev_mine_type = undefined
+                prev_hauler_time = undefined
                 if Memory.room_snapshot is not undefined and Memory.room_snapshot[room_name] is not undefined:
                     prev_mine_place = Memory.room_snapshot[room_name]['mine_place']
                     prev_source_place = Memory.room_snapshot[room_name]['source_place']
                     prev_mine_type = Memory.room_snapshot[room_name]['mineral']
+                    prev_hauler_time = Memory.room_snapshot[room_name]['hauler_time']
                 free_mine_places = prev_mine_place if prev_mine_place is not undefined else get_free_mine_places(room)
                 free_source_places = prev_source_place if prev_source_place is not undefined else \
                     get_free_source_places(room)
@@ -39,6 +41,8 @@ def make_room_snapshot():
                     'mine_place': free_mine_places,
                     'source_place': free_source_places
                 }
+                if prev_hauler_time is not undefined:
+                    __pragma__('js', '{}', 'room_snapshot["hauler_time"] = prev_hauler_time')
                 __pragma__('js', '{}', 'snapshot[room_name] = room_snapshot')
         Memory.room_snapshot = snapshot
     else:

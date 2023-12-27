@@ -19,6 +19,8 @@ def build_exit_wall():
         __pragma__('js', '{}', 'Memory.counters["create_exit_time"] = time_limit')
         for room_name in Object.keys(Game.rooms):
             room = Game.rooms[room_name]
+            if room.controller.level < 7:
+                continue
             room_exits = Memory.room_exits[room_name]
             if len(room.find(FIND_MY_SPAWNS)) == 0 or room_exits is undefined:
                 continue

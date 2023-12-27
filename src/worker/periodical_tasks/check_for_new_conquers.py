@@ -72,9 +72,12 @@ def get_occupier(rooms, neighbours):
 def get_free_rooms(my_rooms):
     cleaned_rooms = []
     for my_room in my_rooms:
+        room = Memory.room_conquer[my_room]
         if Memory.room_conquer[my_room] is undefined and \
-                Game.rooms[my_room].storage is not undefined and \
-                Game.rooms[my_room].storage.store[RESOURCE_ENERGY] > 100000:
+                room.controller.level >= 7 and \
+                len(room.find(FIND_MY_SPAWNS)) > 1 and \
+                room.storage is not undefined and \
+                room.storage.store[RESOURCE_ENERGY] > 100000:
             cleaned_rooms.append(my_room)
     return cleaned_rooms
 
