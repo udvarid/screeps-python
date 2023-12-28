@@ -27,7 +27,7 @@ def run_hauler(creep):
         elif possible_target is None and _.sum(creep.carry) == 0:
             check_for_link_with_energy(creep)
             if creep.memory.working is False:
-                check_for_mineral_from_container(creep)
+                check_for_resource_from_container(creep)
             if creep.memory.working is False:
                 check_for_terminal_job(creep)
 
@@ -119,7 +119,7 @@ def check_for_other_mineral(creep, terminal, resource):
     return False
 
 
-def check_for_mineral_from_container(creep):
+def check_for_resource_from_container(creep):
     containers = list(
         filter(lambda s: s.structureType == STRUCTURE_CONTAINER and s.store.getUsedCapacity() > 0,
                creep.room.find(FIND_STRUCTURES)))
@@ -127,7 +127,7 @@ def check_for_mineral_from_container(creep):
         container_to_use = sorted(containers, key=lambda c: c.store.getFreeCapacity())[0]
         creep.memory.working = True
         creep.memory.filling = True
-        creep.memory.resource = Memory.room_snapshot[creep.room.name]['mineral']
+        creep.memory.resource = Object.keys(container_to_use.store)[0]
         creep.memory.source = container_to_use.id
         creep.memory.target = creep.room.storage.id
 
