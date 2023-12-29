@@ -72,7 +72,7 @@ def get_occupier(rooms, neighbours):
 def get_free_rooms(my_rooms):
     cleaned_rooms = []
     for my_room in my_rooms:
-        room = Memory.room_conquer[my_room]
+        room = Game.rooms[my_room]
         if Memory.room_conquer[my_room] is undefined and \
                 len(room.find(FIND_MY_SPAWNS)) > 1 and \
                 room.controller.level >= 7 and \
