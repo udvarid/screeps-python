@@ -48,7 +48,7 @@ def run_harvester(creep):
         if creep.pos.isNearTo(source):
             creep.harvest(source)
         else:
-            creep.moveTo(source, {'visualizePathStyle': {'stroke': '#ffffff'}})
+            creep.moveTo(source, {'reusePath': 50, 'visualizePathStyle': {'stroke': '#ffffff'}})
     else:
         # If we have a saved target, use it
         if creep.memory.target:
@@ -72,9 +72,9 @@ def run_harvester(creep):
             else:
                 creep.upgradeController(target)
                 if not creep.pos.inRangeTo(target, 2):
-                    creep.moveTo(target)
+                    creep.moveTo(target, {'reusePath': 50, 'visualizePathStyle': {'stroke': '#ffffff'}})
         else:
-            creep.moveTo(target, {'visualizePathStyle': {'stroke': '#ffffff'}})
+            creep.moveTo(target, {'reusePath': 50, 'visualizePathStyle': {'stroke': '#ffffff'}})
 
 
 def get_target(creep):
