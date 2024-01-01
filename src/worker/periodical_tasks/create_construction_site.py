@@ -24,6 +24,8 @@ def create_construction_site():
                 for structure in STRUCTURES_NEED_CONSTRUCT:
                     structures = list(filter(lambda s: s.structureType == structure, room.find(FIND_MY_STRUCTURES)))
                     max_number = CONTROLLER_STRUCTURES[structure][room.controller.level]
+                    if structure == STRUCTURE_LAB:
+                        max_number = min(max_number, 3)
                     if max_number > len(structures):
                         print("{} room tries to structure {}".format(room_name, structure))
                         find_and_create_construction_site(spawns[0], structure)
