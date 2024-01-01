@@ -32,7 +32,7 @@ def run_miner(creep):
             if result == ERR_NOT_ENOUGH_RESOURCES:
                 creep.memory.filling = False
         else:
-            creep.moveTo(source, {'reusePath': 50, 'visualizePathStyle': {'stroke': '#ffffff'}})
+            creep.moveTo(source, {'reusePath': 15, 'visualizePathStyle': {'stroke': '#ffffff'}})
     else:
         if creep.memory.target:
             target = Game.getObjectById(creep.memory.target)
@@ -45,7 +45,7 @@ def run_miner(creep):
             if result == OK or result == ERR_FULL:
                 del creep.memory.target
         else:
-            creep.moveTo(target, {'reusePath': 50, 'visualizePathStyle': {'stroke': '#ffffff'}})
+            creep.moveTo(target, {'reusePath': 15, 'visualizePathStyle': {'stroke': '#ffffff'}})
 
 
 def get_target(creep):

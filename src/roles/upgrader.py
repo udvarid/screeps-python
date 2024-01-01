@@ -35,7 +35,7 @@ def run_upgrader(creep):
         if creep.pos.isNearTo(source):
             creep.withdraw(source, RESOURCE_ENERGY)
         else:
-            creep.moveTo(source, {'reusePath': 50, 'visualizePathStyle': {'stroke': '#ffffff'}})
+            creep.moveTo(source, {'reusePath': 15, 'visualizePathStyle': {'stroke': '#ffffff'}})
     else:
         # If we have a saved target, use it
         if creep.memory.target:
@@ -49,6 +49,6 @@ def run_upgrader(creep):
         if is_close:
             creep.upgradeController(target)
             if not creep.pos.inRangeTo(target, 2):
-                creep.moveTo(target, {'reusePath': 50, 'visualizePathStyle': {'stroke': '#ffffff'}})
+                creep.moveTo(target, {'reusePath': 15, 'visualizePathStyle': {'stroke': '#ffffff'}})
         else:
-            creep.moveTo(target, {'reusePath': 50, 'visualizePathStyle': {'stroke': '#ffffff'}})
+            creep.moveTo(target, {'reusePath': 15, 'visualizePathStyle': {'stroke': '#ffffff'}})
