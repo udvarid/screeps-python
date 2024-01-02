@@ -11,11 +11,6 @@ __pragma__('noalias', 'update')
 
 
 def run_upgrader(creep):
-    """
-    Runs a creep as a generic harvester.
-    :param creep: The creep to run
-    """
-
     if creep.memory.filling and _.sum(creep.carry) >= creep.carryCapacity:
         creep.memory.filling = False
         del creep.memory.source

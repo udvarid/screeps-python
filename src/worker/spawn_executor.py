@@ -6,6 +6,7 @@ from src.roles.spawn_roles.miner_logic import need_extra as miner_logic
 from src.roles.spawn_roles.scouter_logic import need_extra as scouter_logic, give_aim as give_scouter_aim
 from src.roles.spawn_roles.claimer_logic import need_extra as claimer_logic, give_aim as give_claimer_aim
 from src.roles.spawn_roles.c_builder_logic import need_extra as c_builder_logic, give_aim as give_c_builder_aim
+from src.roles.spawn_roles.safe_mode_claimer_logic import need_extra as safe_mode_claimer_logic
 
 from src.defs import *
 
@@ -78,6 +79,16 @@ SPAWN_PLAN = {
         'logic': c_builder_logic,
         'multiple': False,
         'aim_logic': give_c_builder_aim
+    },
+    'safe_mode_claimer': {
+        'min': 0,
+        'max': 1,
+        'base_body': [MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE,
+                      CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY,
+                      MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE,
+                      CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY],
+        'logic': safe_mode_claimer_logic,
+        'multiple': False
     }
 }
 

@@ -119,7 +119,10 @@ def get_missing_mineral(terminal, mineral):
     for hauler in haulers:
         mineral_in_hauler += hauler.store.getUsedCapacity(mineral)
     mineral_in_claimer = 0
-    # TODO ha már lesz claimer unit, akkor annak a tartalmát is átnézni a haulerhez hasonlóan
+    safe_mode_claimers = list(filter(lambda c: c.memory.role == 'safe_mode_claimer',
+                                     terminal.room.find(FIND_MY_CREEPS)))
+    for safe_mode_claimer in safe_mode_claimers:
+        mineral_in_claimer += safe_mode_claimer.store.getUsedCapacity(mineral)
     mineral_in_labs = 0
     labs = list(filter(lambda s: s.sturctureType == STRUCTURE_LAB, terminal.room.find(FIND_MY_STRUCTURES)))
     for lab in labs:
