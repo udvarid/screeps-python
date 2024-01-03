@@ -11,6 +11,11 @@ def need_extra(context):
 
 
 def more_worker_would_be_useful(context):
+    spawns_in_room = context.room.find(FIND_MY_SPAWNS)
+    for spawn_in_room in spawns_in_room:
+        if spawn_in_room.spawning is not None and spawn_in_room.spawning['name'] is not undefined and \
+                spawn_in_room.spawning['name'].includes("harvester"):
+            return False
     my_harvesters = list(filter(lambda c: c.memory.role == 'harvester', context.room.find(FIND_MY_CREEPS)))
     sources = len(context.room.find(FIND_SOURCES))
 
@@ -19,3 +24,4 @@ def more_worker_would_be_useful(context):
         work_elements += harvester.getActiveBodyparts(WORK)
 
     return work_elements // sources < 8
+
