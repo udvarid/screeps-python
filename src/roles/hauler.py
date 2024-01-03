@@ -24,7 +24,7 @@ def run_hauler(creep):
             creep.memory.working = True
         elif check_energy_back_to_store(creep, possible_target):
             creep.memory.working = True
-        elif possible_target is None and _.sum(creep.carry) == 0:
+        elif _.sum(creep.carry) == 0:
             check_for_link_with_energy(creep)
             if creep.memory.working is False:
                 check_for_resource_from_container(creep)
@@ -154,7 +154,7 @@ def check_energy_back_to_store(creep, possible_target):
 
 
 def check_for_real_targets(creep, possible_target):
-    if creep.room.storage.store[RESOURCE_ENERGY] > 10000 and possible_target is not None:
+    if creep.room.storage.store[RESOURCE_ENERGY] > 0 and possible_target is not None:
         creep.memory.filling = False
         del creep.memory.source
         creep.memory.target = possible_target.id

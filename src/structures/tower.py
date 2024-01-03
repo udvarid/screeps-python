@@ -64,14 +64,17 @@ def repair_structure(tower):
 
 def build_rampart_and_wall(tower):
     hit_level = RAMPART_AND_WALL_SIZE[tower.room.controller.level - 1]
-    rampart = list(filter(lambda s: s.structureType == STRUCTURE_RAMPART and s.hits < hit_level,
-                          tower.room.find(FIND_STRUCTURES)))
-    if len(rampart) > 0:
-        structure_to_repair = sorted(rampart, key=lambda c: c.hits)[0]
-        tower.repair(structure_to_repair)
-        return
+    has_store_with_enough_energy = True
+    if tower.room.storage is not undefined and tower.room.storage.store.getUsedCapacity(RESOURCE_ENERGY) < 25000:
+        has_store_with_enough_energy = False
+    if has_store_with_enough_energy:
+        rampart = list(filter(lambda s: s.structureType == STRUCTURE_RAMPART and s.hits < hit_level,
+                              tower.room.find(FIND_STRUCTURES)))
+        if len(rampart) > 0:
+            structure_to_repair = sorted(rampart, key=lambda c: c.hits)[0]
+            tower.repair(structure_to_repair)
+            return
 
-    if tower.room.storage is not undefined and tower.room.storage.store.getUsedCapacity(RESOURCE_ENERGY) >= 50000:
         wall = list(filter(lambda s: s.structureType == STRUCTURE_WALL and s.hits < hit_level,
                            tower.room.find(FIND_STRUCTURES)))
         if len(wall) > 0:

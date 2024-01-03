@@ -14,7 +14,7 @@ def more_hauler_is_needed(context):
     energy_in_store = context.room.storage.store[RESOURCE_ENERGY]
     structures_need_energy = list(filter(lambda s: FILL_WITH_ENERGY.includes(s.structureType),
                                          context.room.find(FIND_MY_STRUCTURES)))
-    return energy_in_store > 10000 and \
+    return energy_in_store > 5000 and \
         (context.number == 0 or len(structures_need_energy) > 45 or has_miner_with_container(context))
 
 
