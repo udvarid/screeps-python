@@ -9,6 +9,7 @@ from src.roles.spawn_roles.c_builder_logic import need_extra as c_builder_logic,
 from src.roles.spawn_roles.safe_mode_claimer_logic import need_extra as safe_mode_claimer_logic
 
 from src.defs import *
+from src.utility.helper import get_active_rooms
 
 __pragma__('noalias', 'name')
 __pragma__('noalias', 'undefined')
@@ -94,36 +95,43 @@ SPAWN_PLAN = {
 
 
 def do_spawn():
-    for name in Object.keys(Game.spawns):
-        spawn = Game.spawns[name]
-        energy_capacity = spawn.room.energyAvailable
-        if not spawn.spawning and energy_capacity >= 250 and spawn.room.controller.my:
-            for role_name in Object.keys(SPAWN_PLAN):
-                role = SPAWN_PLAN[role_name]
-                num_role_creeps = _.sum(Game.creeps, lambda c: c.memory.home == spawn.pos.roomName and
-                                                               c.memory.role == role_name)
-                context = {
-                    'room': spawn.room,
-                    'max': role.max,
-                    'number': num_role_creeps
-                }
-                if num_role_creeps < role.min or role.logic(context):
-                    multiplier = 1 if role.multiple is False else calculate_multiplier(energy_capacity, role.base_body)
-                    body_list = role.base_body[:]
-                    if multiplier > 1:
-                        for i in range(min(multiplier, 10) - 1):
-                            body_list.extend(role.base_body)
-                    name = "{}{}".format(role_name, Game.time)
-                    aim_name = spawn.room.name if role.aim_logic is undefined else role.aim_logic(spawn.room.name)
-                    memory = {
-                        'memory': {
-                            'role': role_name,
-                            'home': spawn.room.name,
-                            'aim': aim_name
-                        }
+    active_rooms = get_active_rooms()
+    for room_name in active_rooms:
+        room = Game.rooms[room_name]
+        spawns = room.find(FIND_MY_SPAWNS)
+        spawn_started = False
+        for spawn in spawns:
+            energy_capacity = room.energyAvailable
+            if not spawn.spawning and energy_capacity >= 250 and room.controller.my:
+                for role_name in Object.keys(SPAWN_PLAN):
+                    role = SPAWN_PLAN[role_name]
+                    num_role_creeps = _.sum(Game.creeps, lambda c: c.memory.home == room.name and
+                                                                   c.memory.role == role_name)
+                    context = {
+                        'room': room,
+                        'max': role.max,
+                        'number': num_role_creeps
                     }
-                    spawn.spawnCreep(body_list, name, memory)
-                    break
+                    if num_role_creeps < role.min or role.logic(context):
+                        multiplier = 1 if role.multiple is False else calculate_multiplier(energy_capacity, role.base_body)
+                        body_list = role.base_body[:]
+                        if multiplier > 1:
+                            for i in range(min(multiplier, 10) - 1):
+                                body_list.extend(role.base_body)
+                        name = "{}{}".format(role_name, Game.time)
+                        aim_name = room.name if role.aim_logic is undefined else role.aim_logic(room.name)
+                        memory = {
+                            'memory': {
+                                'role': role_name,
+                                'home': room.name,
+                                'aim': aim_name
+                            }
+                        }
+                        spawn.spawnCreep(body_list, name, memory)
+                        spawn_started = True
+                        break
+            if spawn_started:
+                break
 
 
 def calculate_multiplier(capacity, body_parts):
