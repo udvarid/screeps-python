@@ -21,9 +21,9 @@ def run_claimer(creep: Creep):
         direction = creep.room.findExitTo(creep.memory.aim)
         creep.memory.my_exit = creep.pos.findClosestByRange(direction)
         creep.memory.my_path = creep.room.findPath(creep.pos, creep.memory.my_exit)
-    if creep.room.name != creep.memory.home:
+    if creep.pos.roomName != creep.memory.home:
         controller = creep.room.controller
-        if creep.memory.cont_path is undefined:
+        if creep.memory.cont_path is undefined or len(creep.memory.cont_path) == 0:
             creep.memory.cont_path = creep.room.findPath(creep.pos, controller.pos, {'swampCost': 1})
 
         result = creep.claimController(controller)

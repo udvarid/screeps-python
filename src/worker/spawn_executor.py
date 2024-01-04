@@ -7,6 +7,8 @@ from src.roles.spawn_roles.scouter_logic import need_extra as scouter_logic, giv
 from src.roles.spawn_roles.claimer_logic import need_extra as claimer_logic, give_aim as give_claimer_aim
 from src.roles.spawn_roles.c_builder_logic import need_extra as c_builder_logic, give_aim as give_c_builder_aim
 from src.roles.spawn_roles.safe_mode_claimer_logic import need_extra as safe_mode_claimer_logic
+from src.roles.spawn_roles.reserved_attacker_logic import need_extra as reserved_attacker_logic, \
+    give_aim as give_reserved_attacker_aim
 
 from src.defs import *
 from src.utility.helper import get_active_rooms
@@ -90,6 +92,30 @@ SPAWN_PLAN = {
                       CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY],
         'logic': safe_mode_claimer_logic,
         'multiple': False
+    },
+    'reserved_attacker_close': {
+        'min': 0,
+        'max': 0,
+        'base_body': [MOVE],
+        'logic': reserved_attacker_logic,
+        'multiple': False,
+        'aim_logic': give_reserved_attacker_aim
+    },
+    'reserved_attacker_range': {
+        'min': 0,
+        'max': 0,
+        'base_body': [MOVE],
+        'logic': reserved_attacker_logic,
+        'multiple': False,
+        'aim_logic': give_reserved_attacker_aim
+    },
+    'reserved_attacker_heal': {
+        'min': 0,
+        'max': 0,
+        'base_body': [MOVE],
+        'logic': reserved_attacker_logic,
+        'multiple': False,
+        'aim_logic': give_reserved_attacker_aim
     }
 }
 
