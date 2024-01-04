@@ -65,7 +65,7 @@ def repair_structure(tower):
 def build_rampart_and_wall(tower):
     hit_level = RAMPART_AND_WALL_SIZE[tower.room.controller.level - 1]
     has_store_with_enough_energy = True
-    if tower.room.storage is not undefined and tower.room.storage.store.getUsedCapacity(RESOURCE_ENERGY) < 25000:
+    if tower.room.storage is not undefined and tower.room.storage.store.getUsedCapacity(RESOURCE_ENERGY) < 50000:
         has_store_with_enough_energy = False
     if has_store_with_enough_energy:
         rampart = list(filter(lambda s: s.structureType == STRUCTURE_RAMPART and s.hits < hit_level,
