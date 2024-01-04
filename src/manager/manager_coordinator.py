@@ -22,6 +22,7 @@ def do_periodical_tasks():
 def do_strategic_tasks():
     discovery_task_executor.check_rooms_for_scout()
     discovery_task_executor.check_rooms_for_conquer()
+    discovery_task_executor.check_rooms_for_reserved_attack()
 
 
 def do_structure_related_tasks():

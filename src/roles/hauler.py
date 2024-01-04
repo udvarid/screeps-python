@@ -182,6 +182,6 @@ def get_target(creep):
         target = creep.pos.findClosestByPath(towers)
     if target is None:
         structures = filter(lambda s: FILL_WITH_ENERGY.includes(s.structureType) and
-                                      s.energy < s.energyCapacity * 0.9, room.find(FIND_MY_STRUCTURES))
+                                      s.energy < s.energyCapacity * 0.75, room.find(FIND_MY_STRUCTURES))
         target = creep.pos.findClosestByPath(structures)
     return target
