@@ -142,7 +142,7 @@ def do_spawn():
                     multiplier = 1 if role.multiple is False else calculate_multiplier(energy_capacity, role.base_body)
                     body_list = role.base_body[:]
                     if multiplier > 1:
-                        for i in range(min(multiplier, 10) - 1):
+                        for i in range(min(multiplier, 8) - 1):
                             body_list.extend(role.base_body)
                     name = "{}{}".format(role_name, Game.time)
                     aim_name = room_name if role.aim_logic is undefined else role.aim_logic(room_name)

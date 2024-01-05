@@ -30,16 +30,30 @@ def operate_terminals():
                     if best_order is not undefined and best_order[1] > 0:
                         Game.market.deal(best_order[0].id, 1000, room_name)
                 else:
-                    if not created_ghodium_order(terminal):
-                        create_booster_order(terminal)
+                    if created_ghodium_order(terminal):
+                        return
+                    if create_booster_order(terminal):
+                        return
+                    if bought_extra_energy(terminal, energy_cost):
+                        return
 
     else:
         actual = Memory.counters["terminal_time"]
         __pragma__('js', '{}', 'Memory.counters["terminal_time"] = actual - 1')
 
 
+def bought_extra_energy(terminal, energy_cost):
+    energy_amount = terminal.room.storage.store.getUsedCapacity(RESOURCE_ENERGY)
+    room_name = terminal.room.name
+    if energy_amount < 100000 and Game.market.credits > 5000000:
+        if energy_cost == undefined:
+            energy_cost = calculate_energy_cost()
+        best_order = get_best_energy_order(energy_cost, room_name)
+        if best_order is not undefined:
+            Game.market.deal(best_order[0].id, 10000, room_name)
+
+
 def create_booster_order(terminal):
-    print('checking for boost mineral')
     neighbours = Memory['room_map'][terminal.room.name]['neighbours']
     n_rooms = []
     if neighbours['up'] != 'NO' and neighbours['up'] != '?':
@@ -76,7 +90,6 @@ def create_booster_order(terminal):
             print("creating {} order in room {}".format(boosted_mineral, room_name))
             Game.market.createOrder(ORDER_BUY, boosted_mineral, price, missing_mineral, room_name)
             return True
-
     return False
 
 
@@ -148,6 +161,25 @@ def get_best_order(energy_cost, room_name, mineral):
         orders_with_cost.append((order, profit))
     if len(orders_with_cost) > 0:
         best_order = sorted(orders_with_cost, key=lambda c: c[1])[len(orders_with_cost) - 1]
+        return best_order
+    else:
+        return undefined
+
+
+def get_best_energy_order(energy_cost, room_name):
+    orders = Game.market.getAllOrders({'type': ORDER_SELL, 'resourceType': RESOURCE_ENERGY})
+    orders_with_cost = []
+    for order in orders:
+        if order.amount < 10000:
+            continue
+        cost = Game.market.calcTransactionCost(10000, room_name, order.roomName)
+        if cost > 3333 or order.price > energy_cost * 1.2:
+            return undefined
+        total_cost = order.price * 10000 + cost * energy_cost
+        orders_with_cost.append((order, total_cost))
+    if len(orders_with_cost) > 0:
+        sorted_orders = sorted(orders_with_cost, key=lambda c: c[1])
+        best_order = sorted_orders[0]
         return best_order
     else:
         return undefined
