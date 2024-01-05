@@ -45,12 +45,13 @@ def run_reserved_attacker(creep: Creep):
             direction = creep.room.findExitTo(creep.memory.aim)
             creep.memory.my_exit = creep.pos.findClosestByRange(direction)
             creep.memory.my_path = creep.room.findPath(creep.pos, creep.memory.my_exit)
-        if creep.pos.roomName != creep.memory.home:
+        if creep.pos.roomName == creep.memory.aim:
             if creep.memory.first_time_x is undefined:
                 creep.memory.first_time_x = creep.pos.x
                 creep.memory.first_time_y = creep.pos.y
 
             if moved_from_exit(creep):
+                del creep.memory.first_time_x
                 if creep.memory.role == "reserved_attacker_close":
                     run_reserved_attacker_close(creep)
                 elif creep.memory.role == "reserved_attacker_range":
@@ -80,23 +81,29 @@ def moved_from_exit(creep):
 
 
 def run_reserved_attacker_heal(creep):
-    if creep.hits <= creep.hitsMax * 0.5:
+    if creep.hits < creep.hitsMax * 0.75:
         creep.heal(creep)
         return
     others = list(filter(lambda c: c.memory.role == 'reserved_attacker_close' or
                                    c.memory.role == 'reserved_attacker_range', creep.room.find(FIND_MY_CREEPS)))
     if len(others) > 0:
         possibly_injured = sorted(others, key=lambda c: c.hits / c.hits.hitsMax)[0]
-        if possibly_injured.hits <= possibly_injured.hitsMax * 0.9:
+        if possibly_injured.hits < possibly_injured.hitsMax:
             if creep.pos.isNearTo(possibly_injured.pos):
                 creep.heal(possibly_injured)
             else:
                 if creep.pos.inRangeTo(possibly_injured, 3):
                     creep.rangedHeal(possibly_injured)
                 creep.moveTo(possibly_injured.pos)
+        elif creep.hits < creep.hitsMax:
+            creep.heal(creep)
+            return
         closest_friend = creep.pos.findClosestByPath(others)
         creep.moveTo(closest_friend.pos)
         return
+
+
+
     go_to_controller(creep)
 
 
@@ -104,22 +111,34 @@ def run_reserved_attacker_range(creep):
     enemies = creep.room.find(FIND_HOSTILE_CREEPS)
     attacker_enemies = list(filter(lambda c: c.getActiveBodyparts(RANGED_ATTACK) +
                                              c.getActiveBodyparts(ATTACK) > 0, enemies))
+    structures = list(filter(lambda s: s.structureType != STRUCTURE_WALL, creep.room.find(FIND_STRUCTURES)))
 
     others = list(filter(lambda c: c.memory.role == 'reserved_attacker_close', creep.room.find(FIND_MY_CREEPS)))
     too_far = False
     if len(others) > 0 and creep.pos.getRangeTo(others[0]) > 3:
         too_far = True
 
+    closest_enemy = undefined
     if len(attacker_enemies) > 0:
         closest_enemy = creep.pos.findClosestByRange(attacker_enemies)
+    elif len(enemies) > 0:
+        closest_enemy = creep.pos.findClosestByRange(enemies)
+    elif len(structures) > 0:
+        closest_enemy = creep.pos.findClosestByRange(structures)
+    if closest_enemy is not undefined:
         if creep.pos.inRangeTo(closest_enemy, 3):
             creep.rangedAttack(closest_enemy)
+            return
         elif not too_far and creep.pos.inRangeTo(closest_enemy, 6):
+            creep.moveTo(closest_enemy)
+            return
+        if len(others) == 0:
             creep.moveTo(closest_enemy)
             return
 
     if len(others) > 0:
         creep.moveTo(others[0])
+        return
 
     go_to_controller(creep)
 
@@ -128,12 +147,20 @@ def run_reserved_attacker_close(creep):
     enemies = creep.room.find(FIND_HOSTILE_CREEPS)
     attacker_enemies = list(filter(lambda c: c.getActiveBodyparts(RANGED_ATTACK) +
                                              c.getActiveBodyparts(ATTACK) > 0, enemies))
+    structures = list(filter(lambda s: s.structureType != STRUCTURE_WALL, creep.room.find(FIND_STRUCTURES)))
+
+    closest_enemy = undefined
     if len(attacker_enemies) > 0:
         closest_enemy = creep.pos.findClosestByRange(attacker_enemies)
+    elif len(enemies) > 0:
+        closest_enemy = creep.pos.findClosestByRange(enemies)
+    elif len(structures) > 0:
+        closest_enemy = creep.pos.findClosestByRange(structures)
+    if closest_enemy is not undefined:
         if creep.pos.isNearTo(closest_enemy):
             creep.attack(closest_enemy)
             return
-        if creep.pos.inRangeTo(closest_enemy, 3):
+        else:
             creep.moveTo(closest_enemy)
             return
 

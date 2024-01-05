@@ -96,7 +96,10 @@ SPAWN_PLAN = {
     'reserved_attacker_close': {
         'min': 0,
         'max': 0,
-        'base_body': [MOVE],
+        'base_body': [TOUGH, TOUGH, TOUGH, TOUGH, TOUGH, TOUGH, TOUGH, TOUGH, TOUGH, TOUGH,
+                      ATTACK, ATTACK, ATTACK, ATTACK, ATTACK, ATTACK, ATTACK, ATTACK, ATTACK, ATTACK,
+                      MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE,
+                      MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE],
         'logic': reserved_attacker_logic,
         'multiple': False,
         'aim_logic': give_reserved_attacker_aim
@@ -104,7 +107,11 @@ SPAWN_PLAN = {
     'reserved_attacker_range': {
         'min': 0,
         'max': 0,
-        'base_body': [MOVE],
+        'base_body': [TOUGH, TOUGH, TOUGH, TOUGH, TOUGH, TOUGH, TOUGH, TOUGH, TOUGH, TOUGH,
+                      RANGED_ATTACK, RANGED_ATTACK, RANGED_ATTACK, RANGED_ATTACK, RANGED_ATTACK,
+                      RANGED_ATTACK, RANGED_ATTACK, RANGED_ATTACK, RANGED_ATTACK, RANGED_ATTACK,
+                      MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE,
+                      MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE],
         'logic': reserved_attacker_logic,
         'multiple': False,
         'aim_logic': give_reserved_attacker_aim
@@ -112,7 +119,10 @@ SPAWN_PLAN = {
     'reserved_attacker_heal': {
         'min': 0,
         'max': 0,
-        'base_body': [MOVE],
+        'base_body': [TOUGH, TOUGH, TOUGH, TOUGH, TOUGH, TOUGH, TOUGH, TOUGH, TOUGH, TOUGH,
+                      HEAL, HEAL, HEAL, HEAL, HEAL, HEAL, HEAL, HEAL, HEAL, HEAL,
+                      MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE,
+                      MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE],
         'logic': reserved_attacker_logic,
         'multiple': False,
         'aim_logic': give_reserved_attacker_aim
