@@ -31,7 +31,7 @@ def check_for_new_reserved_attack():
             reserved = Memory.room_map[room_map]['owner'] == "reserved"
             enemy_present = Memory.room_map[room_map]['enemy'] is True
             under_attack = check_under_attack(room_map)
-            if not old and reserved and not under_attack and enemy_present:
+            if not old and not under_attack and (enemy_present or reserved):
                 attacker = get_attacker(my_free_rooms, Memory.room_map[room_map]['neighbours'])
                 if attacker is not undefined:
                     print("Room {} should be attacked by {}".format(room_map, attacker))
@@ -49,7 +49,11 @@ def check_for_new_reserved_attack():
 def clean_old_reserved_attacks():
     for attacker in Object.keys(Memory.room_reserved_attack):
         attacker = Memory.room_reserved_attack[attacker]
-        if Game.time - attacker['time'] > 50000:
+        aim_room = attacker['aim']
+        aim_room_detailed = Memory.room_map[aim_room]
+        reserved = aim_room_detailed['owner'] == "reserved"
+        enemy_present = aim_room_detailed['enemy'] is True
+        if not reserved and not enemy_present or Game.time - attacker['time'] > 50000:
             del Memory.room_reserved_attack[attacker]
 
 

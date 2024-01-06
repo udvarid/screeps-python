@@ -74,7 +74,8 @@ def create_booster_order(terminal):
     if room_has_occupied_neighbour:
         boosted_minerals = [RESOURCE_CATALYZED_UTRIUM_ACID,
                             RESOURCE_CATALYZED_KEANIUM_ALKALIDE,
-                            RESOURCE_CATALYZED_LEMERGIUM_ALKALIDE]
+                            RESOURCE_CATALYZED_LEMERGIUM_ALKALIDE,
+                            RESOURCE_CATALYZED_GHODIUM_ALKALIDE]
         for boosted_mineral in boosted_minerals:
             missing_mineral = get_missing_mineral(terminal, boosted_mineral)
             if missing_mineral == 0:

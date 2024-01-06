@@ -8,9 +8,10 @@ def need_extra(context):
     room_name = context.room['name']
     if Memory.room_reserved_attack is undefined or Memory.room_reserved_attack[room_name] is undefined:
         return False
+    energy_in_store = context.room.storage.store[RESOURCE_ENERGY]
     attackers = _.sum(Game.creeps,
                       lambda c: c.memory.home == room_name and reserved_attacker_roles.includes(c.memory.role))
-    if attackers == 0:
+    if attackers == 0 and energy_in_store > 25000:
         __pragma__('js', '{}', 'Memory.room_reserved_attack[room_name]["spawn_status"] = "PROGRESS"')
     if attackers == 3:
         __pragma__('js', '{}', 'Memory.room_reserved_attack[room_name]["spawn_status"] = "STOP"')

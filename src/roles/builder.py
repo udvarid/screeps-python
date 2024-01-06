@@ -13,12 +13,10 @@ __pragma__('noalias', 'update')
 def run_builder(creep: Creep):
     if creep.memory.building and creep.store[RESOURCE_ENERGY] == 0:
         creep.memory.building = False
-        creep.say('🔄 harvest')
     if not creep.memory.building and creep.store.getFreeCapacity() == 0:
         if creep.ticksToLive < 50:
             creep.suicide()
         creep.memory.building = True
-        creep.say('🚧 build')
 
     if creep.memory.building:
         targets = creep.room.find(FIND_CONSTRUCTION_SITES)
@@ -27,7 +25,7 @@ def run_builder(creep: Creep):
                 creep.moveTo(
                     targets[0], {'visualizePathStyle': {'stroke': '#ffffff'}})
         else:
-            creep.memory.role = 'harvester'
+            creep.memory.role = 'upgrader'
     else:
         storage = creep.room.storage
         if storage is not undefined and storage.store[RESOURCE_ENERGY] > 0:
