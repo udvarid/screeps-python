@@ -48,14 +48,14 @@ def check_for_new_reserved_attack():
 
 
 def clean_old_reserved_attacks():
-    for attacker in Object.keys(Memory.room_reserved_attack):
-        attacker = Memory.room_reserved_attack[attacker]
+    for attacker_name in Object.keys(Memory.room_reserved_attack):
+        attacker = Memory.room_reserved_attack[attacker_name]
         aim_room = attacker['aim']
         aim_room_detailed = Memory.room_map[aim_room]
         reserved = aim_room_detailed['owner'] == "reserved"
         enemy_present = aim_room_detailed['enemy'] is True
         if not reserved and not enemy_present or Game.time - attacker['time'] > 50000:
-            del Memory.room_reserved_attack[attacker]
+            del Memory.room_reserved_attack[attacker_name]
 
 
 def get_attacker(rooms, neighbours):

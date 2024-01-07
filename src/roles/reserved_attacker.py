@@ -162,8 +162,6 @@ def run_reserved_attacker_close(creep):
                                        s.structureType != STRUCTURE_ROAD and
                                        s.structureType != STRUCTURE_CONTROLLER,
                              creep.room.find(FIND_STRUCTURES)))
-    for structure in structures:
-        print(creep.name, structure.pos)
     walls = list(filter(lambda s: s.structureType == STRUCTURE_WALL, creep.room.find(FIND_STRUCTURES)))
 
     healer = list(filter(lambda c: c.memory.role == 'reserved_attacker_heal', creep.room.find(FIND_MY_CREEPS)))
