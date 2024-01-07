@@ -68,7 +68,7 @@ SPAWN_PLAN = {
     },
     'claimer': {
         'min': 0,
-        'max': 0,
+        'max': 1,
         'base_body': [MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, CLAIM],
         'logic': claimer_logic,
         'multiple': False,
@@ -76,7 +76,7 @@ SPAWN_PLAN = {
     },
     'c_builder': {
         'min': 0,
-        'max': 0,
+        'max': 2,
         'base_body': [WORK, CARRY, MOVE, MOVE, WORK, CARRY, MOVE, MOVE,
                       WORK, CARRY, MOVE, MOVE, WORK, CARRY, MOVE, MOVE],
         'logic': c_builder_logic,

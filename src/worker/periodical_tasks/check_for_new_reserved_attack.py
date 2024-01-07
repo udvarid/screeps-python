@@ -76,6 +76,7 @@ def get_free_rooms(my_rooms):
     for my_room in my_rooms:
         room = Game.rooms[my_room]
         if Memory.room_reserved_attack[my_room] is undefined and \
+                Memory.room_conquer[my_room] is undefined and \
                 len(room.find(FIND_MY_SPAWNS)) > 1 and \
                 room.controller.level >= 7 and \
                 room.storage is not undefined and \
