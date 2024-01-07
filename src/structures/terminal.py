@@ -18,6 +18,8 @@ def operate_terminals():
         energy_cost = undefined
         for room_name in Object.keys(Game.rooms):
             room = Game.rooms[room_name]
+            if room.controller is undefined or not room.controller.my:
+                continue
             terminal = room.terminal
             if room.controller.level >= 6 and terminal is not undefined:
                 mineral = Memory.room_snapshot[room.name]['mineral']
