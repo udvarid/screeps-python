@@ -41,16 +41,14 @@ def run_reserved_attacker(creep: Creep):
         else:
             creep.moveTo(target, {'reusePath': 3})
     else:
-        if creep.memory.my_exit is undefined:
-            direction = creep.room.findExitTo(creep.memory.aim)
-            creep.memory.my_exit = creep.pos.findClosestByRange(direction)
-            creep.memory.my_path = creep.room.findPath(creep.pos, creep.memory.my_exit)
         if creep.pos.roomName == creep.memory.aim:
             if creep.memory.first_time_x is undefined:
                 creep.memory.first_time_x = creep.pos.x
                 creep.memory.first_time_y = creep.pos.y
 
             if moved_from_exit(creep):
+                if creep.memory.my_exit is not undefined:
+                    del creep.memory.my_exit
                 if creep.memory.role == "reserved_attacker_close":
                     run_reserved_attacker_close(creep)
                 elif creep.memory.role == "reserved_attacker_range":
@@ -65,6 +63,10 @@ def run_reserved_attacker(creep: Creep):
                 if result is not OK:
                     del creep.memory.cont_path
         else:
+            if creep.memory.my_exit is undefined:
+                direction = creep.room.findExitTo(creep.memory.aim)
+                creep.memory.my_exit = creep.pos.findClosestByRange(direction)
+                creep.memory.my_path = creep.room.findPath(creep.pos, creep.memory.my_exit)
             if creep.memory.first_time_x is not undefined:
                 del creep.memory.first_time_x
             result = creep.moveByPath(creep.memory.my_path)
@@ -112,7 +114,9 @@ def run_reserved_attacker_range(creep):
     enemies = creep.room.find(FIND_HOSTILE_CREEPS)
     attacker_enemies = list(filter(lambda c: c.getActiveBodyparts(RANGED_ATTACK) +
                                              c.getActiveBodyparts(ATTACK) > 0, enemies))
-    structures = list(filter(lambda s: s.structureType != STRUCTURE_WALL and s.structureType != STRUCTURE_ROAD,
+    structures = list(filter(lambda s: s.structureType != STRUCTURE_WALL and
+                                       s.structureType != STRUCTURE_ROAD and
+                                       s.structureType != STRUCTURE_CONTROLLER,
                              creep.room.find(FIND_STRUCTURES)))
     walls = list(filter(lambda s: s.structureType == STRUCTURE_WALL, creep.room.find(FIND_STRUCTURES)))
 
@@ -154,8 +158,12 @@ def run_reserved_attacker_close(creep):
     enemies = creep.room.find(FIND_HOSTILE_CREEPS)
     attacker_enemies = list(filter(lambda c: c.getActiveBodyparts(RANGED_ATTACK) +
                                              c.getActiveBodyparts(ATTACK) > 0, enemies))
-    structures = list(filter(lambda s: s.structureType != STRUCTURE_WALL and s.structureType != STRUCTURE_ROAD,
+    structures = list(filter(lambda s: s.structureType != STRUCTURE_WALL and
+                                       s.structureType != STRUCTURE_ROAD and
+                                       s.structureType != STRUCTURE_CONTROLLER,
                              creep.room.find(FIND_STRUCTURES)))
+    for structure in structures:
+        print(creep.name, structure.pos)
     walls = list(filter(lambda s: s.structureType == STRUCTURE_WALL, creep.room.find(FIND_STRUCTURES)))
 
     healer = list(filter(lambda c: c.memory.role == 'reserved_attacker_heal', creep.room.find(FIND_MY_CREEPS)))
