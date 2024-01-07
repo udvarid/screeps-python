@@ -185,6 +185,12 @@ def run_reserved_attacker_close(creep):
             creep.moveTo(closest_enemy)
             return
 
+    const_sites = creep.room.find(FIND_CONSTRUCTION_SITES)
+    if len(const_sites) > 0:
+        closest_const_site = creep.pos.findClosestByPath(const_sites)
+        creep.moveTo(closest_const_site)
+        return
+
     go_to_controller(creep)
 
 
