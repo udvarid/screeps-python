@@ -25,7 +25,7 @@ def run_builder(creep: Creep):
                 creep.moveTo(
                     targets[0], {'visualizePathStyle': {'stroke': '#ffffff'}})
         else:
-            creep.memory.role = 'upgrader'
+            creep.memory.role = 'upgrader' if creep.room.storage is not undefined else 'harvester'
     else:
         storage = creep.room.storage
         if storage is not undefined and storage.store[RESOURCE_ENERGY] > 0:

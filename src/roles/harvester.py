@@ -35,7 +35,7 @@ def run_harvester(creep):
             energy_sources = creep.room.find(FIND_SOURCES)
             source_with_workers = []
             for energy_source in energy_sources:
-                harvesters = list(filter(lambda c: c.memory.source == energy_source.id,
+                harvesters = list(filter(lambda c: c.memory.source == energy_source.id and c.ticksToLive >= 100,
                                          creep.room.find(FIND_MY_CREEPS)))
                 work_elements = 0
                 for harvester in harvesters:

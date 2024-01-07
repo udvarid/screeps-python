@@ -28,14 +28,16 @@ SPAWN_PLAN = {
         'max': 2,
         'base_body': [CARRY, CARRY, MOVE, MOVE],
         'logic': hauler_logic,
-        'multiple': True
+        'multiple': True,
+        'to_live': 100
     },
     'harvester': {
         'min': 2,
         'max': 8,
         'base_body': [WORK, CARRY, MOVE, MOVE],
         'logic': harvest_logic,
-        'multiple': True
+        'multiple': True,
+        'to_live': 100
     },
     'builder': {
         'min': 0,
@@ -141,8 +143,10 @@ def do_spawn():
         if not spawn.spawning and energy_capacity >= 250 and spawn.room.controller.my:
             for role_name in Object.keys(SPAWN_PLAN):
                 role = SPAWN_PLAN[role_name]
+                to_live = 1500 if role['to_live'] is undefined else role['to_live']
                 num_role_creeps = _.sum(Game.creeps, lambda c: c.memory.home == room_name and
-                                                               c.memory.role == role_name)
+                                                               c.memory.role == role_name and
+                                                               c.ticksToLive >= to_live)
                 context = {
                     'room': spawn.room,
                     'max': role.max,
