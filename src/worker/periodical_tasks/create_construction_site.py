@@ -62,7 +62,7 @@ def find_and_create_construction_site(spawn, structure):
 
 
 def pos_in_the_frame(position):
-    return not (position[0] <= 2 or position[0] >= 47 or position[1] <= 2 or position[1] >= 47)
+    return not (position[0] < 2 or position[0] > 47 or position[1] < 2 or position[1] > 47)
 
 
 def is_near_to_sources(actual, room):
