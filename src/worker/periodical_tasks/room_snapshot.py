@@ -1,7 +1,7 @@
 from src.constant.my_constants import ROOM_SNAPSHOT
 from src.defs import *
 from src.utility.helper import get_full_neighbours
-from src.worker.periodical_tasks.create_construction_site import pos_in_the_frame, is_valid_type
+from src.worker.periodical_tasks.create_construction_site import is_valid_type
 
 __pragma__('noalias', 'name')
 __pragma__('noalias', 'undefined')
@@ -34,7 +34,8 @@ def make_room_snapshot():
                 free_mine_places = prev_mine_place if prev_mine_place is not undefined else get_free_mine_places(room)
                 free_source_places = prev_source_place if prev_source_place is not undefined else \
                     get_free_source_places(room)
-                mine_type = prev_mine_type if prev_mine_type is not undefined else room.find(FIND_MINERALS)[0].mineraType
+                mine_type = prev_mine_type if prev_mine_type is not undefined else room.find(FIND_MINERALS)[
+                    0].mineraType
                 room_snapshot = {
                     'energy': room.energyAvailable,
                     'mineral': mine_type,
@@ -55,7 +56,7 @@ def get_free_mine_places(room):
     neighbours = get_full_neighbours((mine.pos.x, mine.pos.y))
     free_places = []
     for neighbour in neighbours:
-        if pos_in_the_frame(neighbour) and is_valid_type(neighbour, room):
+        if pos_in_the_frame_for_free_places(neighbour) and is_valid_type(neighbour, room):
             free_places.append(neighbour)
     return len(free_places)
 
@@ -66,6 +67,10 @@ def get_free_source_places(room):
     for source in sources:
         neighbours = get_full_neighbours((source.pos.x, source.pos.y))
         for neighbour in neighbours:
-            if pos_in_the_frame(neighbour) and is_valid_type(neighbour, room):
+            if pos_in_the_frame_for_free_places(neighbour) and is_valid_type(neighbour, room):
                 free_places.append(neighbour)
     return len(free_places)
+
+
+def pos_in_the_frame_for_free_places(position):
+    return not (position[0] < 2 or position[0] > 47 or position[1] < 2 or position[1] > 47)
