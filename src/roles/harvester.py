@@ -80,8 +80,11 @@ def run_harvester(creep):
 def get_target(creep):
     room = creep.room
     target = undefined
-    hauler_time = Memory.room_snapshot[room.name]['hauler_time']
-    we_have_haulers = True if hauler_time is not None and (Game.time - hauler_time) < 10 else False
+    if Memory.room_snapshot[room.name] is not undefined:
+        hauler_time = Memory.room_snapshot[room.name]['hauler_time']
+        we_have_haulers = True if hauler_time is not None and (Game.time - hauler_time) < 10 else False
+    else:
+        we_have_haulers = False
     if Memory.room_safety_state[room.name] is not undefined and \
             Memory.room_safety_state[room.name].enemy and not we_have_haulers:
         target = _(room.find(FIND_STRUCTURES)) \
