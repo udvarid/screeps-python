@@ -143,7 +143,7 @@ def do_spawn():
         if not spawn.spawning and energy_capacity >= 250 and spawn.room.controller.my:
             for role_name in Object.keys(SPAWN_PLAN):
                 role = SPAWN_PLAN[role_name]
-                to_live = 1500 if role['to_live'] is undefined else role['to_live']
+                to_live = 0 if role['to_live'] is undefined else role['to_live']
                 num_role_creeps = _.sum(Game.creeps, lambda c: c.memory.home == room_name and
                                                                c.memory.role == role_name and
                                                                c.ticksToLive >= to_live)
