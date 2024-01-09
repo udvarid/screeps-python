@@ -1,5 +1,6 @@
 from src.defs import *
 from src.roles.builder import run_builder
+from src.utility.helper import get_full_neighbours
 
 __pragma__('noalias', 'name')
 __pragma__('noalias', 'undefined')
@@ -139,6 +140,12 @@ def run_reserved_attacker_range(creep):
     if closest_enemy is not undefined:
         if creep.pos.inRangeTo(closest_enemy, 3):
             creep.rangedAttack(closest_enemy)
+            distance = creep.pos.getRangeTo(closest_enemy)
+            if distance < 3:
+                new_pos = get_new_pos_from_enemy(creep, closest_enemy, distance)
+                if new_pos is not undefined:
+                    creep.moveTo(new_pos)
+                    return
             return
         elif not too_far and creep.pos.inRangeTo(closest_enemy, 6):
             creep.moveTo(closest_enemy)
@@ -152,6 +159,23 @@ def run_reserved_attacker_range(creep):
         return
 
     go_to_controller(creep)
+
+
+def get_new_pos_from_enemy(creep, closest_enemy, distance):
+    neighbours = get_full_neighbours((creep.pos.x, creep.pos.y))
+    cleaned_neighbours = []
+    for neighbour in neighbours:
+        if neighbour[0] < 1 or neighbour[0] > 48 or neighbour[1] < 1 or neighbour[1] > 48:
+            continue
+        if creep.room.getTerrain().get(neighbour[0], neighbour[1]) != 0:
+            continue
+        if abs(closest_enemy.pos.x - neighbour[0]) > distance or abs(closest_enemy.pos.y - neighbour[1]) > distance:
+            cleaned_neighbours.append(neighbour)
+    if len(cleaned_neighbours) > 0:
+        coordinate = _(cleaned_neighbours).sample()
+        new_position = __new__(RoomPosition(coordinate[0], coordinate[1], creep.room.name))
+        return new_position
+    return undefined
 
 
 def run_reserved_attacker_close(creep):
