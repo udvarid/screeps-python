@@ -18,6 +18,10 @@ def run_scouter(creep: Creep):
     if creep.room.name != creep.memory.home:
         energy = len(creep.room.find(FIND_SOURCES))
         owner = get_owner(creep.room)
+        controller_reachable = False
+        if creep.room.controller is not undefined:
+            if creep.pos.findClosestByPath([creep.room.controller]) is not None:
+                controller_reachable = True
         previous_state = Memory.room_map[creep.room.name]
         if previous_state is undefined or previous_state['neighbours'] is undefined:
             neighbours = get_neighbours(creep.room)
@@ -33,6 +37,7 @@ def run_scouter(creep: Creep):
         room_state = {
             'energy': energy,
             'owner': owner,
+            'controller_reachable': controller_reachable,
             'enemy': len(enemies) > 0,
             'attacker': len(attacker_enemies) > 0,
             'neighbours': neighbours,
@@ -64,12 +69,17 @@ def get_exit(creep):
 def get_owner(room):
     owner = 'free'
     controller = room.controller
+    if controller is undefined:
+        return "no_controller"
     if controller.my:
         owner = "me"
     elif controller.owner is not undefined:
         owner = "occupied"
     elif controller.reservation is not undefined:
-        owner = "reserved"
+        if controller.reservation.username == 'Invader' or controller.reservation.username == 'Source Keeper':
+            owner = "invader"
+        else:
+            owner = "reserved"
     return owner
 
 

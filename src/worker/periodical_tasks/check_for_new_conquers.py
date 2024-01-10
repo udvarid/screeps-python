@@ -32,9 +32,10 @@ def check_for_new_conquers():
             old = Game.time - Memory.room_map[room_map]['time'] > 15000
             energy = Memory.room_map[room_map]['energy'] == 2
             free = Memory.room_map[room_map]['owner'] == "free"
+            controller_reachable = Memory.room_map[room_map]['controller_reachable'] is True
             secured = Memory.room_map[room_map]['enemy'] is False and Memory.room_map[room_map]['attacker'] is False
             under_occupy = check_under_occupy(room_map)
-            if not old and energy and free and secured and not under_occupy:
+            if not old and energy and free and secured and not under_occupy and controller_reachable:
                 occupier = get_occupier(my_free_rooms, Memory.room_map[room_map]['neighbours'])
                 if occupier is not undefined:
                     print("Room {} should be occupied by {}".format(room_map, occupier))
