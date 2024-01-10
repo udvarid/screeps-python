@@ -6,6 +6,7 @@ from src.worker.periodical_tasks.clear_unknown_walls import clear_walls
 from src.worker.periodical_tasks.create_construction_site import create_construction_site
 from src.worker.periodical_tasks.create_exit_wall import create_exit_wall_plan
 from src.worker.periodical_tasks.create_rampart import create_rampart
+from src.worker.periodical_tasks.set_labs import set_labs
 
 
 def check_for_new_rampart():
@@ -38,3 +39,7 @@ def build_mine():
 
 def build_containers():
     construct_containers()
+
+
+def set_labs_to_memory():
+    set_labs()
