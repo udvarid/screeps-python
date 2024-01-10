@@ -43,7 +43,6 @@ def run_claimer(creep: Creep):
                     creep.room.createConstructionSite(spawn[0], spawn[1], STRUCTURE_SPAWN)
                     __pragma__('js', '{}', 'Memory.room_conquer[creep.memory.home]["claimed"] = true')
             if len(spawns) > 0:
-                del Memory.room_conquer[creep.memory.home]
                 __pragma__('js', '{}', 'Memory.room_map[creep.room.name]["owner"] = "me"')
                 creep.suicide()
     else:

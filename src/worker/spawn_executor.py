@@ -6,12 +6,12 @@ from src.roles.spawn_roles.miner_logic import need_extra as miner_logic
 from src.roles.spawn_roles.scouter_logic import need_extra as scouter_logic, give_aim as give_scouter_aim
 from src.roles.spawn_roles.claimer_logic import need_extra as claimer_logic, give_aim as give_claimer_aim
 from src.roles.spawn_roles.c_builder_logic import need_extra as c_builder_logic, give_aim as give_c_builder_aim
+from src.roles.spawn_roles.defender_logic import need_extra as defender_logic, give_aim as give_defender_aim
 from src.roles.spawn_roles.safe_mode_claimer_logic import need_extra as safe_mode_claimer_logic
 from src.roles.spawn_roles.reserved_attacker_logic import need_extra as reserved_attacker_logic, \
     give_aim as give_reserved_attacker_aim
 
 from src.defs import *
-from src.utility.helper import get_active_rooms
 
 __pragma__('noalias', 'name')
 __pragma__('noalias', 'undefined')
@@ -82,6 +82,18 @@ SPAWN_PLAN = {
         'logic': c_builder_logic,
         'multiple': False,
         'aim_logic': give_c_builder_aim
+    },
+    'defender': {
+        'min': 0,
+        'max': 1,
+        'base_body': [TOUGH, TOUGH, TOUGH, TOUGH, TOUGH, TOUGH, TOUGH, TOUGH, TOUGH, TOUGH,
+                      MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE,
+                      MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE,
+                      RANGED_ATTACK, RANGED_ATTACK, RANGED_ATTACK, RANGED_ATTACK,
+                      ATTACK, ATTACK, ATTACK, ATTACK, ATTACK, HEAL],
+        'logic': defender_logic,
+        'multiple': False,
+        'aim_logic': give_defender_aim
     },
     'safe_mode_claimer': {
         'min': 0,

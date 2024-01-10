@@ -1,6 +1,7 @@
 from src.roles.builder import run_builder
 from src.roles.claimer import run_claimer
 from src.roles.c_builder import run_c_builder
+from src.roles.defender import run_defender
 from src.roles.harvester import run_harvester
 from src.roles.hauler import run_hauler
 from src.roles.reserved_attacker import run_reserved_attacker
@@ -28,6 +29,7 @@ CREEP_TASKS = {
     'scouter': {'run_task': run_scouter},
     'claimer': {'run_task': run_claimer},
     'c_builder': {'run_task': run_c_builder},
+    'defender': {'run_task': run_defender},
     'safe_mode_claimer': {'run_task': run_safe_mode_claimer},
     'reserved_attacker_close': {'run_task': run_reserved_attacker},
     'reserved_attacker_range': {'run_task': run_reserved_attacker},

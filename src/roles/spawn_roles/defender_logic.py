@@ -11,16 +11,12 @@ __pragma__('noalias', 'update')
 
 
 def need_extra(context):
-    return context.number < context.max and more_claimer_is_needed(context)
+    return context.number < context.max and more_defender_is_needed(context)
 
 
-def more_claimer_is_needed(context):
-    room_name = context.room['name']
-    aim_room = Memory.room_conquer[room_name]['aim']
-    aim_status = Memory.room_map[aim_room]['owner']
+def more_defender_is_needed(context):
     return Memory.room_conquer is not undefined and \
-        Memory.room_conquer[room_name] is not undefined and \
-        aim_status != "me"
+        Memory.room_conquer[context.room['name']] is not undefined
 
 
 def give_aim(room_name):
