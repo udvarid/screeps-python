@@ -16,13 +16,11 @@ def need_extra(context):
 
 def more_c_builder_is_needed(context):
     room_name = context.room['name']
+    if Memory.room_conquer is undefined or Memory.room_conquer[room_name] is undefined:
+        return False
     aim_room = Memory.room_conquer[room_name]['aim']
     aim_status = Memory.room_map[aim_room]['owner']
-
-    return Memory.room_conquer is not undefined and \
-        Memory.room_conquer[context.room['name']] is not undefined and \
-        Memory.room_conquer[context.room['name']]["claimed"] is True and \
-        aim_status != "me"
+    return Memory.room_conquer[room_name]["claimed"] is True and aim_status != "me"
 
 
 def give_aim(room_name):
