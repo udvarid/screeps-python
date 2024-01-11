@@ -17,7 +17,7 @@ def run_hauler(creep):
     time = Game.time
     __pragma__('js', '{}', 'Memory.room_snapshot[room_name]["hauler_time"] = time')
     if not creep.memory.working:
-        if creep.ticksToLive < 20:
+        if creep.ticksToLive < 50:
             creep.suicide()
         possible_target = get_target(creep)
         if check_for_real_targets(creep, possible_target):
@@ -30,6 +30,8 @@ def run_hauler(creep):
                 check_for_resource_from_container(creep)
             if creep.memory.working is False:
                 check_for_terminal_job(creep)
+            if creep.memory.working is False:
+                check_for_lab_job(creep)
 
     if creep.memory.working:
         if creep.memory.filling and _.sum(creep.carry) > 0:
@@ -69,6 +71,20 @@ def run_hauler(creep):
                           .format(creep.name, target, creep.memory.resource, result))
             else:
                 creep.moveTo(target, {'visualizePathStyle': {'stroke': '#ffffff'}})
+
+
+def check_for_lab_job(creep):
+    labs = list(filter(lambda s: s.structureType == STRUCTURE_LAB, creep.room.find(FIND_MY_STRUCTURES)))
+    labs_wo_energy = list(filter(lambda l: l.store.getUsedCapacity(RESOURCE_ENERGY) < 2000, labs))
+    if len(labs_wo_energy) > 0:
+        storage = creep.room.storage
+        storage_energy = storage.store.getUsedCapacity(RESOURCE_ENERGY)
+        if storage_energy > 10000:
+            creep.memory.working = True
+            creep.memory.filling = True
+            creep.memory.resource = RESOURCE_ENERGY
+            creep.memory.source = storage.id
+            creep.memory.target = labs_wo_energy[0].id
 
 
 def check_for_terminal_job(creep):
