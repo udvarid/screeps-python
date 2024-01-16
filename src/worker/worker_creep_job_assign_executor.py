@@ -40,4 +40,5 @@ CREEP_TASKS = {
 def operate_worker_creeps():
     for name in Object.keys(Game.creeps):
         creep = Game.creeps[name]
-        CREEP_TASKS[creep.memory.role].run_task(creep)
+        if creep.memory.role is not undefined:
+            CREEP_TASKS[creep.memory.role].run_task(creep)

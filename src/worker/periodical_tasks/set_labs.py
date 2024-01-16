@@ -88,7 +88,7 @@ def fill_up_memory(labs, room_name):
 
     snapshot = {
         'attack': list(filter(lambda r: r[0] == ATTACK, roles_with_ids))[0][1],
-        'ranged_attack ': list(filter(lambda r: r[0] == RANGED_ATTACK, roles_with_ids))[0][1],
+        'ranged_attack': list(filter(lambda r: r[0] == RANGED_ATTACK, roles_with_ids))[0][1],
         'heal': list(filter(lambda r: r[0] == HEAL, roles_with_ids))[0][1],
         'tough': list(filter(lambda r: r[0] == TOUGH, roles_with_ids))[0][1]
     }

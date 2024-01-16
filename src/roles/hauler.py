@@ -75,6 +75,8 @@ def run_hauler(creep):
 
 def check_for_lab_job(creep):
     labs = list(filter(lambda s: s.structureType == STRUCTURE_LAB, creep.room.find(FIND_MY_STRUCTURES)))
+    if len(labs) == 0:
+        return
     labs_wo_energy = list(filter(lambda l: l.store.getUsedCapacity(RESOURCE_ENERGY) < 2000, labs))
     if len(labs_wo_energy) > 0:
         storage = creep.room.storage
@@ -85,6 +87,46 @@ def check_for_lab_job(creep):
             creep.memory.resource = RESOURCE_ENERGY
             creep.memory.source = storage.id
             creep.memory.target = labs_wo_energy[0].id
+    else:
+        if Memory.labs is undefined or Memory.labs[creep.room.name] is undefined:
+            return
+        storage = creep.room.storage
+        role_resource_pairs = [
+            ('attack', RESOURCE_CATALYZED_UTRIUM_ACID),
+            ('ranged_attack', RESOURCE_CATALYZED_KEANIUM_ALKALIDE),
+            ('heal', RESOURCE_CATALYZED_LEMERGIUM_ALKALIDE),
+            ('tough', RESOURCE_CATALYZED_GHODIUM_ALKALIDE)
+        ]
+        if any(storage.store.getUsedCapacity(rr_pair[1]) > 0 for rr_pair in role_resource_pairs):
+            for rr_pair in role_resource_pairs:
+                if send_resource_if_possible(rr_pair, creep, storage):
+                    break
+
+
+def send_resource_if_possible(rr_pair, creep, storage):
+    role = rr_pair[0]
+    resource = rr_pair[1]
+
+    if storage.store.getUsedCapacity(resource) == 0:
+        return False
+
+    lab_id = Memory.labs[creep.room.name][role]
+    if lab_id is undefined:
+        return False
+    lab = Game.getObjectById(lab_id)
+    if lab is undefined:
+        return False
+    res_amount_in_lab = lab.store.getUsedCapacity(resource)
+    if res_amount_in_lab > 1500:
+        return False
+
+    creep.memory.working = True
+    creep.memory.filling = True
+    creep.memory.resource = resource
+    creep.memory.source = storage.id
+    creep.memory.target = lab.id
+
+    return True
 
 
 def check_for_terminal_job(creep):
