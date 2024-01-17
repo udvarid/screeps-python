@@ -19,13 +19,14 @@ def run_builder(creep: Creep):
         creep.memory.building = True
 
     if creep.memory.building:
-        targets = creep.room.find(FIND_CONSTRUCTION_SITES)
-        if len(targets):
-            if creep.build(targets[0]) == ERR_NOT_IN_RANGE:
-                creep.moveTo(
-                    targets[0], {'visualizePathStyle': {'stroke': '#ffffff'}})
-        else:
-            creep.memory.role = 'upgrader' if creep.room.storage is not undefined else 'harvester'
+        if creep.memory.home == creep.room.name:
+            targets = creep.room.find(FIND_CONSTRUCTION_SITES)
+            if len(targets):
+                if creep.build(targets[0]) == ERR_NOT_IN_RANGE:
+                    creep.moveTo(
+                        targets[0], {'swampCost': 1, 'visualizePathStyle': {'stroke': '#ffffff'}})
+            else:
+                creep.memory.role = 'upgrader' if creep.room.storage is not undefined else 'harvester'
     else:
         storage = creep.room.storage
         if storage is not undefined and storage.store[RESOURCE_ENERGY] > 0:
