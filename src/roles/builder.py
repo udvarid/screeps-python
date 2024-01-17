@@ -18,8 +18,8 @@ def run_builder(creep: Creep):
             creep.suicide()
         creep.memory.building = True
 
-    if creep.memory.building:
-        if creep.memory.home == creep.room.name:
+    if creep.memory.home == creep.room.name:
+        if creep.memory.building:
             targets = creep.room.find(FIND_CONSTRUCTION_SITES)
             if len(targets):
                 if creep.build(targets[0]) == ERR_NOT_IN_RANGE:
@@ -27,14 +27,14 @@ def run_builder(creep: Creep):
                         targets[0], {'swampCost': 1, 'visualizePathStyle': {'stroke': '#ffffff'}})
             else:
                 creep.memory.role = 'upgrader' if creep.room.storage is not undefined else 'harvester'
-    else:
-        storage = creep.room.storage
-        if storage is not undefined and storage.store[RESOURCE_ENERGY] > 0:
-            if creep.withdraw(storage, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE:
-                creep.moveTo(storage, {'visualizePathStyle': {'stroke': '#ffaa00'}})
         else:
-            sources = list(filter(lambda s: s.energy > 0, creep.room.find(FIND_SOURCES)))
-            if len(sources) > 0:
-                source = creep.pos.findClosestByPath(sources)
-                if creep.harvest(source) == ERR_NOT_IN_RANGE:
-                    creep.moveTo(source, {'visualizePathStyle': {'stroke': '#ffaa00'}})
+            storage = creep.room.storage
+            if storage is not undefined and storage.store[RESOURCE_ENERGY] > 0:
+                if creep.withdraw(storage, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE:
+                    creep.moveTo(storage, {'swampCost': 1, 'visualizePathStyle': {'stroke': '#ffaa00'}})
+            else:
+                sources = list(filter(lambda s: s.energy > 0, creep.room.find(FIND_SOURCES)))
+                if len(sources) > 0:
+                    source = creep.pos.findClosestByPath(sources)
+                    if creep.harvest(source) == ERR_NOT_IN_RANGE:
+                        creep.moveTo(source, {'swampCost': 1, 'visualizePathStyle': {'stroke': '#ffaa00'}})
