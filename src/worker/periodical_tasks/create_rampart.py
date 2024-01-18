@@ -20,7 +20,11 @@ def create_rampart():
             if len(room.find(FIND_MY_SPAWNS)) > 0:
                 construction_sites = room.find(FIND_MY_CONSTRUCTION_SITES)
                 towers = list(filter(lambda s: s.structureType == STRUCTURE_TOWER, room.find(FIND_MY_STRUCTURES)))
-                if len(construction_sites) == 0 and len(towers) > 0:
+                storage = room.storage
+                have_energy = True
+                if storage is not undefined and storage.store.getUsedCapacity(RESOURCE_ENERGY) < 125000:
+                    have_energy = False
+                if len(construction_sites) == 0 and len(towers) > 0 and have_energy:
                     vip_structures = list(filter(lambda s: STRUCTURES_NEED_RAMPART.includes(s.structureType),
                                                  room.find(FIND_MY_STRUCTURES)))
                     ramparts = list(filter(lambda s: s.structureType == STRUCTURE_RAMPART,
