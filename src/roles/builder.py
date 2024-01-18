@@ -18,23 +18,43 @@ def run_builder(creep: Creep):
             creep.suicide()
         creep.memory.building = True
 
-    if creep.memory.home == creep.room.name:
-        if creep.memory.building:
-            targets = creep.room.find(FIND_CONSTRUCTION_SITES)
-            if len(targets):
-                if creep.build(targets[0]) == ERR_NOT_IN_RANGE:
-                    creep.moveTo(
-                        targets[0], {'swampCost': 1, 'visualizePathStyle': {'stroke': '#ffffff'}})
+    if creep.memory.building:
+        if creep.memory.target:
+            target = Game.getObjectById(creep.memory.target)
+        else:
+            possible_targets = creep.room.find(FIND_CONSTRUCTION_SITES)
+            if len(possible_targets) > 0:
+                target = possible_targets[0]
+                creep.memory.target = target.id
             else:
-                creep.memory.role = 'upgrader' if creep.room.storage is not undefined else 'harvester'
+                target = None
+
+        if target is not None:
+            if creep.build(target) == ERR_NOT_IN_RANGE:
+                creep.moveTo(
+                    target, {'visualizePathStyle': {'stroke': '#ffffff'}})
+        else:
+            del creep.memory.target
+            del creep.memory.source
+            creep.memory.role = 'upgrader' if creep.room.storage is not undefined else 'harvester'
+    else:
+        if creep.memory.source:
+            source = Game.getObjectById(creep.memory.source)
         else:
             storage = creep.room.storage
-            if storage is not undefined and storage.store[RESOURCE_ENERGY] > 0:
-                if creep.withdraw(storage, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE:
-                    creep.moveTo(storage, {'swampCost': 1, 'visualizePathStyle': {'stroke': '#ffaa00'}})
+            if storage is not undefined:
+                source = storage
+                creep.memory.source_type = 'storage'
             else:
-                sources = list(filter(lambda s: s.energy > 0, creep.room.find(FIND_SOURCES)))
-                if len(sources) > 0:
-                    source = creep.pos.findClosestByPath(sources)
-                    if creep.harvest(source) == ERR_NOT_IN_RANGE:
-                        creep.moveTo(source, {'swampCost': 1, 'visualizePathStyle': {'stroke': '#ffaa00'}})
+                sources = creep.room.find(FIND_SOURCES)
+                source = creep.pos.findClosestByPath(sources)
+                creep.memory.source_type = 'source'
+
+            creep.memory.source = source.id
+
+        if creep.memory.source_type == 'storage':
+            if creep.withdraw(source, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE:
+                creep.moveTo(source, {'visualizePathStyle': {'stroke': '#ffaa00'}})
+        else:
+            if creep.harvest(source) == ERR_NOT_IN_RANGE:
+                creep.moveTo(source, {'visualizePathStyle': {'stroke': '#ffaa00'}})

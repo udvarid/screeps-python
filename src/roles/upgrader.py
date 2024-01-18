@@ -11,10 +11,6 @@ __pragma__('noalias', 'update')
 
 
 def run_upgrader(creep):
-    # if creep.memory.home == 'E38S3':
-    #     aim_pos = __new__(RoomPosition(28, 26, 'E38S3'))
-    #     path = creep.pos.findClosestByPath([creep.room.controller])
-    #     print('ver2', path)
     if creep.memory.filling and _.sum(creep.carry) >= creep.carryCapacity:
         creep.memory.filling = False
         del creep.memory.source
