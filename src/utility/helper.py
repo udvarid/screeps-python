@@ -35,3 +35,12 @@ def get_full_neighbours(actual):
     n7 = (x + 1, y)
     n8 = (x + 1, y + 1)
     return [n1, n2, n3, n4, n5, n6, n7, n8]
+
+
+def get_link_with_energy(room_name):
+    central_link_id = Memory.links[room_name]
+    if central_link_id is not undefined:
+        link = Game.getObjectById(central_link_id)
+        if link is not None and link.energy > 0:
+            return link
+    return None

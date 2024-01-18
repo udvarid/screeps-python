@@ -1,6 +1,7 @@
 from src.constant.my_constants import FILL_WITH_ENERGY, TERMINAL_MINIMUM_ENERGY, TERMINAL_MINIMUM_RESOURCE, \
     TERMINAL_MAXIMUM_ENERGY
 from src.defs import *
+from src.utility.helper import get_link_with_energy
 
 __pragma__('noalias', 'name')
 __pragma__('noalias', 'undefined')
@@ -71,6 +72,12 @@ def run_hauler(creep):
                           .format(creep.name, target, creep.memory.resource, result))
             else:
                 creep.moveTo(target, {'visualizePathStyle': {'stroke': '#ffffff'}})
+    else:
+        spawns_in_room = creep.room.find(FIND_MY_SPAWNS)
+        spawn_in_room = spawns_in_room[0]
+        is_close = creep.pos.isNearTo(spawn_in_room)
+        if not is_close:
+            creep.moveTo(spawn_in_room, {'visualizePathStyle': {'stroke': '#ffffff'}})
 
 
 def check_for_lab_job(creep):
@@ -220,15 +227,6 @@ def check_for_real_targets(creep, possible_target):
         return True
     else:
         return False
-
-
-def get_link_with_energy(room_name):
-    central_link_id = Memory.links[room_name]
-    if central_link_id is not undefined:
-        link = Game.getObjectById(central_link_id)
-        if link is not None and link.energy > 0:
-            return link
-    return None
 
 
 def get_target(creep):
