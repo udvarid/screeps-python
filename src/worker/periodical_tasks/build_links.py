@@ -68,6 +68,7 @@ def check_and_build_at_store(room, spawn, links):
 
 def check_and_build_at_sources(room, spawn, links):
     sources = room.find(FIND_SOURCES)
+    all_s = spawn.room.find(FIND_STRUCTURES)
     for source in sources:
         sp = source.pos
         if any(sp.inRangeTo(link, 2) for link in links):
@@ -90,9 +91,10 @@ def check_and_build_at_sources(room, spawn, links):
             (sp.x - 1, sp.y + 2),
             (sp.x + 1, sp.y + 2)
         ]
-        filtered_neighbours = map(lambda f: __new__(RoomPosition(f[0], f[1], room.name)),
-                                  list(filter(lambda n: is_valid_type(n, room) and pos_in_the_frame(n) and
-                                                        not is_near_to_sources(n, room), neighbours)))
-        closest = spawn.pos.findClosestByPath(filtered_neighbours)
+        filt_n = map(lambda f: __new__(RoomPosition(f[0], f[1], room.name)),
+                     list(filter(lambda n: is_valid_type(n, room) and pos_in_the_frame(n) and
+                                           not any(n[0] == st.pos.x and n[1] == st.pos.y for st in all_s) and
+                                           not is_near_to_sources(n, room), neighbours)))
+        closest = spawn.pos.findClosestByPath(filt_n)
         room.createConstructionSite(closest.x, closest.y, STRUCTURE_LINK)
         print("Create construction site at {}".format(closest))
