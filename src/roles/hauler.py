@@ -16,7 +16,8 @@ __pragma__('noalias', 'update')
 def run_hauler(creep):
     room_name = creep.room.name
     time = Game.time
-    __pragma__('js', '{}', 'Memory.room_snapshot[room_name]["hauler_time"] = time')
+    if creep.room.name == creep.memory.home:
+        __pragma__('js', '{}', 'Memory.room_snapshot[room_name]["hauler_time"] = time')
     if not creep.memory.working:
         if creep.ticksToLive < 50:
             creep.suicide()
