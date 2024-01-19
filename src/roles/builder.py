@@ -42,7 +42,7 @@ def run_builder(creep: Creep):
             source = Game.getObjectById(creep.memory.source)
         else:
             storage = creep.room.storage
-            if storage is not undefined:
+            if storage is not undefined and storage.store.getUsedCapacity(RESOURCE_ENERGY) > 0:
                 source = storage
                 creep.memory.source_type = 'storage'
             else:
@@ -53,6 +53,8 @@ def run_builder(creep: Creep):
             creep.memory.source = source.id
 
         if creep.memory.source_type == 'storage':
+            if source.store.getUsedCapacity(RESOURCE_ENERGY) == 0:
+                del creep.memory.source
             if creep.withdraw(source, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE:
                 creep.moveTo(source, {'visualizePathStyle': {'stroke': '#ffaa00'}})
         else:

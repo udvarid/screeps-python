@@ -27,10 +27,13 @@ def run_upgrader(creep):
             source = creep.room.storage
             creep.memory.source = source.id
 
-        if creep.pos.isNearTo(source):
-            creep.withdraw(source, RESOURCE_ENERGY)
+        if source.store.getUsedCapacity(RESOURCE_ENERGY) > 0:
+            if creep.pos.isNearTo(source):
+                creep.withdraw(source, RESOURCE_ENERGY)
+            else:
+                creep.moveTo(source, {'reusePath': 15, 'visualizePathStyle': {'stroke': '#ffffff'}})
         else:
-            creep.moveTo(source, {'reusePath': 15, 'visualizePathStyle': {'stroke': '#ffffff'}})
+            creep.moveTo(creep.room.controller)
     else:
         # If we have a saved target, use it
         if creep.memory.target:
