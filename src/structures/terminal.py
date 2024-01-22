@@ -1,5 +1,7 @@
-from src.constant.my_constants import TERMINAL_TIME
+from src.constant.my_constants import TERMINAL_TIME, ROOM_ENERGY_LIMIT_ABOVE_CAN_SEND, \
+    ROOM_ENERGY_LIMIT_UNDER_CAN_RECEIVE
 from src.defs import *
+from src.utility.helper import get_active_rooms
 
 __pragma__('noalias', 'name')
 __pragma__('noalias', 'undefined')
@@ -38,10 +40,30 @@ def operate_terminals():
                         return
                     if bought_extra_energy(terminal, energy_cost):
                         return
+                    if sent_energy_to_my_other_room(terminal):
+                        return
 
     else:
         actual = Memory.counters["terminal_time"]
         __pragma__('js', '{}', 'Memory.counters["terminal_time"] = actual - 1')
+
+
+def sent_energy_to_my_other_room(terminal):
+    if terminal.room.storage.store.getUsedCapacity(RESOURCE_ENERGY) < ROOM_ENERGY_LIMIT_ABOVE_CAN_SEND or \
+            terminal.store.getUsedCapacity(RESOURCE_ENERGY) < 20000:
+        return False
+    for room_name in get_active_rooms():
+        if room_name == terminal.room.name:
+            continue
+        room = Game.rooms[room_name]
+        if room.storage.store.getUsedCapacity(RESOURCE_ENERGY) >= ROOM_ENERGY_LIMIT_UNDER_CAN_RECEIVE:
+            continue
+        terminal_receiver = room.terminal
+        if terminal_receiver is not undefined or terminal_receiver is not None:
+            terminal.send(RESOURCE_ENERGY, 10000, room_name)
+            print("Sending energy from {} to {}".format(terminal.room.name, room_name))
+            return True
+    return False
 
 
 def bought_extra_energy(terminal, energy_cost):
@@ -53,6 +75,8 @@ def bought_extra_energy(terminal, energy_cost):
         best_order = get_best_energy_order(energy_cost, room_name)
         if best_order is not undefined:
             Game.market.deal(best_order[0].id, 10000, room_name)
+            return True
+    return False
 
 
 def create_booster_order(terminal):
