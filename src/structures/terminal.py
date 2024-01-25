@@ -1,5 +1,5 @@
 from src.constant.my_constants import TERMINAL_TIME, ROOM_ENERGY_LIMIT_ABOVE_CAN_SEND, \
-    ROOM_ENERGY_LIMIT_UNDER_CAN_RECEIVE
+    ROOM_ENERGY_LIMIT_UNDER_CAN_RECEIVE, TERMINAL_ORDER_CANCEL_LIMIT
 from src.defs import *
 from src.utility.helper import get_active_rooms
 
@@ -147,6 +147,9 @@ def room_has_active_order(terminal, mineral):
                 my_order['roomName'] == terminal.room.name and \
                 my_order['remainingAmount'] > 0:
             room_has_mineral_order = True
+            order_age = Game.time - my_order['created']
+            if order_age > TERMINAL_ORDER_CANCEL_LIMIT:
+                Game.market.cancelOrder(my_order_id)
             break
     return room_has_mineral_order
 
