@@ -100,7 +100,7 @@ def get_target(creep):
         if len(links) > 0:
             target = creep.pos.findClosestByPath(links)
     if target is undefined and room.storage is not undefined:
-        target = _([room.storage]).filter(lambda s: s.store[RESOURCE_ENERGY] < 200000).sample()
+        target = _([room.storage]).filter(lambda s: s.store[RESOURCE_ENERGY] < 750000).sample()
     if target is undefined:
         target = _(room.find(FIND_STRUCTURES)).filter(lambda s: (s.structureType == STRUCTURE_CONTROLLER)).sample()
     return target
