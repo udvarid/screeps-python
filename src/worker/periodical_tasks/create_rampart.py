@@ -18,7 +18,8 @@ def create_rampart():
         for room_name in Object.keys(Game.rooms):
             room = Game.rooms[room_name]
             if len(room.find(FIND_MY_SPAWNS)) > 0:
-                construction_sites = room.find(FIND_MY_CONSTRUCTION_SITES)
+                construction_sites = list(filter(lambda c: c.structureType != STRUCTURE_ROAD,
+                                                 room.find(FIND_MY_CONSTRUCTION_SITES)))
                 towers = list(filter(lambda s: s.structureType == STRUCTURE_TOWER, room.find(FIND_MY_STRUCTURES)))
                 storage = room.storage
                 have_energy = True

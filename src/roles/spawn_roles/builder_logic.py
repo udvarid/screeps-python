@@ -6,5 +6,6 @@ def need_extra(context):
 
 
 def more_builder_is_needed(context):
-    construction_sites = context.room.find(FIND_MY_CONSTRUCTION_SITES)
+    construction_sites = list(filter(lambda c: c.structureType != STRUCTURE_ROAD,
+                                     context.room.find(FIND_MY_CONSTRUCTION_SITES)))
     return context.number == 0 and len(construction_sites) > 0

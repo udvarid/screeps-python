@@ -21,7 +21,8 @@ def construct_mine():
             if len(spawns) > 0:
                 if room.controller.level < 6:
                     continue
-                construction_sites = room.find(FIND_MY_CONSTRUCTION_SITES)
+                construction_sites = list(filter(lambda c: c.structureType != STRUCTURE_ROAD,
+                                                 room.find(FIND_MY_CONSTRUCTION_SITES)))
                 extractors = list(filter(lambda s: s.structureType == STRUCTURE_EXTRACTOR,
                                          room.find(FIND_MY_STRUCTURES)))
                 if len(construction_sites) == 0 and len(extractors) == 0:

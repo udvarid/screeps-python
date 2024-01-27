@@ -26,7 +26,8 @@ def build_exit_wall():
                 continue
             if Memory.room_safety_state[room_name].enemy:
                 continue
-            if len(room.find(FIND_MY_CONSTRUCTION_SITES)) > 0:
+            if len(list(filter(lambda c: c.structureType != STRUCTURE_ROAD,
+                               room.find(FIND_MY_CONSTRUCTION_SITES)))) > 0:
                 continue
             if room.storage is undefined or room.storage.store.getUsedCapacity(RESOURCE_ENERGY) < 200000:
                 continue

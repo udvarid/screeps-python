@@ -20,7 +20,8 @@ def construct_containers():
             room = Game.rooms[room_name]
             spawns = room.find(FIND_MY_SPAWNS)
             if len(spawns) > 0:
-                construction_sites = room.find(FIND_MY_CONSTRUCTION_SITES)
+                construction_sites = list(filter(lambda c: c.structureType != STRUCTURE_ROAD,
+                                                 room.find(FIND_MY_CONSTRUCTION_SITES)))
                 containers = list(filter(lambda s: s.structureType == STRUCTURE_CONTAINER, room.find(FIND_STRUCTURES)))
                 extractors = list(
                     filter(lambda s: s.structureType == STRUCTURE_EXTRACTOR, room.find(FIND_MY_STRUCTURES)))

@@ -20,7 +20,8 @@ def create_construction_site():
             spawns = room.find(FIND_MY_SPAWNS)
             if len(spawns) > 0 and room.controller.my and \
                     not Memory.room_safety_state[room_name].enemy and \
-                    len(room.find(FIND_MY_CONSTRUCTION_SITES)) == 0:
+                    len(list(filter(lambda c: c.structureType != STRUCTURE_ROAD,
+                                    room.find(FIND_MY_CONSTRUCTION_SITES)))) == 0:
                 for structure in STRUCTURES_NEED_CONSTRUCT:
                     structures = list(filter(lambda s: s.structureType == structure, room.find(FIND_MY_STRUCTURES)))
                     max_number = CONTROLLER_STRUCTURES[structure][room.controller.level]
