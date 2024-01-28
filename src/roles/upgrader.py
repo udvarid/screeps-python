@@ -42,11 +42,34 @@ def run_upgrader(creep):
             target = creep.room.controller
             creep.memory.target = target.id
 
+        # maintaining roads
+        route_here = list(filter(lambda s: s.structureType == STRUCTURE_ROAD,
+                                 creep.pos.findInRange(FIND_STRUCTURES, 0)))
+        if len(route_here) == 0:
+            const_site_here = list(creep.pos.findInRange(FIND_CONSTRUCTION_SITES, 0))
+            if len(const_site_here) == 0:
+                creep.room.createConstructionSite(creep.pos.x, creep.pos.y, STRUCTURE_ROAD)
+            else:
+                road_const_here = list(filter(lambda s: s.structureType == STRUCTURE_ROAD,
+                                              creep.pos.findInRange(FIND_CONSTRUCTION_SITES, 0)))
+                if len(road_const_here) != 0:
+                    creep.build(road_const_here[0])
+                else:
+                    road_const_around = list(filter(lambda s: s.structureType == STRUCTURE_ROAD,
+                                                    creep.pos.findInRange(FIND_CONSTRUCTION_SITES, 2)))
+                    if len(road_const_around) != 0:
+                        creep.build(road_const_around[0])
+
+        else:
+            route = route_here[0]
+            if route.hits < route.hitsMax * 0.8:
+                creep.repair(route)
+
         is_close = creep.pos.inRangeTo(target, 3)
 
         if is_close:
             creep.upgradeController(target)
             if not creep.pos.inRangeTo(target, 2):
-                creep.moveTo(target, {'reusePath': 15, 'visualizePathStyle': {'stroke': '#ffffff'}})
+                creep.moveTo(target, {'swampCost': 1, 'reusePath': 15, 'visualizePathStyle': {'stroke': '#ffffff'}})
         else:
-            creep.moveTo(target, {'reusePath': 15, 'visualizePathStyle': {'stroke': '#ffffff'}})
+            creep.moveTo(target, {'swampCost': 1, 'reusePath': 15, 'visualizePathStyle': {'stroke': '#ffffff'}})
