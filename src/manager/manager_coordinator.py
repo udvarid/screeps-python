@@ -18,6 +18,7 @@ def do_periodical_tasks():
     construction_task_executor.build_containers()
     construction_task_executor.exit_wall_plan_creator()
     construction_task_executor.exit_wall_builder()
+    construction_task_executor.clear_road_const_sites()
 
 
 def do_strategic_tasks():

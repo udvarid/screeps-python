@@ -2,6 +2,7 @@ from src.worker.periodical_tasks.build_containers import construct_containers
 from src.worker.periodical_tasks.build_exit_wall import build_exit_wall
 from src.worker.periodical_tasks.build_links import construct_links
 from src.worker.periodical_tasks.build_mine import construct_mine
+from src.worker.periodical_tasks.clear_road_const import clear_road_const
 from src.worker.periodical_tasks.clear_unknown_walls import clear_walls
 from src.worker.periodical_tasks.create_construction_site import create_construction_site
 from src.worker.periodical_tasks.create_exit_wall import create_exit_wall_plan
@@ -43,3 +44,7 @@ def build_containers():
 
 def set_labs_to_memory():
     set_labs()
+
+
+def clear_road_const_sites():
+    clear_road_const()
