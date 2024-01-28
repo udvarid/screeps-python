@@ -54,15 +54,9 @@ def run_upgrader(creep):
                                               creep.pos.findInRange(FIND_CONSTRUCTION_SITES, 0)))
                 if len(road_const_here) != 0:
                     creep.build(road_const_here[0])
-                else:
-                    road_const_around = list(filter(lambda s: s.structureType == STRUCTURE_ROAD,
-                                                    creep.pos.findInRange(FIND_CONSTRUCTION_SITES, 2)))
-                    if len(road_const_around) != 0:
-                        creep.build(road_const_around[0])
-
         else:
             route = route_here[0]
-            if route.hits < route.hitsMax * 0.8:
+            if route.hits < route.hitsMax * 0.75:
                 creep.repair(route)
 
         is_close = creep.pos.inRangeTo(target, 3)
