@@ -42,22 +42,7 @@ def run_upgrader(creep):
             target = creep.room.controller
             creep.memory.target = target.id
 
-        # maintaining roads
-        route_here = list(filter(lambda s: s.structureType == STRUCTURE_ROAD,
-                                 creep.pos.findInRange(FIND_STRUCTURES, 0)))
-        if len(route_here) == 0:
-            const_site_here = list(creep.pos.findInRange(FIND_CONSTRUCTION_SITES, 0))
-            if len(const_site_here) == 0:
-                creep.room.createConstructionSite(creep.pos.x, creep.pos.y, STRUCTURE_ROAD)
-            else:
-                road_const_here = list(filter(lambda s: s.structureType == STRUCTURE_ROAD,
-                                              creep.pos.findInRange(FIND_CONSTRUCTION_SITES, 0)))
-                if len(road_const_here) != 0:
-                    creep.build(road_const_here[0])
-        else:
-            route = route_here[0]
-            if route.hits < route.hitsMax * 0.75:
-                creep.repair(route)
+        # route_maintaining(creep)
 
         is_close = creep.pos.inRangeTo(target, 3)
 

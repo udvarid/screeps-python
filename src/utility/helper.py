@@ -44,3 +44,21 @@ def get_link_with_energy(room_name):
         if link is not None and link.energy > 0:
             return link
     return None
+
+
+def route_maintaining(creep):
+    route_here = list(filter(lambda s: s.structureType == STRUCTURE_ROAD,
+                             creep.pos.findInRange(FIND_STRUCTURES, 0)))
+    if len(route_here) == 0:
+        const_site_here = list(creep.pos.findInRange(FIND_CONSTRUCTION_SITES, 0))
+        if len(const_site_here) == 0:
+            creep.room.createConstructionSite(creep.pos.x, creep.pos.y, STRUCTURE_ROAD)
+        else:
+            road_const_here = list(filter(lambda s: s.structureType == STRUCTURE_ROAD,
+                                          creep.pos.findInRange(FIND_CONSTRUCTION_SITES, 0)))
+            if len(road_const_here) != 0:
+                creep.build(road_const_here[0])
+    else:
+        route = route_here[0]
+        if route.hits < route.hitsMax * 0.75:
+            creep.repair(route)
