@@ -21,8 +21,11 @@ def run_builder(creep: Creep):
     if creep.memory.building:
         if creep.memory.target:
             target = Game.getObjectById(creep.memory.target)
-        else:
-            possible_targets = creep.room.find(FIND_CONSTRUCTION_SITES)
+            if target is None:
+                del creep.memory.target
+        if creep.memory.target is undefined:
+            possible_targets = list(filter(lambda s: s.structureType != STRUCTURE_ROAD,
+                                           creep.room.find(FIND_CONSTRUCTION_SITES)))
             if len(possible_targets) > 0:
                 target = possible_targets[0]
                 creep.memory.target = target.id
@@ -31,8 +34,7 @@ def run_builder(creep: Creep):
 
         if target is not None:
             if creep.build(target) == ERR_NOT_IN_RANGE:
-                creep.moveTo(
-                    target, {'visualizePathStyle': {'stroke': '#ffffff'}})
+                creep.moveTo(target, {'visualizePathStyle': {'stroke': '#ffffff'}})
         else:
             del creep.memory.target
             del creep.memory.source

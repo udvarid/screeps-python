@@ -49,6 +49,6 @@ def run_upgrader(creep):
         if is_close:
             creep.upgradeController(target)
             if not creep.pos.inRangeTo(target, 2):
-                creep.moveTo(target, {'swampCost': 1, 'reusePath': 15, 'visualizePathStyle': {'stroke': '#ffffff'}})
+                creep.moveTo(target, {'reusePath': 15, 'visualizePathStyle': {'stroke': '#ffffff'}})
         else:
-            creep.moveTo(target, {'swampCost': 1, 'reusePath': 15, 'visualizePathStyle': {'stroke': '#ffffff'}})
+            creep.moveTo(target, {'reusePath': 15, 'visualizePathStyle': {'stroke': '#ffffff'}})
