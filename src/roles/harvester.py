@@ -55,26 +55,28 @@ def run_harvester(creep):
             target = Game.getObjectById(creep.memory.target)
         else:
             target = get_target(creep)
-            creep.memory.target = target.id
+            if target is not undefined:
+                creep.memory.target = target.id
 
-        # If we are targeting a spawn or extension, we need to be directly next to it - otherwise, we can be 3 away.
-        if target.energyCapacity or target == creep.room.storage:
-            is_close = creep.pos.isNearTo(target)
-        else:
-            is_close = creep.pos.inRangeTo(target, 3)
-
-        if is_close:
-            # If we are targeting a spawn or extension, transfer energy. Otherwise, use upgradeController on it.
+        if target is not undefined:
+            # If we are targeting a spawn or extension, we need to be directly next to it - otherwise, we can be 3 away.
             if target.energyCapacity or target == creep.room.storage:
-                result = creep.transfer(target, RESOURCE_ENERGY)
-                if result == OK or result == ERR_FULL:
-                    del creep.memory.target
+                is_close = creep.pos.isNearTo(target)
             else:
-                creep.upgradeController(target)
-                if not creep.pos.inRangeTo(target, 2):
-                    creep.moveTo(target, {'reusePath': 15, 'visualizePathStyle': {'stroke': '#ffffff'}})
-        else:
-            creep.moveTo(target, {'reusePath': 15, 'visualizePathStyle': {'stroke': '#ffffff'}})
+                is_close = creep.pos.inRangeTo(target, 3)
+
+            if is_close:
+                # If we are targeting a spawn or extension, transfer energy. Otherwise, use upgradeController on it.
+                if target.energyCapacity or target == creep.room.storage:
+                    result = creep.transfer(target, RESOURCE_ENERGY)
+                    if result == OK or result == ERR_FULL:
+                        del creep.memory.target
+                else:
+                    creep.upgradeController(target)
+                    if not creep.pos.inRangeTo(target, 2):
+                        creep.moveTo(target, {'reusePath': 15, 'visualizePathStyle': {'stroke': '#ffffff'}})
+            else:
+                creep.moveTo(target, {'reusePath': 15, 'visualizePathStyle': {'stroke': '#ffffff'}})
 
 
 def get_target(creep):
