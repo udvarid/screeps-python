@@ -73,6 +73,16 @@ def defend_room(creep):
             return
         elif not creep.pos.inRangeTo(closest_enemy, 3):
             creep.moveTo(closest_enemy)
+    else:
+        enemy_structures = list(filter(lambda s: s.structureType != STRUCTURE_WALL and not s.my,
+                                       creep.room.find(FIND_STRUCTURES)))
+        if len(enemy_structures) > 0:
+            closest_structure = creep.pos.findClosestByPath(enemy_structures)
+            if creep.pos.isNearTo(closest_structure):
+                creep.attack(closest_structure)
+            else:
+                creep.moveTo(closest_structure)
+            return
 
     go_to_controller(creep)
 
