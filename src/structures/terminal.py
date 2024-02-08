@@ -56,6 +56,8 @@ def sent_energy_to_my_other_room(terminal):
         if room_name == terminal.room.name:
             continue
         room = Game.rooms[room_name]
+        if room.terminal is undefined:
+            continue
         if room.storage.store.getUsedCapacity(RESOURCE_ENERGY) >= ROOM_ENERGY_LIMIT_UNDER_CAN_RECEIVE:
             continue
         terminal_receiver = room.terminal
