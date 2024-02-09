@@ -21,9 +21,9 @@ def clear_walls():
             if len(room.find(FIND_MY_SPAWNS)) > 0 and (not Memory.room_clear or not Memory.room_clear[room_name]):
                 walls = list(filter(lambda s: s.structureType == STRUCTURE_WALL, room.find(FIND_STRUCTURES)))
                 if len(walls) > 0:
-                    wall = walls[0]
-                    print("Deleting wall at x:{}, y:{}".format(wall.pos.x, wall.pos.y))
-                    wall.destroy()
+                    for wall in walls:
+                        print("Deleting wall at x:{}, y:{}".format(wall.pos.x, wall.pos.y))
+                        wall.destroy()
                 else:
                     if not Memory.room_clear:
                         room_snapshot = {room_name: 'CLEARED'}
