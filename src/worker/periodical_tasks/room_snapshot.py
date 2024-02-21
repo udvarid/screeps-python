@@ -29,7 +29,6 @@ def make_room_snapshot():
                     prev_mine_place = Memory.room_snapshot[room_name]['mine_place']
                     prev_source_place = Memory.room_snapshot[room_name]['source_place']
                     prev_hauler_time = Memory.room_snapshot[room_name]['hauler_time']
-                    prev_mine_type = Memory.room_snapshot[room_name]['mineral']
                 if prev_mine_place is undefined:
                     free_mine_places = get_free_mine_places(room)
                 else:
@@ -38,10 +37,7 @@ def make_room_snapshot():
                     free_source_places = get_free_source_places(room)
                 else:
                     free_source_places = prev_source_place
-                if prev_mine_type is undefined:
-                    mine_type = room.find(FIND_MINERALS)[0].mineralType
-                else:
-                    mine_type = prev_mine_type
+                mine_type = room.find(FIND_MINERALS)[0].mineralType
                 room_snapshot = {
                     'energy': room.energyAvailable,
                     'mineral': mine_type,
